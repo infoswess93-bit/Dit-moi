@@ -945,10 +945,13 @@
   }
 
   function renderVocabView() {
+    if (photoOpen) { renderPhoto(); return; }
     var html = '<section class="card vocab"><div class="vhead"><p class="label" style="margin:0">Словник</p><span class="count" id="vcount">Слів: ' + vocab.length + '</span></div>';
+    html += '<div class="vtop"><button type="button" class="btn ghost" id="tophoto">📷 Слова з фото</button></div>';
     if (!vocab.length) {
-      html += "<p style=\"margin:0\">Словник порожній. Двічі торкніться слова в реченні, і воно з'явиться тут разом із перекладом.</p>";
+      html += "<p style=\"margin:0\">Словник порожній. Двічі торкніться слова в реченні або додайте слова з фото тексту.</p>";
       stage.innerHTML = html + '</section>';
+      document.getElementById("tophoto").addEventListener("click", openPhoto);
       return;
     }
     html += '<div class="seg" role="group" aria-label="Режим словника">' +
@@ -962,6 +965,7 @@
     }
     html += '</section>';
     stage.innerHTML = html;
+    document.getElementById("tophoto").addEventListener("click", openPhoto);
     var s = document.getElementById("vsearch");
     if (s) s.addEventListener("input", function () { document.getElementById("vlist").innerHTML = vocabListHtml(s.value); });
     var vl = document.getElementById("vlist");
@@ -982,7 +986,7 @@
     var sec = stage.querySelector(".vocab");
     if (sec) sec.addEventListener("click", function (e) {
       var t = e.target.closest("button");
-      if (!t || t.hasAttribute("data-say")) return;
+      if (!t || t.hasAttribute("data-say") || t.id === "tophoto") return;
       if (t.getAttribute("data-vm")) {
         vmode = t.getAttribute("data-vm");
         try { localStorage.setItem("fr-vmode", vmode); } catch (e2) {}
@@ -1121,6 +1125,7 @@
   }
 
   function openVocab() {
+    photoOpen = false;
     inVocab = true; inHome = false; inSettings = false;
     inGram = false;
     inErrors = false;
@@ -1326,6 +1331,7 @@
     var rows = "", ec = bankTotal(), dc = dueCount();
     rows += '<li><button type="button" class="prow" data-act="err"><span class="pt"><b>Робота над помилками</b><small>' + (ec ? "Приклади, де ви помилилися" : "Помилок немає") + '</small></span><span class="pn ' + (ec ? "warn" : "ok") + '">' + (ec || "✓") + '</span></button></li>';
     rows += '<li><button type="button" class="prow" data-act="cards"><span class="pt"><b>Картки слів</b><small>' + (dc ? "До повторення зараз" : (vocab.length ? "На зараз усе повторено" : "Словник порожній")) + '</small></span><span class="pn' + (dc ? "" : " ok") + '">' + (dc || "✓") + '</span></button></li>';
+    rows += '<li><button type="button" class="prow" data-act="photo"><span class="pt"><b>📷 Слова з фото</b><small>Сфотографуйте текст, підкреслені слова підуть у словник</small></span><span class="chev" aria-hidden="true">›</span></button></li>';
     var groups = [["tenses", "часи"], ["topics", "практика"]];
     for (var i = 0; i < groups.length; i++) {
       var nt = nextIn(groups[i][0]);
@@ -1346,10 +1352,278 @@
       if (!b) return;
       var a = b.getAttribute("data-act");
       if (a === "err") openErrors();
+      else if (a === "photo") { openVocab(); openPhoto(); }
       else if (a === "cards") { vmode = "cards"; try { localStorage.setItem("fr-vmode", "cards"); } catch (e2) {} openVocab(); }
       else openSet(b.getAttribute("data-k"), parseInt(b.getAttribute("data-l"), 10));
       window.scrollTo(0, 0);
     });
+  }
+
+  /* Words from a photo: Claude (viewer's account, inside the Claude app) reads the photo,
+     finds underlined / highlighted words, or the word under a tap, and translates it. */
+  var photoOpen = false;
+  var sampleFn = null, sampleImages = false, sampleChecked = false;
+  var samplePromise = null;
+  function getSample() {
+    if (!samplePromise) {
+      samplePromise = new Promise(function (resolve) {
+        try {
+          if (!window.claude || typeof window.claude.use !== "function") { resolve(null); return; }
+          window.claude.use("sample").then(function (fn) {
+            if (!fn) { resolve(null); return; }
+            sampleFn = fn;
+            Promise.resolve(fn.limits ? fn.limits() : null).then(function (lim) {
+              sampleImages = !!(lim && lim.images);
+              resolve(fn);
+            }, function () { resolve(fn); });
+          }, function () { resolve(null); });
+        } catch (e) { resolve(null); }
+      }).then(function (fn) { sampleChecked = true; return fn; });
+    }
+    return samplePromise;
+  }
+  var ph = null; /* { url, img, W, H, zoom } */
+  var found = [], pins = [], mainCtl = null, mainState = "idle", mainNote = "";
+  function sampleErr(e) {
+    var c = e && e.code;
+    if (c === "not_granted" || c === "sampling_disabled" || c === "not_declared" || c === "capability_disabled" || c === "images_unavailable") return "Claude не має дозволу читати фото на цій сторінці. Дозвольте його в меню сторінки (Дозволи) і спробуйте ще раз.";
+    if (c === "rate_limited") return "Забагато запитів підряд або вичерпано ліміт Claude. Спробуйте трохи пізніше.";
+    if (c === "image_rejected") return "Фото не підходить: завелике або незвичний формат. Спробуйте інше.";
+    if (c === "refused") return "Claude не зміг обробити це фото.";
+    if (c === "session_expired") return "Потрібно знову увійти в Claude.";
+    if (c === "invalid_json" || c === "empty_completion") return "Не вдалося прочитати відповідь. Спробуйте ще раз.";
+    return "Не вдалося зв'язатися з Claude. Перевірте інтернет і спробуйте ще раз.";
+  }
+  var ENTRY_RULES = 'For each word give: "fr" = dictionary form (verbs in the infinitive, adjectives in masculine singular, nouns with the definite article le/la/l\'/les; keep a fixed multi-word expression together), "seen" = the exact form as printed, "ua" = a short Ukrainian translation (1-4 words; separate different meanings with commas), "ex" = the French sentence from the text that contains it (fix obvious recognition errors, at most 160 characters), "exua" = Ukrainian translation of that sentence.';
+  function cleanEntry(o) {
+    if (!o || typeof o !== "object") return null;
+    var fr = String(o.fr || o.seen || "").trim().slice(0, 80);
+    if (!fr) return null;
+    return { fr: fr, seen: String(o.seen || "").trim().slice(0, 80), ua: String(o.ua || "").trim().slice(0, 120), ex: String(o.ex || "").trim().slice(0, 200), exua: String(o.exua || "").trim().slice(0, 240) };
+  }
+  function addFound(e, src, pin) {
+    for (var i = 0; i < found.length; i++) {
+      if (found[i].fr.toLowerCase() === e.fr.toLowerCase()) { if (pin) pin.n = i + 1; return; }
+    }
+    e.src = src;
+    e.on = !vocabHas(e.fr);
+    found.push(e);
+    if (pin) pin.n = found.length;
+  }
+  function openPhoto() {
+    if (!inVocab) openVocab();
+    photoOpen = true;
+    renderPhoto();
+    window.scrollTo(0, 0);
+  }
+  function closePhoto() {
+    if (mainCtl) { try { mainCtl.abort(); } catch (e) {} }
+    photoOpen = false;
+    renderVocabView();
+  }
+  function renderPhoto() {
+    var h = '<section class="card vocab"><div class="vhead"><p class="label" style="margin:0">Слова з фото</p><button type="button" class="btn ghost" id="pback">← Словник</button></div>';
+    var noClaude = sampleChecked && (!sampleFn || !sampleImages);
+    if (noClaude) {
+      h += '<p class="smsg warn">Ця функція працює у версії застосунку, відкритій у Claude: фото читає Claude з вашого акаунта. Тут вона недоступна.</p></section>';
+      stage.innerHTML = h;
+      document.getElementById("pback").addEventListener("click", closePhoto);
+      return;
+    }
+    if (!ph) {
+      h += '<p style="margin:0">Сфотографуйте сторінку з французьким текстом. Підкреслені, обведені або виділені маркером слова знайдуться самі. Інші слова можна додати дотиком до фото.</p>';
+    }
+    h += '<div class="photo-actions">' +
+      '<span class="btn filebtn">📷 ' + (ph ? "Нове фото" : "Зробити фото") + '<input type="file" id="pcam" accept="image/*" capture="environment" aria-label="Зробити фото"></span>' +
+      '<span class="btn ghost filebtn">З галереї<input type="file" id="pgal" accept="image/*" aria-label="Вибрати фото з галереї"></span></div>';
+    if (ph) {
+      h += '<div class="ptools"><p class="pstatus" id="pstatus"></p><button type="button" class="btn ghost" id="pzoom">' + (ph.zoom ? "Зменшити" : "Збільшити") + '</button></div>';
+      h += '<div class="pwrap" id="pwrap"><div class="pinner' + (ph.zoom ? " z2" : "") + '" id="pinner"><img id="pimg" src="' + ph.url + '" alt="Ваше фото тексту"><div id="ppins"></div></div></div>';
+      h += '<p class="hint" style="margin:0;color:var(--muted);font-size:0.88rem">Торкніться слова на фото, щоб додати його. «Збільшити» допомагає влучити в дрібний шрифт.</p>';
+      h += '<ul class="flist" id="flist"></ul>';
+      h += '<div class="nextrow" id="paddrow"><button type="button" class="btn" id="padd"></button></div>';
+    }
+    h += '</section>';
+    stage.innerHTML = h;
+    document.getElementById("pback").addEventListener("click", closePhoto);
+    ["pcam", "pgal"].forEach(function (id) {
+      document.getElementById(id).addEventListener("change", function (e) {
+        var f = e.target.files && e.target.files[0];
+        if (f) loadPhoto(f);
+      });
+    });
+    if (ph) {
+      document.getElementById("pzoom").addEventListener("click", function () { ph.zoom = !ph.zoom; renderPhoto(); });
+      document.getElementById("pimg").addEventListener("click", onPhotoTap);
+      document.getElementById("padd").addEventListener("click", addChosen);
+      var fl = document.getElementById("flist");
+      fl.addEventListener("change", function (e) {
+        var li = e.target.closest("[data-i]"); if (!li) return;
+        var it = found[+li.getAttribute("data-i")]; if (!it) return;
+        if (e.target.type === "checkbox") { it.on = e.target.checked; li.classList.toggle("off", !it.on); updateAdd(); }
+      });
+      fl.addEventListener("input", function (e) {
+        var li = e.target.closest("[data-i]"); if (!li) return;
+        var it = found[+li.getAttribute("data-i")]; if (!it) return;
+        if (e.target.classList.contains("fw")) it.fr = e.target.value;
+        else if (e.target.classList.contains("fua")) it.ua = e.target.value;
+      });
+      fl.addEventListener("click", function (e) {
+        var b = e.target.closest(".fx"); if (!b) return;
+        var i = +b.closest("[data-i]").getAttribute("data-i");
+        found.splice(i, 1);
+        for (var k = 0; k < pins.length; k++) { if (pins[k].n === i + 1) pins[k].n = 0; else if (pins[k].n > i + 1) pins[k].n--; }
+        updateList(); updatePins();
+      });
+      updateStatus(); updatePins(); updateList();
+    }
+    if (!sampleChecked) getSample().then(function () { if (photoOpen && inVocab && (!sampleFn || !sampleImages)) renderPhoto(); });
+  }
+  function updateStatus() {
+    var el = document.getElementById("pstatus"); if (!el) return;
+    var busy = 0; for (var i = 0; i < pins.length; i++) if (pins[i].st === "busy") busy++;
+    var h = "";
+    if (mainState === "busy") h = '<span class="spin" aria-hidden="true"></span>Шукаю підкреслені слова… <button type="button" class="btn ghost" id="pstop" style="padding:4px 10px">Стоп</button>';
+    else if (busy) h = '<span class="spin" aria-hidden="true"></span>Розпізнаю слово…';
+    else if (mainNote) h = esc(mainNote);
+    el.innerHTML = h;
+    var st = document.getElementById("pstop");
+    if (st) st.addEventListener("click", function () { if (mainCtl) mainCtl.abort(); });
+  }
+  function updatePins() {
+    var box = document.getElementById("ppins"); if (!box || !ph) return;
+    var h = "";
+    for (var i = 0; i < pins.length; i++) {
+      var p = pins[i];
+      h += '<span class="pin ' + p.st + '" style="left:' + (p.x / ph.W * 100) + '%;top:' + (p.y / ph.H * 100) + '%">' + (p.st === "busy" ? "…" : p.st === "err" ? "!" : (p.n || "✓")) + '</span>';
+    }
+    box.innerHTML = h;
+  }
+  function updateAdd() {
+    var b = document.getElementById("padd"), row = document.getElementById("paddrow"); if (!b) return;
+    var n = 0; for (var i = 0; i < found.length; i++) if (found[i].on && found[i].fr.trim()) n++;
+    b.textContent = n ? "Додати в словник: " + n : "Позначте слова, щоб додати";
+    b.disabled = !n;
+    row.hidden = !found.length;
+  }
+  function updateList() {
+    var fl = document.getElementById("flist"); if (!fl) return;
+    var h = "";
+    for (var i = 0; i < found.length; i++) {
+      var it = found[i], dup = vocabHas(it.fr);
+      h += '<li class="fitem' + (it.on ? "" : " off") + '" data-i="' + i + '"><input type="checkbox" id="fc' + i + '" aria-label="Додати ' + esc(it.fr) + '"' + (it.on ? " checked" : "") + '>' +
+        '<div class="fbody"><input class="fin fw" value="' + esc(it.fr).replace(/"/g, "&quot;") + '" aria-label="Слово" spellcheck="false">' +
+        '<input class="fin fua" value="' + esc(it.ua).replace(/"/g, "&quot;") + '" aria-label="Переклад">' +
+        (it.ex ? '<p class="fctx">' + esc(it.ex) + '</p>' : '') +
+        '<span class="ftag' + (dup ? " dup" : "") + '">' + (dup ? "вже у словнику" : (it.src === "mark" ? "підкреслене" : "дотик № " + (i + 1))) + '</span></div>' +
+        '<button type="button" class="fx" aria-label="Прибрати ' + esc(it.fr) + '">×</button></li>';
+    }
+    fl.innerHTML = h;
+    updateAdd();
+  }
+  function loadPhoto(file) {
+    if (mainCtl) { try { mainCtl.abort(); } catch (e) {} }
+    var url = URL.createObjectURL(file), img = new Image();
+    img.onload = function () {
+      if (ph && ph.url) { try { URL.revokeObjectURL(ph.url); } catch (e) {} }
+      ph = { url: url, img: img, W: img.naturalWidth, H: img.naturalHeight, zoom: false };
+      found = []; pins = []; mainNote = "";
+      renderPhoto();
+      findMarked();
+    };
+    img.onerror = function () { toast("Не вдалося відкрити фото. Спробуйте інше."); };
+    img.src = url;
+  }
+  function toBlob(canvas, q) {
+    return new Promise(function (res) { canvas.toBlob(function (b) { res(b); }, "image/jpeg", q || 0.9); });
+  }
+  function scaled(maxSide) {
+    var k = Math.min(1, maxSide / Math.max(ph.W, ph.H)), c = document.createElement("canvas");
+    c.width = Math.round(ph.W * k); c.height = Math.round(ph.H * k);
+    c.getContext("2d").drawImage(ph.img, 0, 0, c.width, c.height);
+    return toBlob(c, 0.9);
+  }
+  function findMarked() {
+    var my = ph;
+    mainState = "busy"; mainNote = ""; updateStatus();
+    getSample().then(function (fn) {
+      if (!fn || !sampleImages) { mainState = "idle"; renderPhoto(); return; }
+      return scaled(2000).then(function (blob) {
+        if (my !== ph) return;
+        mainCtl = new AbortController();
+        var prompt = "The image is a photo of a page with French text (a book, worksheet or screen). A Ukrainian learner of French has underlined, circled or highlighted some words or expressions (pen, pencil or marker). Find every such marked word or expression, in reading order. Ignore printed formatting such as bold headings or hyperlinks unless it is clearly a hand or marker mark. " + ENTRY_RULES + ' Reply with only JSON: {"marked": [{"fr": "...", "seen": "...", "ua": "...", "ex": "...", "exua": "..."}]}. If nothing is marked, reply {"marked": []}.';
+        return fn.json(prompt, { images: [blob], signal: mainCtl.signal }).then(function (r) {
+          if (my !== ph) return;
+          var list = r && Array.isArray(r.marked) ? r.marked : [];
+          var n = 0;
+          for (var i = 0; i < list.length; i++) { var e = cleanEntry(list[i]); if (e) { addFound(e, "mark"); n++; } }
+          mainState = "idle";
+          mainNote = n ? "Знайдено підкреслених слів: " + n + "." : "Підкреслених слів не знайдено. Торкніться слів на фото, щоб додати їх.";
+          updateStatus(); updateList(); updatePins();
+        });
+      });
+    }).catch(function (e) {
+      if (my !== ph) return;
+      mainState = "idle";
+      mainNote = e && e.code === "cancelled" ? "Пошук зупинено. Слова можна додавати дотиком." : sampleErr(e);
+      updateStatus();
+    });
+  }
+  function onPhotoTap(e) {
+    if (!ph) return;
+    var r = e.currentTarget.getBoundingClientRect();
+    var x = (e.clientX - r.left) / r.width * ph.W, y = (e.clientY - r.top) / r.height * ph.H;
+    if (x < 0 || y < 0 || x > ph.W || y > ph.H) return;
+    var pin = { x: x, y: y, st: "busy", n: 0 };
+    pins.push(pin); updatePins(); updateStatus();
+    var my = ph;
+    /* Crop a band around the tap so small print stays legible, and mark the spot. */
+    var cw = Math.min(ph.W, Math.max(ph.W * 0.42, 360)), chh = Math.min(ph.H, Math.max(cw * 0.42, 160));
+    var sx = Math.max(0, Math.min(ph.W - cw, x - cw / 2)), sy = Math.max(0, Math.min(ph.H - chh, y - chh / 2));
+    var k = Math.min(1, 1200 / cw), c = document.createElement("canvas");
+    c.width = Math.round(cw * k); c.height = Math.round(chh * k);
+    var g = c.getContext("2d");
+    g.drawImage(ph.img, sx, sy, cw, chh, 0, 0, c.width, c.height);
+    var mx = (x - sx) * k, my2 = (y - sy) * k, rad = Math.max(10, c.width * 0.018);
+    g.lineWidth = Math.max(3, rad * 0.35); g.strokeStyle = "rgba(230,0,40,0.95)";
+    g.beginPath(); g.arc(mx, my2, rad, 0, Math.PI * 2); g.stroke();
+    g.beginPath(); g.moveTo(mx, my2 + rad * 1.2); g.lineTo(mx, my2 + rad * 3.2); g.stroke();
+    toBlob(c, 0.9).then(function (blob) {
+      return getSample().then(function (fn) {
+        if (!fn || !sampleImages) throw { code: "images_unavailable" };
+        var prompt = "The image is a crop of a photo of French text. A red circle (with a short red line below it) marks the spot where the learner tapped. Identify the single French word whose letters are under or closest to the centre of the red circle (if it is part of an elided form like l'école, take école; if it is clearly part of a fixed expression, you may give the whole expression). " + ENTRY_RULES + ' Reply with only JSON: {"fr": "...", "seen": "...", "ua": "...", "ex": "...", "exua": "..."}. If there is no readable word at the circle, reply {"fr": ""}.';
+        return fn.json(prompt, { images: [blob] });
+      });
+    }).then(function (r) {
+      if (my !== ph) return;
+      var en = cleanEntry(r);
+      if (!en) { pin.st = "err"; toast("Під позначкою не видно слова. Торкніться точніше або збільште фото."); }
+      else { pin.st = "ok"; addFound(en, "tap", pin); }
+      updatePins(); updateList(); updateStatus();
+    }, function (err) {
+      if (my !== ph) return;
+      pin.st = "err"; updatePins(); updateStatus();
+      toast(sampleErr(err));
+    });
+  }
+  function addChosen() {
+    var added = 0, skipped = 0, now = Date.now();
+    for (var i = found.length - 1; i >= 0; i--) {
+      var it = found[i];
+      if (!it.on || !it.fr.trim()) continue;
+      var w = it.fr.trim();
+      if (vocabHas(w)) { skipped++; continue; }
+      vocab.unshift({ w: w, ua: it.ua.trim() || "—", ex: it.ex, exua: it.exua, t: now, box: 0, due: 0, reps: 0, lapses: 0, src: "photo" });
+      added++;
+    }
+    saveVocab();
+    var keep = [];
+    for (var j = 0; j < found.length; j++) { if (!found[j].on) keep.push(found[j]); }
+    found = keep;
+    for (var k2 = 0; k2 < pins.length; k2++) pins[k2].n = 0;
+    refreshStatus();
+    toast(added ? "Додано до словника: " + added + (skipped ? " (ще " + skipped + " вже були)" : "") : "Ці слова вже є у словнику.");
+    updateList(); updatePins();
   }
 
   /* Settings screen. */

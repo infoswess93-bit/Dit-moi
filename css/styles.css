@@ -321,3 +321,36 @@ h1 { font-family: var(--font-display); font-size: 1.25rem; line-height: 1.15; ma
 .sep { height: 1px; background: var(--line); border: 0; margin: 2px 0; }
 .hstat.ok b { color: var(--good); }
 .hstat small { font-size: 0.8rem; color: var(--muted); font-weight: 500; }
+
+/* Words from a photo */
+.photo-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.photo-actions .filebtn { display: flex; align-items: center; justify-content: center; text-align: center; }
+.pwrap { position: relative; overflow: auto; max-height: 70vh; border-radius: 12px; border: 1px solid var(--line); background: var(--bg); -webkit-overflow-scrolling: touch; }
+.pinner { position: relative; width: 100%; }
+.pinner.z2 { width: 220%; }
+.pinner img { display: block; width: 100%; max-width: none; height: auto; cursor: crosshair; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+.pin { position: absolute; transform: translate(-50%, -135%); min-width: 26px; height: 26px; padding: 0 6px; border-radius: 999px; display: grid; place-items: center; font: 700 0.8rem/1 var(--font-body); color: #fff; background: var(--accent); border: 2px solid #fff; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35); pointer-events: none; }
+.pin.busy { background: var(--warn); animation: pinpulse 1s ease-in-out infinite; }
+.pin.err { background: var(--bad); }
+@keyframes pinpulse { 50% { transform: translate(-50%, -135%) scale(1.2); } }
+.pin::after { content: ""; position: absolute; left: 50%; bottom: -8px; width: 2px; height: 7px; margin-left: -1px; background: inherit; }
+@media (prefers-reduced-motion: reduce) { .pin.busy { animation: none; } }
+.ptools { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between; }
+.pstatus { margin: 0; font-size: 0.92rem; color: var(--muted); display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.spin { width: 16px; height: 16px; border-radius: 50%; border: 2px solid var(--line); border-top-color: var(--accent); animation: spin 0.8s linear infinite; flex: none; }
+@keyframes spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .spin { animation-duration: 3s; } }
+.flist { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.fitem { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 4px 10px; align-items: start; padding: 10px 12px; border-radius: 12px; border: 1.5px solid var(--line); background: var(--bg); }
+.fitem.off { opacity: 0.55; }
+.fitem input[type="checkbox"] { width: 22px; height: 22px; margin: 6px 0 0; accent-color: var(--accent); }
+.fbody { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.fin { font: inherit; width: 100%; min-width: 0; padding: 5px 8px; border-radius: 8px; border: 1px solid transparent; background: transparent; color: var(--ink); }
+.fin:hover, .fin:focus { border-color: var(--line); background: var(--surface); }
+.fin:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.fin.fw { font-family: var(--font-display); font-weight: 700; font-size: 1.05rem; }
+.fctx { margin: 0 8px; font-size: 0.85rem; color: var(--muted); overflow-wrap: anywhere; }
+.ftag { align-self: flex-start; font-size: 0.72rem; font-weight: 600; border-radius: 999px; padding: 1px 8px; background: var(--accent-soft); color: var(--accent); justify-self: start; margin-left: 8px; }
+.ftag.dup { background: var(--warn-soft); color: var(--warn); }
+.fx { font: inherit; width: 32px; height: 32px; border-radius: 8px; border: 1px solid var(--line); background: transparent; color: var(--muted); cursor: pointer; font-size: 1.1rem; line-height: 1; }
+.vtop { display: flex; gap: 8px; flex-wrap: wrap; }
