@@ -5,6 +5,50 @@
   var inVocab = false;
   var inGram = false;
   var inHome = false;
+  var inSettings = false;
+
+  /* Settings (stored per device). */
+  function lsGet(k, d) { try { var v = localStorage.getItem(k); return v === null ? d : v; } catch (e) { return d; } }
+  function lsSet(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+  var GOALS = [10, 20, 30, 50];
+  var dailyGoal = parseInt(lsGet("fr-goal", "20"), 10);
+  if (GOALS.indexOf(dailyGoal) < 0) dailyGoal = 20;
+  var theme = lsGet("fr-theme", "system");
+  var autoSay = lsGet("fr-autosay", "0") === "1";
+  var sfxOn = lsGet("fr-sfx", "0") === "1";
+  var vibOn = lsGet("fr-vib", "1") === "1";
+  var canVib = typeof navigator !== "undefined" && typeof navigator.vibrate === "function";
+  function applyTheme() {
+    if (theme === "light" || theme === "dark") document.documentElement.setAttribute("data-theme", theme);
+    else if (lsGet("fr-theme-set", "0") === "1") document.documentElement.removeAttribute("data-theme");
+  }
+  applyTheme();
+  var actx = null;
+  function beep(ok) {
+    if (!sfxOn) return;
+    try {
+      var AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return;
+      if (!actx) actx = new AC();
+      if (actx.state === "suspended") actx.resume();
+      var notes = ok ? [660, 880] : [220, 180], t = actx.currentTime;
+      for (var i = 0; i < notes.length; i++) {
+        var o = actx.createOscillator(), g = actx.createGain();
+        o.type = ok ? "sine" : "triangle";
+        o.frequency.value = notes[i];
+        g.gain.setValueAtTime(0.0001, t + i * 0.11);
+        g.gain.exponentialRampToValueAtTime(0.18, t + i * 0.11 + 0.02);
+        g.gain.exponentialRampToValueAtTime(0.0001, t + i * 0.11 + 0.16);
+        o.connect(g); g.connect(actx.destination);
+        o.start(t + i * 0.11); o.stop(t + i * 0.11 + 0.18);
+      }
+    } catch (e) {}
+  }
+  function answerFx(ok, sentence) {
+    beep(ok);
+    if (vibOn && canVib) { try { navigator.vibrate(ok ? 25 : [70, 50, 70]); } catch (e) {} }
+    if (autoSay && sentence) setTimeout(function () { say(sentence); }, sfxOn ? 380 : 0);
+  }
 
   /* Every exercise gets a stable id (tense-oldLesson-oldIndex). Source lists hold 20 exercises; each is shown as two lessons of 10.
      New source lists are appended at the end and never reordered, so saved ids stay valid. */
@@ -95,6 +139,7 @@
     return d.getFullYear() + "-" + z(d.getMonth() + 1) + "-" + z(d.getDate());
   }
   function touchStreak() {
+    if (todayCount() < dailyGoal) return;
     var now = new Date(), t = dayStr(now);
     if (streak.last === t) return;
     var y = new Date(now.getTime()); y.setDate(y.getDate() - 1);
@@ -116,6 +161,12 @@
     if (today.d !== t) today = { d: t, n: 0 };
     today.n++;
     try { localStorage.setItem("fr-day", JSON.stringify(today)); } catch (e) {}
+    if (today.n >= dailyGoal) {
+      var before = streak.last;
+      touchStreak();
+      saveGame();
+      if (before !== streak.last) { refreshGame(); toast("🎯 Денну мету виконано! Серія: " + streak.n + " " + daysWord(streak.n)); }
+    }
   }
 
   /* French text-to-speech (built into Android, works offline). */
@@ -450,6 +501,7 @@
     saveState();
     refreshStatus();
 
+    answerFx(ok, q.pre + q.a[0] + q.post);
     var blank = document.getElementById("blank");
     if (ok) blank.innerHTML = wrapWords(q.a[0]); else blank.textContent = value;
     blank.className = "blank " + (ok ? "good" : "bad");
@@ -647,6 +699,7 @@
       shownAns = it.t === "tr" ? fullSentence(q, q.a[0]) : q.a[0];
     }
     tans = true;
+    answerFx(ok, fullSentence(q, q.a[0]));
     if (ok) tscore++;
     else {
       twrong.push({ q: q, given: it.t === "judge" ? (val === "1" ? "Вірно" : "Є помилка") : val });
@@ -717,7 +770,7 @@
   }
 
   function curGroup() {
-    return inHome ? "home" : inErrors ? "err" : inVocab ? "vocab" : inGram ? "gram" : SETS[currentKey].group;
+    return inSettings ? "settings" : inHome ? "home" : inErrors ? "err" : inVocab ? "vocab" : inGram ? "gram" : SETS[currentKey].group;
   }
   function groupStatus(g) {
     var any = false, allDone = true, todo = false;
@@ -771,17 +824,18 @@
   function refreshStatus() {
     syncTabs();
     syncNav();
-    if (!inErrors && !inVocab && !inGram && !inHome) renderLessonChips();
+    if (!inErrors && !inVocab && !inGram && !inHome && !inSettings) renderLessonChips();
     refreshGame();
   }
 
   function setMode() {
-    var other = inErrors || inVocab || inGram || inHome;
+    var other = inErrors || inVocab || inGram || inHome || inSettings;
+    document.getElementById("setbtn").setAttribute("aria-pressed", String(inSettings));
     document.getElementById("lessons").hidden = other;
     document.getElementById("recapbox").hidden = other;
     syncNav();
     document.getElementById("errnote").hidden = !inErrors;
-    document.getElementById("progress").hidden = inVocab || inGram || inHome;
+    document.getElementById("progress").hidden = inVocab || inGram || inHome || inSettings;
   }
   function dueCount() {
     var now = Date.now(), n = 0;
@@ -883,6 +937,7 @@
     if (r === 1) cur.lapses = (cur.lapses || 0) + 1;
     saveVocab();
     bumpDay();
+    if (vibOn && canVib) { try { navigator.vibrate(15); } catch (e) {} }
     fq.shift();
     if (r === 1) fq.push(cur.w); else fdone++;
     fshow = false;
@@ -1058,7 +1113,7 @@
   }
   function openGram(topic) {
     if (typeof topic === "string") gq = topic;
-    inGram = true; inHome = false; inVocab = false; inErrors = false;
+    inGram = true; inHome = false; inSettings = false; inVocab = false; inErrors = false;
     setMode();
     refreshStatus();
     try { localStorage.setItem("fr-state", "gram:0"); } catch (e) {}
@@ -1066,7 +1121,7 @@
   }
 
   function openVocab() {
-    inVocab = true; inHome = false;
+    inVocab = true; inHome = false; inSettings = false;
     inGram = false;
     inErrors = false;
     setMode();
@@ -1077,7 +1132,7 @@
   }
 
   function openErrors() {
-    inErrors = true; inHome = false;
+    inErrors = true; inHome = false; inSettings = false;
     inVocab = false;
     inGram = false;
     setMode();
@@ -1116,6 +1171,7 @@
     currentKey = key;
     currentLesson = idx;
     inHome = false;
+    inSettings = false;
     inErrors = false;
     inVocab = false;
     inGram = false;
@@ -1253,7 +1309,7 @@
     return { k: t.k, l: t.l, act: "Повторити урок", done: 0 };
   }
   function openHome() {
-    inHome = true; inErrors = false; inVocab = false; inGram = false;
+    inHome = true; inSettings = false; inErrors = false; inVocab = false; inGram = false;
     navOpen = false;
     setMode();
     refreshStatus();
@@ -1280,7 +1336,7 @@
 
     var lv = levelOf(xp), sn = streakNow();
     h += '<div class="hstats">' +
-      '<div class="hstat"><b>' + todayCount() + '</b><span>відповідей сьогодні</span></div>' +
+      '<div class="hstat' + (todayCount() >= dailyGoal ? " ok" : "") + '"><b>' + todayCount() + '<small> / ' + dailyGoal + '</small></b><span>' + (todayCount() >= dailyGoal ? "мету виконано ✓" : "денна мета") + '</span></div>' +
       '<div class="hstat"><b>' + sn + '</b><span>' + daysWord(sn) + ' поспіль</span></div>' +
       '<div class="hstat" title="' + esc(lv.name) + '"><b>' + (lv.to - xp) + '</b><span>балів до рівня ' + (lv.n + 1) + '</span></div></div>';
     stage.innerHTML = h;
@@ -1295,6 +1351,151 @@
       window.scrollTo(0, 0);
     });
   }
+
+  /* Settings screen. */
+  var importText = "", importMsg = null, importReady = null;
+  function exportData() {
+    var data = {};
+    try {
+      for (var i = 0; i < localStorage.length; i++) {
+        var k = localStorage.key(i);
+        if (k && k.indexOf("fr-") === 0) data[k] = localStorage.getItem(k);
+      }
+    } catch (e) {}
+    return JSON.stringify({ app: "dis-moi", v: 1, date: new Date().toISOString(), data: data });
+  }
+  function parseImport(text) {
+    var o;
+    try { o = JSON.parse(String(text).trim()); } catch (e) { return { err: "Це не схоже на файл прогресу. Скопіюйте текст повністю, від { до }." }; }
+    if (!o || o.app !== "dis-moi" || !o.data || typeof o.data !== "object") return { err: "У тексті немає даних Dis-moi. Перевірте, що вставили саме експорт прогресу." };
+    var n = 0;
+    for (var k in o.data) { if (k.indexOf("fr-") === 0 && typeof o.data[k] === "string") n++; }
+    if (!n) return { err: "Файл прогресу порожній." };
+    var g = {}; try { g = JSON.parse(o.data["fr-game"] || "{}"); } catch (e) {}
+    var v = []; try { v = JSON.parse(o.data["fr-vocab"] || "[]"); } catch (e) {}
+    return { data: o.data, date: o.date, xp: g.xp || 0, words: Array.isArray(v) ? v.length : 0 };
+  }
+  function openSettings() {
+    inSettings = true; inHome = false; inErrors = false; inVocab = false; inGram = false;
+    navOpen = false;
+    importMsg = null; importReady = null;
+    setMode();
+    refreshStatus();
+    renderSettings();
+  }
+  function seg(name, items, cur) {
+    var h = '<div class="seg wide" role="group">';
+    for (var i = 0; i < items.length; i++) h += '<button type="button" class="segbtn" data-' + name + '="' + items[i][0] + '" aria-pressed="' + (String(items[i][0]) === String(cur)) + '">' + items[i][1] + '</button>';
+    return h + '</div>';
+  }
+  function sw(id, label, sub, on) {
+    return '<label class="swrow" for="' + id + '"><span><b>' + label + '</b>' + (sub ? '<small>' + sub + '</small>' : '') + '</span><input type="checkbox" class="sw" id="' + id + '"' + (on ? " checked" : "") + '></label>';
+  }
+  function renderSettings() {
+    var h = '<section class="card sets"><h2>Денна мета</h2>';
+    h += seg("goal", GOALS.map(function (g) { return [g, String(g)]; }), dailyGoal);
+    h += '<p class="hint">Скільки відповідей на день: вправи, тести й картки. Серія днів 🔥 зростає, коли мету виконано. Сьогодні: ' + todayCount() + ' з ' + dailyGoal + '.</p></section>';
+
+    h += '<section class="card sets"><h2>Вигляд</h2>' + seg("theme", [["system", "Як у системі"], ["light", "Світла"], ["dark", "Темна"]], theme) + '</section>';
+
+    h += '<section class="card sets"><h2>Звук і вібрація</h2>';
+    h += sw("s-autosay", "Озвучувати речення", "Автоматично після кожної відповіді", autoSay);
+    h += sw("s-sfx", "Звуки відповіді", "Короткий сигнал: правильно чи ні", sfxOn);
+    if (canVib) h += sw("s-vib", "Вібрація", "Легкий відгук на відповідь", vibOn);
+    if (canSpeak) {
+      pickVoice();
+      h += '<div class="voice"><button type="button" class="btn ghost" id="s-test">🔊 Перевірити голос</button><span>' + (frVoice ? 'Голос: <b>' + esc(frVoice.name) + '</b>' : 'Французький голос не знайдено. На Android: Налаштування → Мова та введення → Синтез мовлення → Google → встановити французьку.') + '</span></div>';
+    } else {
+      h += '<p class="hint">Цей браузер не вміє озвучувати текст.</p>';
+    }
+    h += '</section>';
+
+    h += '<section class="card sets"><h2>Перенести прогрес</h2>';
+    h += '<p class="hint">Бали, зірки, помилки, словник і налаштування зберігаються лише на цьому пристрої. Щоб перенести їх на інший телефон чи в іншу версію застосунку, скопіюйте прогрес тут і вставте там.</p>';
+    h += '<div class="srow"><button type="button" class="btn" id="s-copy">Скопіювати прогрес</button>' + (window.self === window.top ? '<button type="button" class="btn ghost" id="s-save">Зберегти файл</button>' : '') + '</div>';
+    h += '<textarea class="ta" id="s-out" readonly hidden aria-label="Експорт прогресу"></textarea>';
+    h += '<hr class="sep">';
+    h += '<label class="hint" for="s-in">Вставте скопійований прогрес або виберіть файл:</label>';
+    h += '<textarea class="ta" id="s-in" placeholder="{&quot;app&quot;:&quot;dis-moi&quot;, …}" spellcheck="false">' + esc(importText) + '</textarea>';
+    h += '<div class="srow"><button type="button" class="btn ghost" id="s-check">Завантажити прогрес</button><span class="btn ghost filebtn">Вибрати файл<input type="file" id="s-file" accept=".json,application/json,text/plain" aria-label="Вибрати файл прогресу"></span></div>';
+    if (importMsg) h += '<p class="smsg ' + importMsg[0] + '">' + importMsg[1] + '</p>';
+    if (importReady) h += '<div class="srow"><button type="button" class="btn" id="s-apply">Так, замінити</button><button type="button" class="btn ghost" id="s-cancel">Скасувати</button></div>';
+    h += '</section>';
+
+    var nq = 0; for (var id in ALL) nq++;
+    h += '<section class="card sets"><h2>Про застосунок</h2><div class="about">' +
+      '<div class="hstat"><b>' + nq + '</b><span>вправ</span></div>' +
+      '<div class="hstat"><b>' + GRAM.length + '</b><span>тем граматики</span></div>' +
+      '<div class="hstat"><b>' + vocab.length + '</b><span>слів у словнику</span></div></div></section>';
+    stage.innerHTML = h;
+
+    var box = stage;
+    box.querySelectorAll("[data-goal]").forEach(function (b) { b.addEventListener("click", function () { dailyGoal = parseInt(b.getAttribute("data-goal"), 10); lsSet("fr-goal", String(dailyGoal)); renderSettings(); refreshGame(); }); });
+    box.querySelectorAll("[data-theme]").forEach(function (b) { b.addEventListener("click", function () { theme = b.getAttribute("data-theme"); lsSet("fr-theme", theme); lsSet("fr-theme-set", "1"); applyTheme(); renderSettings(); }); });
+    function bindSw(id, fn) { var el = document.getElementById(id); if (el) el.addEventListener("change", function () { fn(el.checked); }); }
+    bindSw("s-autosay", function (v) { autoSay = v; lsSet("fr-autosay", v ? "1" : "0"); if (v) say("C'est parti !"); });
+    bindSw("s-sfx", function (v) { sfxOn = v; lsSet("fr-sfx", v ? "1" : "0"); if (v) beep(true); });
+    bindSw("s-vib", function (v) { vibOn = v; lsSet("fr-vib", v ? "1" : "0"); if (v && canVib) { try { navigator.vibrate(30); } catch (e) {} } });
+    var tb = document.getElementById("s-test"); if (tb) tb.addEventListener("click", function () { say("Bonjour ! Je m'appelle Dis-moi. On pratique le français ensemble ?"); });
+
+    document.getElementById("s-copy").addEventListener("click", function () {
+      var txt = exportData(), out = document.getElementById("s-out");
+      out.value = txt; out.hidden = false;
+      function fallback() { out.focus(); out.select(); toast("Виділено. Натисніть «Копіювати» в меню телефона."); }
+      try {
+        navigator.clipboard.writeText(txt).then(function () { toast("Прогрес скопійовано. Вставте його в іншій версії застосунку."); }, fallback);
+      } catch (e) { fallback(); }
+    });
+    var sv = document.getElementById("s-save");
+    if (sv) sv.addEventListener("click", function () {
+      try {
+        var blob = new Blob([exportData()], { type: "application/json" }), a = document.createElement("a");
+        a.href = URL.createObjectURL(blob); a.download = "dis-moi-progres-" + dayStr(new Date()) + ".json";
+        document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(function () { URL.revokeObjectURL(a.href); }, 2000);
+      } catch (e) { toast("Не вдалося зберегти файл. Скористайтеся кнопкою «Скопіювати прогрес»."); }
+    });
+    var inp = document.getElementById("s-in");
+    inp.addEventListener("input", function () { importText = inp.value; });
+    function check(text) {
+      importText = text;
+      var r = parseImport(text);
+      if (r.err) { importMsg = ["bad", r.err]; importReady = null; }
+      else {
+        importReady = r.data;
+        importMsg = ["warn", "Знайдено прогрес" + (r.date ? " від " + esc(String(r.date).slice(0, 10)) : "") + ": " + r.xp + " балів, " + r.words + " слів у словнику. Поточний прогрес на цьому пристрої буде замінено."];
+      }
+      renderSettings();
+    }
+    document.getElementById("s-check").addEventListener("click", function () { check(inp.value); });
+    document.getElementById("s-file").addEventListener("change", function (e) {
+      var f = e.target.files && e.target.files[0];
+      if (!f) return;
+      var rd = new FileReader();
+      rd.onload = function () { check(String(rd.result || "")); };
+      rd.onerror = function () { importMsg = ["bad", "Не вдалося прочитати файл."]; renderSettings(); };
+      rd.readAsText(f);
+    });
+    var ap = document.getElementById("s-apply");
+    if (ap) ap.addEventListener("click", function () {
+      try {
+        var del = [];
+        for (var i = 0; i < localStorage.length; i++) { var k = localStorage.key(i); if (k && k.indexOf("fr-") === 0) del.push(k); }
+        for (var j = 0; j < del.length; j++) localStorage.removeItem(del[j]);
+        for (var key in importReady) { if (key.indexOf("fr-") === 0 && typeof importReady[key] === "string") localStorage.setItem(key, importReady[key]); }
+        importReady = null; importText = "";
+        importMsg = ["good", "Прогрес завантажено. Перезапускаю…"];
+        renderSettings();
+        setTimeout(function () { location.reload(); }, 600);
+      } catch (e) { importMsg = ["bad", "Не вдалося записати прогрес на цьому пристрої."]; renderSettings(); }
+    });
+    var cc = document.getElementById("s-cancel");
+    if (cc) cc.addEventListener("click", function () { importReady = null; importMsg = null; renderSettings(); });
+  }
+  document.getElementById("setbtn").addEventListener("click", function () {
+    if (inSettings) openHome(); else openSettings();
+    window.scrollTo(0, 0);
+  });
 
   (function () {
     var lt = lastTarget();
