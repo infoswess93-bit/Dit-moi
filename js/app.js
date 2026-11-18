@@ -4,6 +4,7 @@
   var inErrors = false;
   var inVocab = false;
   var inGram = false;
+  var inHome = false;
 
   /* Every exercise gets a stable id (tense-oldLesson-oldIndex). Source lists hold 20 exercises; each is shown as two lessons of 10.
      New source lists are appended at the end and never reordered, so saved ids stay valid. */
@@ -104,15 +105,93 @@
     var now = new Date(), y = new Date(now.getTime()); y.setDate(y.getDate() - 1);
     return (streak.last === dayStr(now) || streak.last === dayStr(y)) ? streak.n : 0;
   }
+  function daysWord(n) { var m = n % 10, h = n % 100; return (m === 1 && h !== 11) ? "день" : (m >= 2 && m <= 4 && (h < 12 || h > 14)) ? "дні" : "днів"; }
+
+  /* Answers given today (for the Today screen). */
+  var today = { d: "", n: 0 };
+  try { var td0 = JSON.parse(localStorage.getItem("fr-day") || "{}"); if (td0 && typeof td0.n === "number") today = { d: String(td0.d || ""), n: td0.n }; } catch (e) {}
+  function todayCount() { return today.d === dayStr(new Date()) ? today.n : 0; }
+  function bumpDay() {
+    var t = dayStr(new Date());
+    if (today.d !== t) today = { d: t, n: 0 };
+    today.n++;
+    try { localStorage.setItem("fr-day", JSON.stringify(today)); } catch (e) {}
+  }
+
+  /* French text-to-speech (built into Android, works offline). */
+  var canSpeak = typeof window.speechSynthesis !== "undefined" && typeof window.SpeechSynthesisUtterance !== "undefined";
+  var frVoice = null;
+  function pickVoice() {
+    try {
+      var vs = window.speechSynthesis.getVoices(), best = null;
+      for (var i = 0; i < vs.length; i++) {
+        var lg = String(vs[i].lang || "").toLowerCase().replace("_", "-");
+        if (lg.indexOf("fr") !== 0) continue;
+        if (!best || (lg === "fr-fr" && String(best.lang).toLowerCase().replace("_", "-") !== "fr-fr")) best = vs[i];
+      }
+      frVoice = best;
+    } catch (e) {}
+  }
+  if (canSpeak) {
+    pickVoice();
+    try { window.speechSynthesis.addEventListener("voiceschanged", pickVoice); } catch (e) {}
+  }
+  function say(text) {
+    if (!canSpeak || !text) return;
+    try {
+      window.speechSynthesis.cancel();
+      var u = new SpeechSynthesisUtterance(text);
+      u.lang = "fr-FR";
+      if (frVoice) u.voice = frVoice;
+      u.rate = 0.92;
+      window.speechSynthesis.speak(u);
+    } catch (e) {}
+  }
+  function sayBtn(text, cls) {
+    return canSpeak ? '<button type="button" class="say' + (cls ? " " + cls : "") + '" data-say="' + esc(text).replace(/"/g, "&quot;") + '" aria-label="Прослухати">🔊</button>' : "";
+  }
+  document.addEventListener("click", function (e) {
+    var b = e.target.closest ? e.target.closest("[data-say]") : null;
+    if (b) say(b.getAttribute("data-say"));
+  });
+
+  /* Accent keys for typing on a phone. */
+  var ACCENTS = ["é", "è", "ê", "à", "â", "ç", "ô", "û", "ù", "î", "ï", "ë", "œ", "’"];
+  function keysHtml() {
+    var h = '<div class="keys" role="group" aria-label="Французькі літери">';
+    for (var i = 0; i < ACCENTS.length; i++) h += '<button type="button" class="key" data-k="' + ACCENTS[i] + '" tabindex="-1">' + ACCENTS[i] + '</button>';
+    return h + '</div>';
+  }
+  function wireKeys(inputId) {
+    var box = stage.querySelector(".keys"), inp = document.getElementById(inputId);
+    if (!box || !inp) return;
+    box.addEventListener("mousedown", function (e) { e.preventDefault(); });
+    box.addEventListener("pointerdown", function (e) { if (e.target.closest(".key")) e.preventDefault(); });
+    box.addEventListener("click", function (e) {
+      var k = e.target.closest(".key");
+      if (!k || inp.disabled) return;
+      var ch = k.getAttribute("data-k") === "’" ? "'" : k.getAttribute("data-k");
+      var a = inp.selectionStart == null ? inp.value.length : inp.selectionStart, b = inp.selectionEnd == null ? a : inp.selectionEnd;
+      inp.value = inp.value.slice(0, a) + ch + inp.value.slice(b);
+      inp.focus();
+      try { inp.setSelectionRange(a + ch.length, a + ch.length); } catch (e2) {}
+    });
+  }
+
+  /* Answer mode: pick from options or type (typing gives more points). */
+  var amode = "choice";
+  try { if (localStorage.getItem("fr-amode") === "typed") amode = "typed"; } catch (e) {}
+
   function starsText(n) { return n === 3 ? "★★★" : n === 2 ? "★★☆" : n === 1 ? "★☆☆" : "☆☆☆"; }
   function refreshGame() {
     var lv = levelOf(xp);
     document.getElementById("gxp").textContent = String(xp);
     var gl = document.getElementById("glvl");
-    gl.textContent = "Рівень " + lv.n + " · " + lv.name;
-    gl.title = "До наступного рівня: " + (lv.to - xp) + " балів";
-    var sn = streakNow();
-    document.getElementById("gstreak").textContent = sn ? "Серія: " + sn + " " + (sn === 1 ? "день" : (sn < 5 ? "дні" : "днів")) : "";
+    gl.textContent = "Рівень " + lv.n;
+    gl.title = lv.name + ". До наступного рівня: " + (lv.to - xp) + " балів";
+    var sn = streakNow(), gs = document.getElementById("gstreak");
+    gs.textContent = sn ? "🔥 " + sn : "";
+    gs.title = sn ? "Серія: " + sn + " " + daysWord(sn) + " поспіль" : "";
     document.getElementById("gbarfill").style.width = Math.max(0, Math.min(100, (xp - lv.from) / (lv.to - lv.from) * 100)) + "%";
   }
 
@@ -289,38 +368,57 @@
     answered = false;
     var q = queue[pos];
     var opts = shuffle(q.o);
+    var typed = amode === "typed";
     var html = "";
     html += '<section class="card" aria-labelledby="sentence">';
     html += '<div class="meta"><span class="chip">' + esc(SETS[q.set].label + (inErrors ? " · урок " + (q.lesson + 1) : "")) + '</span>' + (hist[q.id] ? '<span class="chip warn">помилок раніше: ' + hist[q.id] + '</span>' : '') + '<span class="verb">(' + wrapWords(q.verb) + ')</span></div>';
     html += '<p class="sentence" id="sentence">' + wrapWords(q.pre) + '<span class="blank" id="blank">&nbsp;&nbsp;&nbsp;&nbsp;</span>' + wrapWords(q.post) + '</p>';
     html += '<p class="tr">' + esc(q.tr) + '</p>';
-    html += '<div><p class="label">Оберіть варіант</p><div class="opts" id="opts">';
-    for (var i = 0; i < opts.length; i++) {
-      html += '<button type="button" class="opt" data-v="' + esc(opts[i]) + '">' + esc(opts[i]) + '</button>';
+    html += '<div class="seg amode" role="group" aria-label="Спосіб відповіді"><button type="button" class="segbtn" data-am="choice" aria-pressed="' + !typed + '">Варіанти</button><button type="button" class="segbtn" data-am="typed" aria-pressed="' + typed + '">Вписати <small>+50%</small></button></div>';
+    if (!typed) {
+      html += '<div class="opts" id="opts">';
+      for (var i = 0; i < opts.length; i++) {
+        html += '<button type="button" class="opt" data-v="' + esc(opts[i]) + '">' + esc(opts[i]) + '</button>';
+      }
+      html += '</div>';
+    } else {
+      html += '<form class="type" id="typeform" autocomplete="off">';
+      html += '<input class="field" id="answer" type="text" placeholder="' + esc(SETS[q.set].placeholder || "Напишіть форму дієслова") + '" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="done" aria-label="Ваша відповідь">';
+      html += keysHtml();
+      html += '<button type="submit" class="btn" id="check">Перевірити</button>';
+      html += '</form>';
     }
-    html += '</div></div>';
-    html += '<div class="or">або впишіть самі</div>';
-    html += '<form class="type" id="typeform" autocomplete="off">';
-    html += '<input class="field" id="answer" type="text" placeholder="' + esc(SETS[q.set].placeholder || "Напишіть форму дієслова") + '" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Ваша відповідь">';
-    html += '<button type="submit" class="btn" id="check">Перевірити</button>';
-    html += '</form>';
     html += '<div id="fb" aria-live="polite"></div>';
-    html += '<div class="nextrow" id="nextrow" hidden><button type="button" class="btn" id="next">' + (pos === queue.length - 1 ? "Показати результат" : "Далі") + '</button></div>';
+    html += '<div class="nextrow" id="nextrow" hidden>' + sayBtn(q.pre + q.a[0] + q.post, "") + '<button type="button" class="btn" id="next">' + (pos === queue.length - 1 ? "Показати результат" : "Далі") + '</button></div>';
     html += '</section>';
     stage.innerHTML = html;
 
-    document.getElementById("opts").addEventListener("click", function (e) {
+    stage.querySelector(".amode").addEventListener("click", function (e) {
+      var b = e.target.closest("[data-am]");
+      if (!b || b.getAttribute("data-am") === amode) return;
+      amode = b.getAttribute("data-am");
+      try { localStorage.setItem("fr-amode", amode); } catch (e2) {}
+      if (!answered) render();
+      else { var bs = stage.querySelectorAll(".amode .segbtn"); for (var j = 0; j < bs.length; j++) bs[j].setAttribute("aria-pressed", String(bs[j].getAttribute("data-am") === amode)); }
+    });
+    var ob = document.getElementById("opts");
+    if (ob) ob.addEventListener("click", function (e) {
       var b = e.target.closest(".opt");
       if (!b || answered) return;
       submit(b.getAttribute("data-v"), "choice");
     });
-    document.getElementById("typeform").addEventListener("submit", function (e) {
-      e.preventDefault();
-      if (answered) return;
-      var v = document.getElementById("answer").value;
-      if (!norm(v)) { document.getElementById("answer").focus(); return; }
-      submit(v, "typed");
-    });
+    var tf = document.getElementById("typeform");
+    if (tf) {
+      tf.addEventListener("submit", function (e) {
+        e.preventDefault();
+        if (answered) { pos++; render(); keepInView(); return; }
+        var v = document.getElementById("answer").value;
+        if (!norm(v)) { document.getElementById("answer").focus(); return; }
+        submit(v, "typed");
+      });
+      wireKeys("answer");
+      try { document.getElementById("answer").focus({ preventScroll: true }); } catch (e3) {}
+    }
     document.getElementById("next").addEventListener("click", function () { pos++; render(); keepInView(); });
   }
 
@@ -337,14 +435,15 @@
     var pts = 0;
     if (ok) {
       score++;
-      if (inErrors) { delete bank[q.id]; pts = 5; }
-      else if (kind === "main" && !got[q.id]) { pts = 10; got[q.id] = 1; }
+      if (inErrors) { delete bank[q.id]; pts = mode === "typed" ? 8 : 5; }
+      else if (kind === "main" && !got[q.id]) { pts = mode === "typed" ? 15 : 10; got[q.id] = 1; }
     } else {
       wrong.push({ q: q, given: value });
       bank[q.id] = (bank[q.id] || 0) + 1;
       hist[q.id] = (hist[q.id] || 0) + 1;
     }
     touchStreak();
+    bumpDay();
     if (pts) { lessonPts += pts; addXp(pts); }
     saveProg();
     saveGame();
@@ -363,8 +462,9 @@
       if (v === q.a[0]) b.className = "opt good";
       else if (mode === "choice" && v === value) b.className = "opt bad";
     }
-    document.getElementById("answer").disabled = true;
-    document.getElementById("check").disabled = true;
+    var ai = document.getElementById("answer"); if (ai) ai.readOnly = true;
+    var ck = document.getElementById("check"); if (ck) ck.hidden = true;
+    var kb = stage.querySelectorAll(".key"); for (var kk = 0; kk < kb.length; kk++) kb[kk].disabled = true;
 
     var fb = document.getElementById("fb");
     var msg;
@@ -377,7 +477,7 @@
     fb.innerHTML = msg;
     var nr = document.getElementById("nextrow");
     nr.hidden = false;
-    document.getElementById("next").focus();
+    if (mode !== "typed") document.getElementById("next").focus({ preventScroll: true });
     barFill.style.width = ((pos + 1) / queue.length * 100) + "%";
     bar.setAttribute("aria-valuenow", String(pos + 1));
   }
@@ -508,7 +608,7 @@
       for (var i = 0; i < os.length; i++) h += '<button type="button" class="opt" data-v="' + esc(os[i]) + '">' + esc(os[i]) + '</button>';
       h += '</div>';
     } else if (it.t === "type") {
-      h += '<form class="type" id="ttype" autocomplete="off"><input class="field" id="tanswer" type="text" placeholder="Напишіть відповідь" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Ваша відповідь"><button type="submit" class="btn" id="tcheck">Перевірити</button></form>';
+      h += '<form class="type" id="ttype" autocomplete="off"><input class="field" id="tanswer" type="text" placeholder="Напишіть відповідь" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Ваша відповідь">' + keysHtml() + '<button type="submit" class="btn" id="tcheck">Перевірити</button></form>';
     } else if (it.t === "judge") {
       h += '<p class="tq" id="sentence">' + wrapWords(q.pre) + '<b>' + esc(it.shown) + '</b>' + wrapWords(q.post) + '</p><p class="tr">' + esc(q.tr) + '</p>';
       h += '<div class="opts" id="topts"><button type="button" class="opt" data-v="1">Вірно</button><button type="button" class="opt" data-v="0">Є помилка</button></div>';
@@ -518,7 +618,7 @@
       for (var j = 0; j < os2.length; j++) h += '<button type="button" class="opt" data-v="' + esc(os2[j]) + '">' + wrapWords(fullSentence(q, os2[j])) + '</button>';
       h += '</div>';
     }
-    h += '<div id="tfb" aria-live="polite"></div><div class="nextrow" id="tnextrow" hidden><button type="button" class="btn" id="tnext">' + (tpos === tq.length - 1 ? "Показати результат" : "Далі") + '</button></div></section>';
+    h += '<div id="tfb" aria-live="polite"></div><div class="nextrow" id="tnextrow" hidden>' + sayBtn(fullSentence(q, q.a[0]), "") + '<button type="button" class="btn" id="tnext">' + (tpos === tq.length - 1 ? "Показати результат" : "Далі") + '</button></div></section>';
     stage.innerHTML = h;
     var to = document.getElementById("topts");
     if (to) to.addEventListener("click", function (e) {
@@ -534,6 +634,7 @@
       if (!norm(v)) return;
       tsubmit(v, null);
     });
+    if (tf) wireKeys("tanswer");
     document.getElementById("tnext").addEventListener("click", function () { tpos++; renderTest(); keepInView(); });
   }
   function tsubmit(val, btn) {
@@ -551,7 +652,7 @@
       twrong.push({ q: q, given: it.t === "judge" ? (val === "1" ? "Вірно" : "Є помилка") : val });
       bank[q.id] = (bank[q.id] || 0) + 1; hist[q.id] = (hist[q.id] || 0) + 1;
     }
-    touchStreak(); saveGame(); saveState(); refreshStatus();
+    touchStreak(); bumpDay(); saveGame(); saveState(); refreshStatus();
     var bs = document.querySelectorAll("#topts .opt");
     for (var k = 0; k < bs.length; k++) {
       var v = bs[k].getAttribute("data-v"); bs[k].disabled = true;
@@ -566,7 +667,7 @@
       ? '<div class="feedback good"><strong>Правильно</strong><span>' + esc(q.why) + '</span></div>'
       : '<div class="feedback bad"><strong>' + (near ? "Майже, перевірте діакритику" : "Не зовсім") + '</strong><span>Правильно: <b>' + wrapWords(shownAns) + '</b></span><span>' + esc(q.why) + '</span></div>';
     document.getElementById("tnextrow").hidden = false;
-    document.getElementById("tnext").focus();
+    document.getElementById("tnext").focus({ preventScroll: true });
     barFill.style.width = ((tpos + 1) / tq.length * 100) + "%";
   }
   function testSummary() {
@@ -616,7 +717,7 @@
   }
 
   function curGroup() {
-    return inErrors ? "err" : inVocab ? "vocab" : inGram ? "gram" : SETS[currentKey].group;
+    return inHome ? "home" : inErrors ? "err" : inVocab ? "vocab" : inGram ? "gram" : SETS[currentKey].group;
   }
   function groupStatus(g) {
     var any = false, allDone = true, todo = false;
@@ -632,21 +733,15 @@
   var lastSet = { tenses: "pc", topics: "cod" };
   function syncTabs() {
     var g = curGroup();
+    var tg = (g === "tenses" || g === "topics") ? "lessons" : g;
     var tabs = document.querySelectorAll("#maintabs .tab");
-    for (var i = 0; i < tabs.length; i++) {
-      var gk = tabs[i].getAttribute("data-g");
-      tabs[i].setAttribute("aria-selected", gk === g ? "true" : "false");
-      if (gk === "tenses" || gk === "topics") {
-        var st = groupStatus(gk);
-        tabs[i].classList.toggle("done", st === "done");
-        tabs[i].classList.toggle("todo", st === "todo");
-      } else if (gk === "err" || gk === "vocab") {
-        var c = gk === "err" ? bankTotal() : vocab.length;
-        var badge = document.getElementById(gk === "err" ? "errcount" : "vocabcount");
-        badge.textContent = String(c);
-        badge.hidden = c === 0;
-      }
-    }
+    for (var i = 0; i < tabs.length; i++) tabs[i].setAttribute("aria-current", tabs[i].getAttribute("data-g") === tg ? "true" : "false");
+    var ec = bankTotal(), eb = document.getElementById("errcount");
+    eb.textContent = String(ec); eb.hidden = ec === 0;
+    var vb = document.getElementById("vocabcount"), vd = dueCount();
+    vb.textContent = String(vd); vb.hidden = vd === 0;
+    var gb = document.querySelectorAll("#groupseg .segbtn");
+    for (var gi2 = 0; gi2 < gb.length; gi2++) gb[gi2].setAttribute("aria-pressed", String(gb[gi2].getAttribute("data-grp") === g));
     var sub = document.getElementById("subtabs");
     if (g === "tenses" || g === "topics") {
       var h = "";
@@ -676,16 +771,22 @@
   function refreshStatus() {
     syncTabs();
     syncNav();
-    if (!inErrors && !inVocab && !inGram) renderLessonChips();
+    if (!inErrors && !inVocab && !inGram && !inHome) renderLessonChips();
     refreshGame();
   }
 
   function setMode() {
-    document.getElementById("lessons").hidden = inErrors || inVocab || inGram;
-    document.getElementById("recapbox").hidden = inErrors || inVocab || inGram;
+    var other = inErrors || inVocab || inGram || inHome;
+    document.getElementById("lessons").hidden = other;
+    document.getElementById("recapbox").hidden = other;
     syncNav();
     document.getElementById("errnote").hidden = !inErrors;
-    document.getElementById("progress").hidden = inVocab || inGram;
+    document.getElementById("progress").hidden = inVocab || inGram || inHome;
+  }
+  function dueCount() {
+    var now = Date.now(), n = 0;
+    for (var i = 0; i < vocab.length; i++) { if ((vocab[i].due || 0) <= now) n++; }
+    return n;
   }
 
   function vocabListHtml(filter) {
@@ -697,7 +798,7 @@
       n++;
       h += '<li class="vitem"><div class="vtext"><div class="vline"><b class="vw">' + esc(v.w) + '</b><span class="vua">' + esc(v.ua) + '</span></div>';
       if (v.ex) h += '<p class="vex">' + esc(v.ex) + (v.exua ? '<br><span class="vexua">' + esc(v.exua) + '</span>' : '') + '</p>';
-      h += '</div><button type="button" class="vdel" data-w="' + esc(v.w) + '" aria-label="Видалити слово ' + esc(v.w) + '">×</button></li>';
+      h += '</div><div class="vbtns">' + sayBtn(v.w, "vsay") + '<button type="button" class="vdel" data-w="' + esc(v.w) + '" aria-label="Видалити слово ' + esc(v.w) + '">×</button></div></li>';
     }
     return n ? h : '<li class="vempty">Нічого не знайдено.</li>';
   }
@@ -764,6 +865,7 @@
       if (cur.ex) h += '<p class="fex">' + esc(cur.ex) + (cur.exua ? '<br>' + esc(cur.exua) : '') + '</p>';
     }
     h += '</button>';
+    if (canSpeak) h += '<div style="display:flex;justify-content:center">' + sayBtn(cur.w + (fshow && cur.ex ? ". " + cur.ex : ""), "") + '</div>';
     if (fshow) {
       var labels = ["Знову", "Важко", "Добре", "Легко"];
       h += '<div class="frate">';
@@ -780,6 +882,7 @@
     cur.box = st.box; cur.due = Date.now() + st.iv; cur.reps = (cur.reps || 0) + 1;
     if (r === 1) cur.lapses = (cur.lapses || 0) + 1;
     saveVocab();
+    bumpDay();
     fq.shift();
     if (r === 1) fq.push(cur.w); else fdone++;
     fshow = false;
@@ -824,7 +927,7 @@
     var sec = stage.querySelector(".vocab");
     if (sec) sec.addEventListener("click", function (e) {
       var t = e.target.closest("button");
-      if (!t) return;
+      if (!t || t.hasAttribute("data-say")) return;
       if (t.getAttribute("data-vm")) {
         vmode = t.getAttribute("data-vm");
         try { localStorage.setItem("fr-vmode", vmode); } catch (e2) {}
@@ -955,7 +1058,7 @@
   }
   function openGram(topic) {
     if (typeof topic === "string") gq = topic;
-    inGram = true; inVocab = false; inErrors = false;
+    inGram = true; inHome = false; inVocab = false; inErrors = false;
     setMode();
     refreshStatus();
     try { localStorage.setItem("fr-state", "gram:0"); } catch (e) {}
@@ -963,7 +1066,7 @@
   }
 
   function openVocab() {
-    inVocab = true;
+    inVocab = true; inHome = false;
     inGram = false;
     inErrors = false;
     setMode();
@@ -974,7 +1077,7 @@
   }
 
   function openErrors() {
-    inErrors = true;
+    inErrors = true; inHome = false;
     inVocab = false;
     inGram = false;
     setMode();
@@ -1012,6 +1115,7 @@
     if (idx < 0 || idx >= set.lessons.length) idx = 0;
     currentKey = key;
     currentLesson = idx;
+    inHome = false;
     inErrors = false;
     inVocab = false;
     inGram = false;
@@ -1037,7 +1141,7 @@
     setMode();
     refreshStatus();
     document.getElementById("recap").innerHTML = set.recap + (set.gramRef ? '<p><button type="button" class="btn ghost" id="gref">Повне правило в розділі «Граматика»</button></p>' : "");
-    try { localStorage.setItem("fr-state", key + ":" + idx); } catch (e) {}
+    try { localStorage.setItem("fr-state", key + ":" + idx); localStorage.setItem("fr-last", key + ":" + idx); } catch (e) {}
     start(list, "main", res);
   }
 
@@ -1045,13 +1149,27 @@
     var t = e.target.closest ? e.target.closest(".tab") : null;
     if (!t) return;
     var g = t.getAttribute("data-g");
-    if (g === "err") { openErrors(); return; }
-    if (g === "vocab") { openVocab(); return; }
-    if (g === "gram") { openGram(); return; }
+    if (g === "home") { openHome(); window.scrollTo(0, 0); return; }
+    if (g === "err") { openErrors(); window.scrollTo(0, 0); return; }
+    if (g === "vocab") { openVocab(); window.scrollTo(0, 0); return; }
+    if (g === "gram") { openGram(); window.scrollTo(0, 0); return; }
+    var cg = curGroup();
+    if (cg === "tenses" || cg === "topics") { navOpen = !navOpen; syncNav(); window.scrollTo(0, 0); return; }
+    navOpen = false;
+    var lt = lastTarget();
+    openSet(lt.k, lt.l);
+    window.scrollTo(0, 0);
+  });
+  document.getElementById("groupseg").addEventListener("click", function (e) {
+    var b = e.target.closest("[data-grp]");
+    if (!b) return;
+    var g = b.getAttribute("data-grp");
+    if (g === curGroup()) return;
     navOpen = true;
-    if (curGroup() === g) { syncNav(); return; }
-    var key = lastSet[g] || currentKey;
-    openSet(key, key === currentKey ? currentLesson : pickLesson(key));
+    var key = lastSet[g];
+    if (!key) { var nt = nextIn(g); key = nt ? nt.k : null; }
+    if (!key) for (var k in SETS) { if (SETS[k].group === g) { key = k; break; } }
+    openSet(key, pickLesson(key));
   });
   document.getElementById("subtabs").addEventListener("click", function (e) {
     var t = e.target.closest ? e.target.closest(".subtab") : null;
@@ -1091,16 +1209,97 @@
     }
   });
 
-  var startKey = "pc", startLesson = 0, startMode = "lesson";
-  try {
-    var saved = (localStorage.getItem("fr-state") || "").split(":");
-    if (saved[0] === "err") { startMode = "err"; }
-    else if (saved[0] === "vocab") { startMode = "vocab"; }
-    else if (saved[0] === "gram") { startMode = "gram"; }
-    else if (SETS[saved[0]]) { startKey = saved[0]; startLesson = parseInt(saved[1], 10) || 0; }
-  } catch (e) {}
-  if (startMode === "err" && bankTotal() > 0) openErrors();
-  else if (startMode === "vocab") openVocab();
-  else if (startMode === "gram") openGram();
-  else openSet(startKey, startLesson);
+  /* Today screen: continue where you stopped, plus a short plan for the day. */
+  function lastTarget() {
+    var k = "pc", l = 0;
+    try {
+      var raw = (localStorage.getItem("fr-last") || localStorage.getItem("fr-state") || "").split(":");
+      if (SETS[raw[0]]) { k = raw[0]; l = parseInt(raw[1], 10) || 0; }
+    } catch (e) {}
+    if (l < 0 || l >= SETS[k].lessons.length) l = 0;
+    return { k: k, l: l };
+  }
+  function firstOpen(k, from) {
+    for (var l = from || 0; l < SETS[k].lessons.length; l++) { if (!finished[k + ":" + l]) return l; }
+    return -1;
+  }
+  function nextIn(g, afterKey) {
+    var keys = [], k, i, l;
+    for (k in SETS) { if (SETS[k].group === g) keys.push(k); }
+    if (!afterKey) {
+      for (i = 0; i < keys.length; i++) {
+        for (l = 0; l < SETS[keys[i]].lessons.length; l++) {
+          var pr = prog[keys[i] + ":" + l];
+          if (pr && pr.n > 0) return { k: keys[i], l: l, done: Math.min(pr.n, SETS[keys[i]].lessons[l].length) };
+        }
+      }
+    }
+    var startI = afterKey ? Math.max(0, keys.indexOf(afterKey)) : 0;
+    for (i = 0; i < keys.length; i++) {
+      k = keys[(startI + i) % keys.length];
+      l = firstOpen(k, 0);
+      if (l >= 0) return { k: k, l: l };
+    }
+    return null;
+  }
+  function contTarget() {
+    var t = lastTarget(), pk = t.k + ":" + t.l, pr = prog[pk];
+    if (pr && pr.n > 0) return { k: t.k, l: t.l, act: "Продовжити", done: Math.min(pr.n, SETS[t.k].lessons[t.l].length) };
+    if (!finished[pk]) return { k: t.k, l: t.l, act: "Почати урок", done: 0 };
+    var nl = firstOpen(t.k, t.l + 1);
+    if (nl >= 0) return { k: t.k, l: nl, act: "Наступний урок", done: 0 };
+    var nx = nextIn(SETS[t.k].group, t.k);
+    if (nx) return { k: nx.k, l: nx.l, act: "Наступна тема", done: 0 };
+    return { k: t.k, l: t.l, act: "Повторити урок", done: 0 };
+  }
+  function openHome() {
+    inHome = true; inErrors = false; inVocab = false; inGram = false;
+    navOpen = false;
+    setMode();
+    refreshStatus();
+    renderHome();
+  }
+  function renderHome() {
+    var c = contTarget(), set = SETS[c.k], total = set.lessons[c.l].length;
+    var h = '<section class="card hero"><p class="label">' + (c.done ? "Ви зупинилися тут" : "Далі за планом") + '</p>';
+    h += '<p class="htitle">' + esc(set.label) + ' · Урок ' + (c.l + 1) + '</p>';
+    h += '<p class="hsub">' + (set.group === "tenses" ? "Часи" : "Практика") + (c.done ? " · виконано " + c.done + " з " + total : " · " + total + " вправ") + '</p>';
+    if (c.done) h += '<div class="hbar" aria-hidden="true"><i style="width:' + Math.round(c.done / total * 100) + '%"></i></div>';
+    h += '<button type="button" class="btn big" id="hgo">' + c.act + '</button></section>';
+
+    var rows = "", ec = bankTotal(), dc = dueCount();
+    rows += '<li><button type="button" class="prow" data-act="err"><span class="pt"><b>Робота над помилками</b><small>' + (ec ? "Приклади, де ви помилилися" : "Помилок немає") + '</small></span><span class="pn ' + (ec ? "warn" : "ok") + '">' + (ec || "✓") + '</span></button></li>';
+    rows += '<li><button type="button" class="prow" data-act="cards"><span class="pt"><b>Картки слів</b><small>' + (dc ? "До повторення зараз" : (vocab.length ? "На зараз усе повторено" : "Словник порожній")) + '</small></span><span class="pn' + (dc ? "" : " ok") + '">' + (dc || "✓") + '</span></button></li>';
+    var groups = [["tenses", "часи"], ["topics", "практика"]];
+    for (var i = 0; i < groups.length; i++) {
+      var nt = nextIn(groups[i][0]);
+      if (!nt || (nt.k === c.k && nt.l === c.l)) continue;
+      rows += '<li><button type="button" class="prow" data-act="lesson" data-k="' + nt.k + '" data-l="' + nt.l + '"><span class="pt"><b>' + (nt.done ? "Продовжити: " : "Новий урок: ") + groups[i][1] + '</b><small>' + esc(SETS[nt.k].label) + ' · урок ' + (nt.l + 1) + (nt.done ? " · " + nt.done + " з " + SETS[nt.k].lessons[nt.l].length : "") + '</small></span><span class="chev" aria-hidden="true">›</span></button></li>';
+    }
+    h += '<section class="card"><p class="label" style="margin:0">На сьогодні</p><ul class="plan">' + rows + '</ul></section>';
+
+    var lv = levelOf(xp), sn = streakNow();
+    h += '<div class="hstats">' +
+      '<div class="hstat"><b>' + todayCount() + '</b><span>відповідей сьогодні</span></div>' +
+      '<div class="hstat"><b>' + sn + '</b><span>' + daysWord(sn) + ' поспіль</span></div>' +
+      '<div class="hstat" title="' + esc(lv.name) + '"><b>' + (lv.to - xp) + '</b><span>балів до рівня ' + (lv.n + 1) + '</span></div></div>';
+    stage.innerHTML = h;
+    document.getElementById("hgo").addEventListener("click", function () { openSet(c.k, c.l); window.scrollTo(0, 0); });
+    stage.querySelector(".plan").addEventListener("click", function (e) {
+      var b = e.target.closest(".prow");
+      if (!b) return;
+      var a = b.getAttribute("data-act");
+      if (a === "err") openErrors();
+      else if (a === "cards") { vmode = "cards"; try { localStorage.setItem("fr-vmode", "cards"); } catch (e2) {} openVocab(); }
+      else openSet(b.getAttribute("data-k"), parseInt(b.getAttribute("data-l"), 10));
+      window.scrollTo(0, 0);
+    });
+  }
+
+  (function () {
+    var lt = lastTarget();
+    currentKey = lt.k; currentLesson = lt.l;
+    lastSet[SETS[lt.k].group] = lt.k;
+  })();
+  openHome();
 })();
