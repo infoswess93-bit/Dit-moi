@@ -15,6 +15,7 @@
 | `data/vocab-presets.js` | готові слова для «Словника» |
 | `data/grammar.js` | довідник граматики (A1–B2) |
 | `IDEAS.md` | ідеї нових функцій |
+| `tools/bundle.py` | збирає все в один HTML для перегляду в Claude |
 
 ## Формат вправи
 ```js
