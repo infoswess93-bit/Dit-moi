@@ -1320,42 +1320,136 @@
     refreshStatus();
     renderHome();
   }
+  var ICON = {
+    err: '<path d="M20 12a8 8 0 1 1-2.6-5.9"/><path d="M20 4v5h-5"/>',
+    cards: '<rect x="3" y="7" width="13" height="14" rx="2.5"/><path d="M8 4h11a2 2 0 0 1 2 2v11"/>',
+    photo: '<path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>',
+    book: '<path d="M5 5.5A2.5 2.5 0 0 1 7.5 3H19v15H7.5A2.5 2.5 0 0 0 5 20.5z"/><path d="M5 20.5V5.5"/>'
+  };
+  function ico(n) { return '<svg viewBox="0 0 24 24" aria-hidden="true">' + ICON[n] + '</svg>'; }
+  function greeting() {
+    var hr = new Date().getHours();
+    if (hr < 5) return ["Bonne nuit", "Добраніч"];
+    if (hr < 12) return ["Bonjour", "Доброго ранку"];
+    if (hr < 18) return ["Bon après-midi", "Доброго дня"];
+    return ["Bonsoir", "Доброго вечора"];
+  }
+  function dayHash() { var d = dayStr(new Date()), h = 0; for (var i = 0; i < d.length; i++) h = (h * 31 + d.charCodeAt(i)) >>> 0; return h; }
+  /* Word of the day: from the learner's own dictionary, else from the lesson glossary. */
+  var wodShift = 0, wodOpen = false;
+  function wordOfDay() {
+    if (vocab.length) { var v = vocab[(dayHash() + wodShift) % vocab.length]; return { w: v.w, ua: v.ua, ex: v.ex, exua: v.exua, mine: true }; }
+    var keys = Object.keys(GLOSS);
+    var k = keys[(dayHash() + wodShift) % keys.length];
+    return { w: k, ua: GLOSS[k], ex: "", exua: "", mine: false };
+  }
+  /* Quick question: one exercise right on the home screen, from lessons already met. */
+  var quickQ = null, quickDone = false, quickAns = null, quickOpts = null;
+  function plural(n, one, few, many) { var m = n % 10, h = n % 100; return (m === 1 && h !== 11) ? one : (m >= 2 && m <= 4 && (h < 12 || h > 14)) ? few : many; }
+  function pickQuick() {
+    var pool = [];
+    for (var k in SETS) for (var l = 0; l < SETS[k].lessons.length; l++) if (finished[k + ":" + l] || prog[k + ":" + l]) pool = pool.concat(SETS[k].lessons[l]);
+    if (!pool.length) { var c = contTarget(); pool = SETS[c.k].lessons[c.l]; }
+    var q = pool[Math.floor(Math.random() * pool.length)];
+    if (quickQ && pool.length > 1 && q === quickQ) q = pool[(pool.indexOf(q) + 1) % pool.length];
+    quickQ = q; quickDone = false; quickAns = null; quickOpts = shuffle(q.o);
+  }
+  function quickHtml() {
+    if (!quickQ) pickQuick();
+    var q = quickQ, opts = quickOpts, done = quickAns !== null, ok = done && q.a.indexOf(quickAns) >= 0, h = '';
+    h += '<p class="qs">' + esc(q.pre) + '<span class="blank' + (done ? (ok ? " good" : " bad") : "") + '" id="qblank">' + (done ? esc(ok ? quickAns : q.a[0]) : "&nbsp;&nbsp;&nbsp;") + '</span>' + esc(q.post) + '</p>';
+    h += '<p class="qtr">' + esc(q.tr) + ' <span class="verb">(' + esc(q.verb) + ')</span></p><div class="qopts" id="qopts">';
+    for (var i = 0; i < opts.length; i++) {
+      var cls = done ? (opts[i] === q.a[0] ? " good" : (opts[i] === quickAns ? " bad" : "")) : "";
+      h += '<button type="button" class="opt' + cls + '" data-v="' + esc(opts[i]) + '"' + (done ? " disabled" : "") + '>' + esc(opts[i]) + '</button>';
+    }
+    h += '</div>';
+    if (done) h += '<div class="qres ' + (ok ? "good" : "bad") + '"><b>' + (ok ? "Чудово!" : "Майже. Правильно: " + esc(q.a[0])) + '</b><span>' + esc(q.why) + '</span><div class="qbtns">' + sayBtn(q.pre + q.a[0] + q.post, "") + '<button type="button" class="btn" id="qnext">Ще питання</button></div></div>';
+    return h;
+  }
+  function wireQuick() {
+    var card = document.getElementById("quick");
+    card.addEventListener("click", function (e) {
+      if (e.target.closest("#qnext") || e.target.closest("#qskip")) { pickQuick(); renderHome(); var qc = document.getElementById("quick"); if (qc) qc.scrollIntoView({ block: "nearest" }); return; }
+      var b = e.target.closest(".opt"); if (!b || quickAns !== null) return;
+      var q = quickQ; quickAns = b.getAttribute("data-v");
+      var ok = q.a.indexOf(quickAns) >= 0;
+      if (!ok) { bank[q.id] = (bank[q.id] || 0) + 1; hist[q.id] = (hist[q.id] || 0) + 1; saveState(); }
+      answerFx(ok, q.pre + q.a[0] + q.post);
+      bumpDay();
+      card.querySelector(".qbody").innerHTML = quickHtml();
+      refreshStatus(); updateRing(); updateTiles();
+    });
+  }
+  function updateTiles() {
+    var t = stage.querySelector('.tile[data-act="err"]'); if (!t) return;
+    var ec = bankTotal();
+    t.querySelector("b").textContent = ec || "✓";
+    t.querySelector("span:last-child").textContent = ec ? plural(ec, "помилка", "помилки", "помилок") + " на повтор" : "помилок немає";
+  }
+  function ringSvg() {
+    var n = todayCount(), g = dailyGoal, f = Math.min(1, n / g), C = 2 * Math.PI * 30;
+    return '<svg viewBox="0 0 72 72" class="ring" aria-hidden="true"><circle cx="36" cy="36" r="30" class="rbg"/><circle cx="36" cy="36" r="30" class="rfg' + (f >= 1 ? " done" : "") + '" stroke-dasharray="' + C.toFixed(1) + '" stroke-dashoffset="' + (C * (1 - f)).toFixed(1) + '"/></svg>' +
+      '<span class="rnum">' + (f >= 1 ? "✓" : n) + '<small>' + (f >= 1 ? "мета" : "з " + g) + '</small></span>';
+  }
+  function updateRing() { var r = document.getElementById("ringbox"); if (r) r.innerHTML = ringSvg(); var t = document.getElementById("hgoal"); if (t) t.textContent = goalText(); }
+  function goalText() {
+    var n = todayCount();
+    if (n >= dailyGoal) return "Денну мету виконано. Bravo !";
+    if (!n) return "Почнімо: денна мета " + dailyGoal + " відповідей";
+    return "Ще " + (dailyGoal - n) + " до денної мети";
+  }
   function renderHome() {
-    var c = contTarget(), set = SETS[c.k], total = set.lessons[c.l].length;
-    var h = '<section class="card hero"><p class="label">' + (c.done ? "Ви зупинилися тут" : "Далі за планом") + '</p>';
-    h += '<p class="htitle">' + esc(set.label) + ' · Урок ' + (c.l + 1) + '</p>';
-    h += '<p class="hsub">' + (set.group === "tenses" ? "Часи" : "Практика") + (c.done ? " · виконано " + c.done + " з " + total : " · " + total + " вправ") + '</p>';
-    if (c.done) h += '<div class="hbar" aria-hidden="true"><i style="width:' + Math.round(c.done / total * 100) + '%"></i></div>';
-    h += '<button type="button" class="btn big" id="hgo">' + c.act + '</button></section>';
+    var c = contTarget(), set = SETS[c.k], total = set.lessons[c.l].length, gr = greeting(), sn = streakNow(), lv = levelOf(xp);
+    var h = '<section class="hello"><div class="htext"><p class="hi">' + gr[0] + ' !</p><p class="hisub" id="hgoal">' + goalText() + '</p>' +
+      '<p class="hchips"><span class="hchip">🔥 ' + (sn ? sn + ' ' + daysWord(sn) + ' поспіль' : 'серія ще попереду') + '</span><span class="hchip" title="' + esc(lv.name) + '">Рівень ' + lv.n + ' · ще ' + (lv.to - xp) + '</span></p></div>' +
+      '<button type="button" class="ringbox" id="ringbox" aria-label="Денна мета: ' + todayCount() + ' з ' + dailyGoal + '. Змінити в налаштуваннях">' + ringSvg() + '</button></section>';
 
-    var rows = "", ec = bankTotal(), dc = dueCount();
-    rows += '<li><button type="button" class="prow" data-act="err"><span class="pt"><b>Робота над помилками</b><small>' + (ec ? "Приклади, де ви помилилися" : "Помилок немає") + '</small></span><span class="pn ' + (ec ? "warn" : "ok") + '">' + (ec || "✓") + '</span></button></li>';
-    rows += '<li><button type="button" class="prow" data-act="cards"><span class="pt"><b>Картки слів</b><small>' + (dc ? "До повторення зараз" : (vocab.length ? "На зараз усе повторено" : "Словник порожній")) + '</small></span><span class="pn' + (dc ? "" : " ok") + '">' + (dc || "✓") + '</span></button></li>';
-    rows += '<li><button type="button" class="prow" data-act="photo"><span class="pt"><b>📷 Слова з фото</b><small>Сфотографуйте текст, підкреслені слова підуть у словник</small></span><span class="chev" aria-hidden="true">›</span></button></li>';
-    var groups = [["tenses", "часи"], ["topics", "практика"]];
+    h += '<section class="card cont"><div class="ctop"><span class="cico">' + ico("book") + '</span><div class="ctext"><p class="ckind">' + (set.group === "tenses" ? "Часи" : "Практика") + (c.done ? " · " + c.done + " з " + total : "") + '</p><p class="htitle">' + esc(set.label) + '</p><p class="clesson">Урок ' + (c.l + 1) + '</p></div></div>';
+    if (c.done) h += '<div class="hbar" aria-hidden="true"><i style="width:' + Math.round(c.done / total * 100) + '%"></i></div>';
+    h += '<button type="button" class="btn big" id="hgo">' + c.act + ' →</button></section>';
+
+    var ec = bankTotal(), dc = dueCount(), other = null;
+    var groups = [["tenses", "Часи"], ["topics", "Практика"]];
     for (var i = 0; i < groups.length; i++) {
       var nt = nextIn(groups[i][0]);
-      if (!nt || (nt.k === c.k && nt.l === c.l)) continue;
-      rows += '<li><button type="button" class="prow" data-act="lesson" data-k="' + nt.k + '" data-l="' + nt.l + '"><span class="pt"><b>' + (nt.done ? "Продовжити: " : "Новий урок: ") + groups[i][1] + '</b><small>' + esc(SETS[nt.k].label) + ' · урок ' + (nt.l + 1) + (nt.done ? " · " + nt.done + " з " + SETS[nt.k].lessons[nt.l].length : "") + '</small></span><span class="chev" aria-hidden="true">›</span></button></li>';
+      if (nt && !(nt.k === c.k && nt.l === c.l) && SETS[nt.k].group !== set.group) { other = nt; other.g = groups[i][1]; }
     }
-    h += '<section class="card"><p class="label" style="margin:0">На сьогодні</p><ul class="plan">' + rows + '</ul></section>';
+    if (!other) { var nt2 = nextIn(set.group === "tenses" ? "topics" : "tenses"); if (nt2) { other = nt2; other.g = set.group === "tenses" ? "Практика" : "Часи"; } }
+    h += '<div class="tiles">';
+    h += '<button type="button" class="tile t-warm" data-act="err"><span class="tico">' + ico("err") + '</span><b>' + (ec || "✓") + '</b><span>' + (ec ? plural(ec, "помилка", "помилки", "помилок") + " на повтор" : "помилок немає") + '</span></button>';
+    h += '<button type="button" class="tile t-blue" data-act="cards"><span class="tico">' + ico("cards") + '</span><b>' + (dc || "✓") + '</b><span>' + (dc ? plural(dc, "картка", "картки", "карток") + " до повтору" : "картки повторено") + '</span></button>';
+    if (other) h += '<button type="button" class="tile t-mint" data-act="lesson" data-k="' + other.k + '" data-l="' + other.l + '"><span class="tico">' + ico("book") + '</span><b class="tsm">' + esc(SETS[other.k].label) + '</b><span>' + other.g + ' · урок ' + (other.l + 1) + '</span></button>';
+    h += '<button type="button" class="tile t-rose" data-act="photo"><span class="tico">' + ico("photo") + '</span><b class="tsm">Слова з фото</b><span>знімок → словник</span></button>';
+    h += '</div>';
 
-    var lv = levelOf(xp), sn = streakNow();
-    h += '<div class="hstats">' +
-      '<div class="hstat' + (todayCount() >= dailyGoal ? " ok" : "") + '"><b>' + todayCount() + '<small> / ' + dailyGoal + '</small></b><span>' + (todayCount() >= dailyGoal ? "мету виконано ✓" : "денна мета") + '</span></div>' +
-      '<div class="hstat"><b>' + sn + '</b><span>' + daysWord(sn) + ' поспіль</span></div>' +
-      '<div class="hstat" title="' + esc(lv.name) + '"><b>' + (lv.to - xp) + '</b><span>балів до рівня ' + (lv.n + 1) + '</span></div></div>';
+    h += '<section class="card quick" id="quick"><div class="qhead"><p class="label" style="margin:0">Швидке питання</p><button type="button" class="qskip" id="qskip" aria-label="Інше питання">↻</button></div><div class="qbody">' + quickHtml() + '</div></section>';
+
+    var wd = wordOfDay();
+    h += '<section class="card wod"><div class="qhead"><p class="label" style="margin:0">Слово дня' + (wd.mine ? " · з вашого словника" : "") + '</p><button type="button" class="qskip" id="wnext" aria-label="Інше слово">↻</button></div>' +
+      '<button type="button" class="wcard' + (wodOpen ? " open" : "") + '" id="wcard"><span class="ww">' + esc(wd.w) + '</span>' +
+      (wodOpen ? '<span class="wua">' + esc(wd.ua) + '</span>' + (wd.ex ? '<span class="wex">' + esc(wd.ex) + '</span>' : '') : '<span class="whint">Торкніться, щоб побачити переклад</span>') + '</button>' +
+      '<div class="wbtns">' + sayBtn(wd.w, "") + (wd.mine || vocabHas(wd.w) ? '' : '<button type="button" class="btn ghost" id="wadd">+ У словник</button>') + '</div></section>';
     stage.innerHTML = h;
+
     document.getElementById("hgo").addEventListener("click", function () { openSet(c.k, c.l); window.scrollTo(0, 0); });
-    stage.querySelector(".plan").addEventListener("click", function (e) {
-      var b = e.target.closest(".prow");
-      if (!b) return;
+    document.getElementById("ringbox").addEventListener("click", function () { openSettings(); window.scrollTo(0, 0); });
+    stage.querySelector(".tiles").addEventListener("click", function (e) {
+      var b = e.target.closest(".tile"); if (!b) return;
       var a = b.getAttribute("data-act");
       if (a === "err") openErrors();
       else if (a === "photo") { openVocab(); openPhoto(); }
       else if (a === "cards") { vmode = "cards"; try { localStorage.setItem("fr-vmode", "cards"); } catch (e2) {} openVocab(); }
       else openSet(b.getAttribute("data-k"), parseInt(b.getAttribute("data-l"), 10));
       window.scrollTo(0, 0);
+    });
+    wireQuick();
+    document.getElementById("wcard").addEventListener("click", function () { wodOpen = !wodOpen; renderHome(); });
+    document.getElementById("wnext").addEventListener("click", function () { wodShift++; wodOpen = false; renderHome(); });
+    var wa = document.getElementById("wadd");
+    if (wa) wa.addEventListener("click", function () {
+      vocab.unshift({ w: wd.w, ua: wd.ua, ex: "", exua: "", t: Date.now(), box: 0, due: 0, reps: 0, lapses: 0 });
+      saveVocab(); refreshStatus(); toast("Додано до словника: " + wd.w); renderHome();
     });
   }
 
