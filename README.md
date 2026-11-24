@@ -17,6 +17,7 @@
 | `data/grammar.js` | довідник граматики (A1–B2, 102 правила) |
 | `data/rules.js` | вправи на правила за рівнями; **генерується** з `tools/rules/A1.txt … B2.txt` командою `python3 tools/gen_rules.py` |
 | `IDEAS.md` | ідеї нових функцій |
+| `docs/GAME_DESIGN_PROMPT.md` | промпт на ігровий дизайн і систему винагород (круасани, магазин, квести) |
 | `tools/bundle.py` | збирає все в один HTML для перегляду в Claude |
 
 ## Формат вправи
