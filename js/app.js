@@ -200,11 +200,28 @@
     } catch (e) {}
   }
   function sayBtn(text, cls) {
-    return canSpeak ? '<button type="button" class="say' + (cls ? " " + cls : "") + '" data-say="' + esc(text).replace(/"/g, "&quot;") + '" aria-label="Прослухати">🔊</button>' : "";
+    return '<button type="button" class="say' + (cls ? " " + cls : "") + (canSpeak ? "" : " off") + '" data-say="' + esc(text).replace(/"/g, "&quot;") + '" aria-label="Прослухати">🔊</button>';
+  }
+  /* The Claude Android app shows pages in a WebView without speech and often without the file picker.
+     In Chrome (claude.ai in the browser) both work, so point the learner there. */
+  var APP_URL = "https://claude.ai/artifact/GmDRjoUZC3FDbFRkrHB9UD";
+  var inWebView = /; wv\)/.test(navigator.userAgent || "");
+  function chromeHint(text) {
+    return '<div class="chint"><p>' + text + '</p><div class="srow"><a class="btn" href="' + APP_URL + '" target="_blank" rel="noopener">Відкрити в браузері</a><button type="button" class="btn ghost" data-copylink="1">Скопіювати посилання</button></div>' +
+      '<p class="chint-url">' + APP_URL + '</p></div>';
   }
   document.addEventListener("click", function (e) {
+    var b = e.target.closest ? e.target.closest("[data-copylink]") : null;
+    if (!b) return;
+    var done = function () { toast("Посилання скопійовано. Вставте його в адресний рядок Chrome."); };
+    try { navigator.clipboard.writeText(APP_URL).then(done, function () { toast("Скопіюйте посилання під кнопками вручну."); }); }
+    catch (e2) { toast("Скопіюйте посилання під кнопками вручну."); }
+  });
+  document.addEventListener("click", function (e) {
     var b = e.target.closest ? e.target.closest("[data-say]") : null;
-    if (b) say(b.getAttribute("data-say"));
+    if (!b) return;
+    if (!canSpeak) { toast("Озвучка недоступна в цьому вікні (застосунок Claude на Android). Відкрийте сторінку в Chrome — там вона працює."); return; }
+    say(b.getAttribute("data-say"));
   });
 
   /* Accent keys for typing on a phone. */
@@ -1519,6 +1536,8 @@
       '<p class="hchips"><span class="hchip">🔥 ' + (sn ? sn + ' ' + daysWord(sn) + ' поспіль' : 'серія ще попереду') + '</span><span class="hchip" title="' + esc(lv.name) + '">Рівень ' + lv.n + ' · ще ' + (lv.to - xp) + '</span></p></div>' +
       '<button type="button" class="ringbox" id="ringbox" aria-label="Денна мета: ' + todayCount() + ' з ' + dailyGoal + '. Змінити в налаштуваннях">' + ringSvg() + '</button></section>';
 
+    var hideHint = false; try { hideHint = localStorage.getItem("fr-hint-chrome") === "1"; } catch (e0) {}
+    if ((inWebView || !canSpeak) && !hideHint) h += '<section class="card chome">' + chromeHint("Ви відкрили застосунок у Claude на Android: тут не працюють озвучка 🔊 і камера для «Слів з фото». Відкрийте цю сторінку в Chrome, і все запрацює. Прогрес можна перенести в ⚙️ Налаштуваннях.") + '<button type="button" class="qskip chx" id="hidehint" aria-label="Сховати">×</button></section>';
     var wd = wordOfDay();
     h += '<section class="wodh" aria-label="Слово дня"><p class="wlabel">Слово дня</p>' +
       '<h2 class="wtitle"><span class="ww">' + esc(wd.w) + '</span> <span class="wdash">—</span> <span class="wua">' + esc(wd.ua) + '</span></h2>' +
@@ -1544,6 +1563,8 @@
     h += '<section class="card quick" id="quick"><div class="qhead"><p class="label" style="margin:0">Швидке питання</p><button type="button" class="qskip" id="qskip" aria-label="Інше питання">↻</button></div><div class="qbody">' + quickHtml() + '</div></section>';
     stage.innerHTML = h;
 
+    var hh = document.getElementById("hidehint");
+    if (hh) hh.addEventListener("click", function () { try { localStorage.setItem("fr-hint-chrome", "1"); } catch (e1) {} renderHome(); });
     document.getElementById("dgo").addEventListener("click", function () { openDaily(!!(t && t.done)); window.scrollTo(0, 0); });
     document.getElementById("hgo").addEventListener("click", function () { openSet(c.k, c.l); window.scrollTo(0, 0); });
     document.getElementById("ringbox").addEventListener("click", function () { openSettings(); window.scrollTo(0, 0); });
@@ -1638,8 +1659,14 @@
       h += '<p style="margin:0">Сфотографуйте сторінку з французьким текстом. Підкреслені, обведені або виділені маркером слова знайдуться самі. Інші слова можна додати дотиком до фото.</p>';
     }
     h += '<div class="photo-actions">' +
-      '<span class="btn filebtn">📷 ' + (ph ? "Нове фото" : "Зробити фото") + '<input type="file" id="pcam" accept="image/*" capture="environment" aria-label="Зробити фото"></span>' +
-      '<span class="btn ghost filebtn">З галереї<input type="file" id="pgal" accept="image/*" aria-label="Вибрати фото з галереї"></span></div>';
+      '<button type="button" class="btn" data-pick="pcam">📷 ' + (ph ? "Нове фото" : "Зробити фото") + '</button>' +
+      '<button type="button" class="btn ghost" data-pick="pgal">З галереї</button></div>' +
+      '<input type="file" class="vh" id="pcam" accept="image/*" capture="environment" tabindex="-1" aria-hidden="true">' +
+      '<input type="file" class="vh" id="pgal" accept="image/*" tabindex="-1" aria-hidden="true">';
+    if (!ph) {
+      h += '<textarea class="ta paste" id="ppaste" rows="2" placeholder="Або вставте сюди скопійоване фото: утримуйте палець тут → «Вставити»" aria-label="Вставити фото"></textarea>';
+      if (inWebView) h += chromeHint("Камера й галерея не відкриваються? У застосунку Claude на Android вибір файлів часто заблокований. Відкрийте цю сторінку в Chrome: там працює і фото, і озвучка.");
+    }
     if (ph) {
       h += '<div class="ptools"><p class="pstatus" id="pstatus"></p><button type="button" class="btn ghost" id="pzoom">' + (ph.zoom ? "Зменшити" : "Збільшити") + '</button></div>';
       h += '<div class="pwrap" id="pwrap"><div class="pinner' + (ph.zoom ? " z2" : "") + '" id="pinner"><img id="pimg" src="' + ph.url + '" alt="Ваше фото тексту"><div id="ppins"></div></div></div>';
@@ -1650,6 +1677,22 @@
     h += '</section>';
     stage.innerHTML = h;
     document.getElementById("pback").addEventListener("click", closePhoto);
+    stage.querySelectorAll("[data-pick]").forEach(function (b) {
+      b.addEventListener("click", function () {
+        var inp = document.getElementById(b.getAttribute("data-pick"));
+        inp.value = "";
+        try { inp.click(); } catch (e) { toast("Не вдалося відкрити вибір фото. Спробуйте в Chrome."); }
+      });
+    });
+    var pp = document.getElementById("ppaste");
+    if (pp) pp.addEventListener("paste", function (e) {
+      var items = (e.clipboardData && e.clipboardData.items) || [];
+      for (var i = 0; i < items.length; i++) {
+        if (items[i].type && items[i].type.indexOf("image/") === 0) { e.preventDefault(); loadPhoto(items[i].getAsFile()); return; }
+      }
+      setTimeout(function () { pp.value = ""; }, 0);
+      toast("У буфері немає фото. Скопіюйте зображення в галереї й вставте ще раз.");
+    });
     ["pcam", "pgal"].forEach(function (id) {
       document.getElementById(id).addEventListener("change", function (e) {
         var f = e.target.files && e.target.files[0];
@@ -1884,7 +1927,7 @@
       pickVoice();
       h += '<div class="voice"><button type="button" class="btn ghost" id="s-test">🔊 Перевірити голос</button><span>' + (frVoice ? 'Голос: <b>' + esc(frVoice.name) + '</b>' : 'Французький голос не знайдено. На Android: Налаштування → Мова та введення → Синтез мовлення → Google → встановити французьку.') + '</span></div>';
     } else {
-      h += '<p class="hint">Цей браузер не вміє озвучувати текст.</p>';
+      h += chromeHint("Озвучка недоступна в цьому вікні: вбудований браузер застосунку Claude на Android не вміє читати текст уголос. У Chrome вона працює.");
     }
     h += '</section>';
 

@@ -480,3 +480,15 @@ h1, .htitle, .score, .tq { font-weight: 600; }
 .rintro .recap-body { padding: 12px 14px; border-radius: 14px; background: var(--bg); }
 .gpractice { margin-top: 4px; }
 #levelseg .segbtn small { font-weight: 600; opacity: 0.75; }
+
+/* Hints for the Claude Android app (no speech, no file picker) */
+.vh { position: absolute; width: 1px; height: 1px; opacity: 0; overflow: hidden; clip: rect(0 0 0 0); pointer-events: none; }
+.say.off { opacity: 0.45; }
+.chint { display: flex; flex-direction: column; gap: 10px; padding: 12px 14px; border-radius: 14px; background: var(--warn-soft); }
+.chint p { margin: 0; font-size: 0.92rem; }
+.chint .btn { text-decoration: none; display: inline-flex; align-items: center; }
+.chint-url { font-size: 0.78rem !important; color: var(--muted); overflow-wrap: anywhere; user-select: all; -webkit-user-select: all; }
+.chome { position: relative; padding: 0; background: transparent; box-shadow: none; }
+.chome .chx { position: absolute; top: 8px; right: 8px; background: var(--surface); }
+.chome .chint { padding-right: 48px; }
+.ta.paste { min-height: 0; font: inherit; font-size: 0.9rem; }
