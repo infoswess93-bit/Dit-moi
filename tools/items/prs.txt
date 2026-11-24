@@ -1,0 +1,101 @@
+# Présent: зараз, звички, загальні істини
+Chaque matin, je | un café.|boire|1s|Щоранку я п'ю каву.
+Tu | où exactement ?|habiter|2s|Де саме ти живеш?
+Mon frère | dans une banque.|travailler|3m|Мій брат працює в банку.
+Nous | le français depuis un an.|apprendre|1p|Ми вивчаємо французьку вже рік.
+Vous | quelle langue à la maison ?|parler|2p|Якою мовою ви розмовляєте вдома?
+Les enfants | au parc tous les jours.|jouer|3pm|Діти щодня граються в парку.
+Elle | le bus à 7 h 30.|prendre|3f|Вона сідає на автобус о 7:30.
+Je | mes devoirs le soir.|faire|1s|Я роблю домашнє завдання ввечері.
+Tu | du sport le week-end ?|faire|2s|Ти займаєшся спортом на вихідних?
+Mon fils | toujours « merci ».|dire|3m|Мій син завжди каже «дякую».
+Nous | au cinéma ce soir.|aller|1p|Сьогодні ввечері ми йдемо в кіно.
+Vous | venir demain ?|pouvoir|2p|Ви можете прийти завтра?
+Ils | une nouvelle maison.|chercher|3pm|Вони шукають новий будинок.
+Je | ma mère tous les dimanches.|appeler|1s|Я дзвоню мамі щонеділі.
+Elle | trois enfants.|avoir|3f|У неї троє дітей.
+Nous | très contents.|être|1p|Ми дуже задоволені.
+Tu | quoi comme musique ?|écouter|2s|Яку музику ти слухаєш?
+La pharmacie | à midi le samedi.|fermer|3f|У суботу аптека зачиняється опівдні.
+Vous | le train ou la voiture ?|prendre|2p|Ви їдете потягом чи машиною?
+Je ne | pas la réponse.|savoir|1s|Я не знаю відповіді.
+Ils | le journal le matin.|lire|3pm|Вони читають газету зранку.
+Elle | ses amis au café.|attendre|3f|Вона чекає друзів у кафе.
+Nous | à 18 h.|finir|1p|Ми закінчуємо о 18:00.
+Tu | ton café avec du sucre ?|vouloir|2s|Ти хочеш каву з цукром?
+Il | à l'école à pied.|aller|3m|Він ходить до школи пішки.
+Je | ce film très drôle.|trouver|1s|Я вважаю цей фільм дуже смішним.
+Vous | à quelle heure ?|partir|2p|О котрій ви їдете?
+Les étudiants | beaucoup de livres.|lire|3pm|Студенти читають багато книжок.
+Elle | une lettre à son ami.|écrire|3f|Вона пише листа своєму другові.
+Nous | nos amis samedi.|voir|1p|У суботу ми бачимося з друзями.
+J' | la musique classique.|aimer|1s|Я люблю класичну музику.
+Tu | trop vite !|conduire|2s|Ти їдеш занадто швидко!
+Il | beaucoup en été.|pleuvoir|3m|Улітку часто йде дощ.
+Vous | du thé ?|boire|2p|Ви п'єте чай?
+Ils | en retard ce matin.|être|3pm|Сьогодні вранці вони запізнюються.
+Je | mon travail à 8 h.|commencer|1s|Я починаю роботу о 8:00.
+Elle | ses clés partout.|chercher|3f|Вона всюди шукає ключі.
+Nous | le petit-déjeuner pour toute la famille.|préparer|1p|Ми готуємо сніданок для всієї родини.
+Tu | ce mot ?|comprendre|2s|Ти розумієш це слово?
+Le bébé | beaucoup.|dormir|3m|Малюк багато спить.
+Vous | la porte, s'il vous plaît ?|ouvrir|2p|Ви відчините двері, будь ласка?
+Elles | à Paris depuis cinq ans.|vivre|3pf|Вони живуть у Парижі вже п'ять років.
+Je | toujours mes lunettes.|perdre|1s|Я постійно гублю окуляри.
+Il | sa voiture devant la maison.|garer|3m|Він паркує машину перед будинком.
+Nous | la table à 19 h tous les soirs.|mettre|1p|Щовечора ми накриваємо на стіл о 19:00.
+Tu | avec nous au marché ?|venir|2s|Ти йдеш з нами на ринок?
+Les magasins | le dimanche ?|ouvrir|3pm|Магазини відчинені в неділю?
+Elle | beaucoup de messages.|recevoir|3f|Вона отримує багато повідомлень.
+Je | en train tous les jours.|voyager|1s|Я щодня їжджу потягом.
+Vous | le loyer à qui ?|payer|2p|Кому ви платите оренду?
+Mon père | ses courses au marché.|faire|3m|Мій батько купує продукти на ринку.
+Nous | à la maison quand il pleut.|rester|1p|Коли йде дощ, ми залишаємося вдома.
+Tu | quel âge ?|avoir|2s|Скільки тобі років?
+Ils | leurs grands-parents en été.|visiter|3pm|Улітку вони відвідують бабусю й дідуся.
+Je | être à l'heure.|devoir|1s|Я маю бути вчасно.
+Elle | sa sœur avec ses devoirs.|aider|3f|Вона допомагає сестрі з домашнім завданням.
+Nous | le bus numéro 8.|attendre|1p|Ми чекаємо автобус номер 8.
+Vous | ce restaurant ?|connaître|2p|Ви знаєте цей ресторан?
+Le cours | à 9 h.|commencer|3m|Заняття починається о 9:00.
+Je | à ta lettre ce soir.|répondre|1s|Я відповідаю на твій лист сьогодні ввечері.
+Les enfants | au lit à 20 h.|aller|3pm|Діти лягають спати о 20:00.
+Tu | ce restaurant ?|choisir|2s|Ти вибираєш цей ресторан?
+Elle | toujours des vêtements noirs.|porter|3f|Вона завжди носить чорний одяг.
+Nous | souvent des crêpes.|manger|1p|Ми часто їмо млинці.
+Il | son vélo pour aller au travail.|prendre|3m|Він їздить на роботу велосипедом.
+Vous | combien de langues ?|parler|2p|Скількома мовами ви розмовляєте?
+Je | un nouvel appartement.|chercher|1s|Я шукаю нову квартиру.
+Ils | toujours à la dernière minute.|arriver|3pm|Вони завжди приходять в останню хвилину.
+Elle | médecin à l'hôpital.|être|3f|Вона лікарка в лікарні.
+Tu | souvent au téléphone.|parler|2s|Ти часто розмовляєш по телефону.
+Nous | nos vacances en août.|prendre|1p|Ми беремо відпустку в серпні.
+Vous | souvent à la montagne ?|aller|2p|Ви часто їздите в гори?
+Mon chat | sur le canapé.|dormir|3m|Мій кіт спить на дивані.
+Je | à l'heure aujourd'hui.|arriver|1s|Сьогодні я приходжу вчасно.
+Elles | des fleurs au marché.|vendre|3pf|Вони продають квіти на ринку.
+Tu | le dossier ce soir ?|finir|2s|Ти закінчуєш справу сьогодні ввечері?
+Il | ses parents tous les week-ends.|voir|3m|Він бачиться з батьками щовихідних.
+Nous | une petite fête samedi.|organiser|1p|У суботу ми влаштовуємо невелику вечірку.
+Vous | les fenêtres le matin ?|ouvrir|2p|Ви відчиняєте вікна вранці?
+Je | du café sans sucre.|boire|1s|Я п'ю каву без цукру.
+Les voisins | une grande maison.|avoir|3pm|У сусідів великий будинок.
+Elle | bien la ville.|connaître|3f|Вона добре знає місто.
+Tu | le métro ?|prendre|2s|Ти їздиш метро?
+Nous | souvent à nos amis.|écrire|1p|Ми часто пишемо друзям.
+Il | une heure pour aller au travail.|mettre|3m|Йому потрібна година, щоб доїхати на роботу.
+Je | toujours mon parapluie.|oublier|1s|Я завжди забуваю парасольку.
+Vous | quel bus ?|attendre|2p|Який автобус ви чекаєте?
+Ils | du bruit le soir.|faire|3pm|Увечері вони шумлять.
+Elle | une petite voiture rouge.|conduire|3f|Вона їздить на маленькій червоній машині.
+Tu | chez toi après le travail ?|rentrer|2s|Ти повертаєшся додому після роботи?
+Nous | le contrat aujourd'hui.|signer|1p|Ми підписуємо контракт сьогодні.
+Le train | de la voie 3.|partir|3m|Потяг відправляється з колії 3.
+Je | heureux ici.|être|1s|Мені тут добре.
+Vous | ce livre ? Il est super.|lire|2p|Ви читаєте цю книжку? Вона чудова.
+Les filles | une chanson.|chanter|3pf|Дівчата співають пісню.
+Tu | ton appartement ?|vendre|2s|Ти продаєш свою квартиру?
+Elle | souvent de son pays.|parler|3f|Вона часто розповідає про свою країну.
+Nous | la vaisselle après le repas.|faire|1p|Ми миємо посуд після їжі.
+Il | travailler demain.|devoir|3m|Завтра він має працювати.
+Je | mes amis à la gare.|attendre|1s|Я чекаю друзів на вокзалі.

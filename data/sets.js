@@ -2,7 +2,7 @@
 var SETS = {
   pc: {
     label: "Passé composé", group: "tenses", gramRef: "Passé composé",
-    lessons: [PC, PC2, PC3, PC4, PC5],
+    lessons: [PC, PC2, PC3, PC4, PC5, PC6, PC7, PC8, PC9, PC10],
     recap:
       '<p class="formula">avoir / être (présent) + participe passé</p>' +
       '<p>З <b>avoir</b> більшість дієслів. Participe passé не змінюється, якщо немає COD перед дієсловом.</p>' +
@@ -14,7 +14,7 @@ var SETS = {
   },
   imp: {
     label: "Imparfait", group: "tenses", gramRef: "Imparfait",
-    lessons: [IMP, IMP2, IMP3, IMP4, IMP5],
+    lessons: [IMP, IMP2, IMP3, IMP4, IMP5, IMP6, IMP7, IMP8, IMP9, IMP10],
     recap:
       '<p class="formula">основа від nous (présent) без -ons + закінчення</p>' +
       '<div class="mnemonic"><span>je -ais</span><span>tu -ais</span><span>il -ait</span><span>nous -ions</span><span>vous -iez</span><span>ils -aient</span></div>' +
@@ -25,7 +25,7 @@ var SETS = {
   },
   fp: {
     label: "Futur proche", group: "tenses", gramRef: "Futur proche та passé récent",
-    lessons: [FP, FP2, FP3, FP4, FP5],
+    lessons: [FP, FP2, FP3, FP4, FP5, FP6, FP7, FP8, FP9, FP10],
     recap:
       '<p class="formula">aller (présent) + інфінітив</p>' +
       '<div class="mnemonic"><span>je vais</span><span>tu vas</span><span>il / elle / on va</span><span>nous allons</span><span>vous allez</span><span>ils / elles vont</span></div>' +
@@ -36,7 +36,7 @@ var SETS = {
   },
   fs: {
     label: "Futur simple", group: "tenses", gramRef: "Futur simple",
-    lessons: [FS, FS2, FS3, FS4, FS5],
+    lessons: [FS, FS2, FS3, FS4, FS5, FS6, FS7, FS8, FS9, FS10],
     recap:
       '<p class="formula">інфінітив (у -re без e) + закінчення</p>' +
       '<div class="mnemonic"><span>je -ai</span><span>tu -as</span><span>il -a</span><span>nous -ons</span><span>vous -ez</span><span>ils -ont</span></div>' +
@@ -47,19 +47,19 @@ var SETS = {
   },
   prs: {
     label: "Présent", group: "tenses", gramRef: "Дієслова на -er (présent)",
-    lessons: [T3_PRS],
+    lessons: [T3_PRS, T3_PRS2, T3_PRS3, T3_PRS4, T3_PRS5, T3_PRS6],
     recap: "<p class=\"formula\">основа + закінчення особи</p><div class=\"mnemonic\"><span>-er: -e, -es, -e, -ons, -ez, -ent</span><span>-ir: -is, -is, -it, -issons, -issez, -issent</span><span>-re: -s, -s, —, -ons, -ez, -ent</span></div><p>Нерегулярні: <b>être</b> (suis, es, est, sommes, êtes, sont), <b>avoir</b>, <b>aller</b> (vais, vas, va, allons, allez, vont), <b>faire</b>, <b>venir</b>, <b>prendre</b>, <b>pouvoir</b>, <b>vouloir</b>, <b>devoir</b>, <b>dire</b>, <b>voir</b>, <b>boire</b>.</p>",
     next: "Можна переходити до наступного часу."
   },
   cond: {
     label: "Conditionnel présent", group: "tenses", gramRef: "Conditionnel présent",
-    lessons: [T3_COND],
+    lessons: [T3_COND, T3_COND2, T3_COND3, T3_COND4, T3_COND5, T3_COND6],
     recap: "<p class=\"formula\">основа futur simple + закінчення imparfait</p><div class=\"mnemonic\"><span>je -ais</span><span>tu -ais</span><span>il -ait</span><span>nous -ions</span><span>vous -iez</span><span>ils -aient</span></div><p>Ввічливість: <i>Je voudrais, pourriez-vous</i>. Порада: <i>Tu devrais</i>. Гіпотеза: <i>Si j'avais le temps, je voyagerais.</i> Основи ті самі, що й у futur simple: ser-, aur-, ir-, fer-, pourr-, voudr-, viendr-.</p>",
     next: "Можна переходити до наступного часу."
   },
   sbj: {
     label: "Subjonctif présent", group: "tenses", gramRef: "Subjonctif présent",
-    lessons: [T3_SBJ],
+    lessons: [T3_SBJ, T3_SBJ2, T3_SBJ3, T3_SBJ4, T3_SBJ5, T3_SBJ6],
     recap: "<p class=\"formula\">3 ос. мн. présent без -ent + -e, -es, -e, -ions, -iez, -ent</p><p><i>Il faut que tu <b>viennes</b>. Je veux que vous <b>soyez</b> là. Bien que, pour que, avant que + subjonctif.</i> Нерегулярні: <b>être</b> (sois, soyons, soient), <b>avoir</b> (aie, ayons, aient), <b>aller</b> (aille, allions), <b>faire</b> (fasse), <b>pouvoir</b> (puisse), <b>savoir</b> (sache), <b>vouloir</b> (veuille).</p>",
     next: "Можна повертатися до інших часів або практики."
   },

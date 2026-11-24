@@ -14,7 +14,7 @@
 <body>
 <div class="wrap">
   <header class="top" id="game" aria-label="Ваш прогрес">
-    <h1 class="logo" aria-label="Dis-moi"><span aria-hidden="true">Dis</span><span class="dash" aria-hidden="true">-</span><span aria-hidden="true">mo</span><svg class="tower" viewBox="0 0 20 48" aria-hidden="true"><circle cx="10" cy="1.6" r="1.6"/><path d="M9.3 3h1.4l.5 4.5h-2.4z"/><path d="M8.6 7.5h2.8l1.3 12.5H7.3z"/><rect x="6.2" y="20" width="7.6" height="2.2" rx=".6"/><path d="M7.4 22.2h5.2l2.2 10.6H5.2z"/><rect x="3.8" y="32.8" width="12.4" height="2.4" rx=".6"/><path d="M4.6 35.2h10.8L19.4 48h-4.6C14 42.6 12.3 40 10 40s-4 2.6-4.8 8H.6z"/></svg></h1>
+    <h1 class="logo" aria-label="Dis-moi"><span aria-hidden="true">Dis</span><span class="dash" aria-hidden="true">-</span><span aria-hidden="true">mo</span><svg class="tower" viewBox="0 0 20 58" aria-hidden="true"><path class="heart" d="M10 9.2C4.4 5.6 4.2 1.4 6.8.7 8.3.3 9.4 1.2 10 2.3 10.6 1.2 11.7.3 13.2.7c2.6.7 2.4 4.9-3.2 8.5z"/><path d="M9.4 11.6h1.2l.6 5.4H8.8z"/><path d="M8.6 17h2.8l1.3 12.2H7.3z"/><rect x="6.2" y="29.2" width="7.6" height="2.2" rx=".6"/><path d="M7.4 31.4h5.2l2.2 10.4H5.2z"/><rect x="3.8" y="41.8" width="12.4" height="2.4" rx=".6"/><path d="M4.6 44.2h10.8L19.4 58h-4.6C14 52.4 12.3 49.6 10 49.6S6 52.4 5.2 58H.6z"/></svg></h1>
     <div class="tstat"><span id="glvl"></span><span id="gstreak"></span><span class="gpts"><b id="gxp">0</b> балів</span></div>
     <button type="button" class="gear" id="setbtn" aria-label="Налаштування" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
     <div class="gbar" aria-hidden="true"><i id="gbarfill"></i></div>
@@ -48,7 +48,6 @@
   <div class="bnav-in">
     <button type="button" class="tab" data-g="home" aria-current="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 10.5 12 3.5l8.5 7V20h-5.5v-6h-6v6H3.5z"/></svg><span>Сьогодні</span></button>
     <button type="button" class="tab" data-g="lessons" aria-current="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5.5A2.5 2.5 0 0 1 7.5 3H19v15H7.5A2.5 2.5 0 0 0 5 20.5zM5 20.5A2.5 2.5 0 0 0 7.5 23"/><path d="M5 20.5V5.5"/></svg><span>Уроки</span></button>
-    <button type="button" class="tab" data-g="err" aria-current="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.6-5.9"/><path d="M20 4v5h-5"/></svg><span>Помилки</span><b class="badge" id="errcount" hidden>0</b></button>
     <button type="button" class="tab" data-g="vocab" aria-current="false"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="7" width="13" height="14" rx="2"/><path d="M8 4h11a2 2 0 0 1 2 2v11"/></svg><span>Словник</span><b class="badge acc" id="vocabcount" hidden>0</b></button>
     <button type="button" class="tab" data-g="gram" aria-current="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h8l5 5v13H6z"/><path d="M14 3v5h5M9 13h7M9 17h7"/></svg><span>Граматика</span></button>
   </div>
@@ -58,6 +57,7 @@
 <script src="data/tenses.js"></script>
 <script src="data/topics.js"></script>
 <script src="data/tenses2.js"></script>
+<script src="data/tenses-more.js"></script>
 <script src="data/sets.js"></script>
 <script src="data/gloss.js"></script>
 <script src="data/vocab-presets.js"></script>

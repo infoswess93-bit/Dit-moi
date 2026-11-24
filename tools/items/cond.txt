@@ -1,0 +1,101 @@
+# Conditionnel présent: ввічливість, порада, бажання, умова з si + imparfait
+Je | un thé, s'il vous plaît.|prendre|1s|Я взяв би чай, будь ласка.
+Tu | te reposer un peu.|devoir|2s|Тобі варто трохи відпочити.
+Si j'avais le temps, je | plus.|lire|1s|Якби я мав час, я б більше читав.
+Nous | partir plus tôt, si c'est possible.|préférer|1p|Ми б воліли поїхати раніше, якщо можна.
+Vous | m'expliquer ce mot ?|pouvoir|2p|Чи не могли б ви пояснити мені це слово?
+Si elle avait de l'argent, elle | une maison.|acheter|3f|Якби в неї були гроші, вона купила б будинок.
+À ta place, je | au médecin.|aller|1s|На твоєму місці я пішов би до лікаря.
+Ils | venir avec nous.|aimer|3pm|Вони хотіли б піти з нами.
+Si j'étais malade, je | à la maison.|rester|1s|Якби я захворів, я залишився б удома.
+On | au cinéma ce soir ?|aller|3m|Може, підемо в кіно сьогодні ввечері?
+Si nous habitions à Paris, nous | souvent au musée.|aller|1p|Якби ми жили в Парижі, ми б часто ходили в музей.
+Tu | m'aider, s'il te plaît ?|pouvoir|2s|Ти не міг би мені допомогти, будь ласка?
+Elle | bien voyager en Asie un jour.|aimer|3f|Їй дуже хотілося б колись поїхати до Азії.
+Si tu étais riche, tu | quoi ?|faire|2s|Якби ти був багатий, що б ти робив?
+Vous | parler moins fort ?|pouvoir|2p|Ви не могли б говорити тихіше?
+J' | un appartement plus grand.|aimer|1s|Я хотів би більшу квартиру.
+Si nous avions une voiture, nous | à la montagne.|partir|1p|Якби в нас була машина, ми поїхали б у гори.
+Si tu mangeais mieux, tu | plus en forme.|être|2s|Якби ти краще харчувався, ти був би в кращій формі.
+Si tu venais, il | content de te voir.|être|3m|Якби ти прийшов, він був би радий тебе побачити.
+Si j'étais toi, j' | ce travail.|accepter|1s|Якби я був тобою, я погодився б на цю роботу.
+Elles | rester plus longtemps.|vouloir|3pf|Вони хотіли б залишитися довше.
+Vous | ce livre à un enfant de dix ans ?|conseiller|2p|Ви порадили б цю книжку десятирічній дитині?
+Si elle parlait français, elle | en France.|travailler|3f|Якби вона розмовляла французькою, вона працювала б у Франції.
+Nous | vous inviter samedi.|aimer|1p|Ми б хотіли запросити вас у суботу.
+À ta place, je | mon manteau, il fait froid.|mettre|1s|На твоєму місці я б удягнув пальто, холодно.
+Je | volontiers un café.|boire|1s|Я б охоче випив кави.
+Si vous veniez, vous | mes parents.|rencontrer|2p|Якби ви прийшли, ви познайомилися б з моїми батьками.
+S'ils quittaient la ville, ils | heureux à la campagne.|être|3pm|Якби вони виїхали з міста, вони були б щасливі за містом.
+Il | te parler un moment, si tu as le temps.|vouloir|3m|Він хотів би з тобою трохи поговорити, якщо маєш час.
+Si j'avais faim, je | une pizza.|commander|1s|Якби я був голодний, я замовив би піцу.
+Nous | prendre un rendez-vous.|vouloir|1p|Ми хотіли б записатися на прийом.
+Tu | mieux si tu te couchais plus tôt.|dormir|2s|Ти спав би краще, якби лягав раніше.
+Elle | besoin d'aide, je pense.|avoir|3f|Думаю, їй знадобилася б допомога.
+Si tu venais, nous | ensemble.|cuisiner|1p|Якби ти прийшов, ми б готували разом.
+Vous | une table pour deux ?|avoir|2p|У вас не знайдеться столика на двох?
+Je | savoir l'heure, s'il vous plaît.|vouloir|1s|Я хотів би знати, котра година, будь ласка.
+Si nous gagnions de l'argent, nous | le Japon.|visiter|1p|Якби ми заробили гроші, ми б поїхали до Японії.
+S'il pleuvait, ils | mieux de rester ici.|faire|3pm|Якби пішов дощ, їм краще було б залишитися тут.
+Tu | quoi à ma place ?|dire|2s|Що б ти сказав на моєму місці?
+Si elle habitait plus près, elle | ses parents plus souvent.|voir|3f|Якби вона жила ближче, вона бачилася б з батьками частіше.
+Si j'avais une maison, j' | un chien.|avoir|1s|Якби в мене був будинок, я мав би собаку.
+Vous | sortir avec nous ce soir ?|vouloir|2p|Чи не хотіли б ви піти з нами сьогодні ввечері?
+Nous | heureux de vous aider.|être|1p|Ми були б раді вам допомогти.
+Avec un bon outil, il | ce problème en cinq minutes.|comprendre|3m|З гарним інструментом він зрозумів би цю проблему за п'ять хвилин.
+Si tu étudiais plus, tu | ton examen.|réussir|2s|Якби ти більше вчився, ти склав би іспит.
+Je | rester ici toute ma vie.|pouvoir|1s|Я міг би залишатися тут усе життя.
+Si elles pouvaient, elles | au bord de la mer.|vivre|3pf|Якби вони могли, вони жили б біля моря.
+Vous | la fenêtre, s'il vous plaît ?|fermer|2p|Ви не зачинили б вікно, будь ласка?
+Si elle avait le choix, elle | Paris.|choisir|3f|Якби вона мала вибір, вона обрала б Париж.
+Tu | lui téléphoner.|devoir|2s|Тобі варто йому зателефонувати.
+Si nous étions en vacances, nous | tard.|dormir|1p|Якби ми були у відпустці, ми спали б довго.
+Il | un peu de temps pour réfléchir.|vouloir|3m|Він хотів би трохи часу, щоб подумати.
+J' | partir en Italie cet été.|aimer|1s|Я хотів би поїхати до Італії цього літа.
+Si vous aviez le temps, vous | à la fête ?|venir|2p|Якби у вас був час, ви прийшли б на свято?
+Ils | acheter cette maison.|pouvoir|3pm|Вони могли б купити цей будинок.
+Tu | ça à ta mère ?|dire|2s|Ти сказав би це своїй мамі?
+Nous | manger moins de sucre.|devoir|1p|Нам варто їсти менше цукру.
+Si j'étais en France, je | du fromage tous les jours.|manger|1s|Якби я був у Франції, я щодня їв би сир.
+Si elle était libre, elle | volontiers avec nous.|venir|3f|Якби вона була вільна, вона охоче пішла б з нами.
+Vous | un verre d'eau ?|vouloir|2p|Чи не хочете склянку води?
+Si tu avais un vélo, tu | au travail à vélo ?|aller|2s|Якби в тебе був велосипед, ти їздив би на роботу на ньому?
+Il | professeur, s'il pouvait.|devenir|3m|Він став би викладачем, якби міг.
+Si nous avions le temps, nous | ce film.|regarder|1p|Якби в нас був час, ми подивилися б цей фільм.
+Si je travaillais moins, je | plus de temps avec mes enfants.|passer|1s|Якби я менше працював, я проводив би більше часу з дітьми.
+Si elles savaient la vérité, elles | en colère.|être|3pf|Якби вони знали правду, вони б розсердилися.
+Avec mon aide, tu | ce travail en une heure.|finir|2s|З моєю допомогою ти закінчив би цю роботу за годину.
+Vous | dîner avec nous ?|aimer|2p|Ви хотіли б повечеряти з нами?
+Si nous partions maintenant, nous | à l'heure.|arriver|1p|Якби ми вирушили зараз, ми прибули б вчасно.
+S'il dormait plus, il | plus de patience.|avoir|3m|Якби він більше спав, він мав би більше терпіння.
+J' | une question, s'il vous plaît.|avoir|1s|У мене було б запитання, будь ласка.
+Elle | mieux si elle dormait plus.|aller|3f|Їй було б краще, якби вона більше спала.
+Si vous pouviez, vous | où ?|habiter|2p|Якби ви могли, де б ви жили?
+Si on leur demandait, ils | la vérité.|dire|3pm|Якби їх запитали, вони сказали б правду.
+À ta place, je | un parapluie.|prendre|1s|На твоєму місці я б узяв парасольку.
+Si j'avais une voiture, je | plus souvent mes parents.|voir|1s|Якби я мав машину, я частіше бачився б з батьками.
+Nous | rester un jour de plus.|pouvoir|1p|Ми могли б залишитися ще на день.
+Elle | ce cadeau, j'en suis sûre.|adorer|3f|Їй дуже сподобався б цей подарунок, я впевнена.
+Si tu me le demandais, je t' |.|aider|1s|Якби ти мене попросив, я б тобі допоміг.
+Vous | m'envoyer le document ?|pouvoir|2p|Чи не могли б ви надіслати мені документ?
+S'il changeait de travail, il | plus heureux.|être|3m|Якби він змінив роботу, він був би щасливішим.
+Si nous avions faim, nous | au restaurant.|aller|1p|Якби ми були голодні, ми пішли б у ресторан.
+Tu | moins travailler.|devoir|2s|Тобі варто менше працювати.
+Je | t'accompagner à la gare.|pouvoir|1s|Я міг би провести тебе на вокзал.
+Elles | apprendre le piano.|vouloir|3pf|Вони хотіли б навчитися грати на піаніно.
+Si vous étiez libres, vous | avec nous ?|partir|2p|Якби ви були вільні, ви поїхали б з нами?
+S'il n'était pas au régime, il | bien un dessert.|prendre|3m|Якби він не був на дієті, він охоче взяв би десерт.
+Si j'avais su, je | plus tôt.|venir|1s|Якби я знав, я прийшов би раніше.
+S'il n'y avait plus de bus, nous | un taxi.|appeler|1p|Якби вже не було автобусів, ми викликали б таксі.
+Elle | être plus prudente sur la route.|devoir|3f|Їй варто бути обережнішою на дорозі.
+Si tu partais, tu me | beaucoup.|manquer|2s|Якби ти поїхав, я б дуже за тобою сумував.
+À ma place, vous | ce qu'il faut faire ?|savoir|2p|На моєму місці ви знали б, що треба робити?
+S'ils acceptaient ce travail, ils | plus d'argent.|gagner|3pm|Якби вони погодилися на цю роботу, вони заробляли б більше.
+Si j'avais le temps, je | ça avec plaisir.|faire|1s|Якби я мав час, я зробив би це з задоволенням.
+Si elle venait, elle | ses cousins.|voir|3f|Якби вона приїхала, вона побачила б двоюрідних братів.
+Tu | le temps de m'aider demain ?|avoir|2s|Чи знайшовся б у тебе завтра час мені допомогти?
+Nous | contents de partir en vacances.|être|1p|Ми були б раді поїхати у відпустку.
+S'il n'était pas malade, il | volontiers à la fête.|aller|3m|Якби він не хворів, він охоче пішов би на свято.
+Si j'étais plus jeune, je | le marathon.|courir|1s|Якби я був молодшим, я пробіг би марафон.
+Si on vous proposait un bon prix, vous | votre voiture ?|vendre|2p|Якби вам запропонували гарну ціну, ви продали б свою машину?
+Si elles venaient à Lyon, elles | ce restaurant.|aimer|3pf|Якби вони приїхали до Ліона, їм сподобався б цей ресторан.

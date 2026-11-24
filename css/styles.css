@@ -258,7 +258,7 @@ h1 { font-family: var(--font-display); font-size: 1.25rem; line-height: 1.15; ma
 /* Bottom navigation */
 .bnav { position: fixed; left: 0; right: 0; bottom: 0; z-index: 15; background: var(--surface); border-top: 1px solid var(--line);
   padding: 6px max(8px, env(safe-area-inset-right, 0px)) calc(6px + env(safe-area-inset-bottom, 0px)) max(8px, env(safe-area-inset-left, 0px)); }
-.bnav-in { max-width: 640px; margin: 0 auto; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 2px; }
+.bnav-in { max-width: 640px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 2px; }
 .tab { position: relative; font: inherit; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 4px 0 2px; border: 0; background: transparent; color: var(--muted); cursor: pointer; min-width: 0; -webkit-tap-highlight-color: transparent; }
 .tab svg { width: 44px; height: 30px; padding: 4px 11px; border-radius: 999px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; transition: background 0.15s; }
 .tab span { font-size: 0.72rem; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
@@ -453,4 +453,25 @@ h1, .htitle, .score, .tq { font-weight: 600; }
 .whint { font-size: 0.85rem; color: var(--muted); }
 .wbtns { display: flex; gap: 8px; justify-content: center; }
 .qbody { display: flex; flex-direction: column; gap: 14px; }
-.logo .tower { width: 0.48em; }
+.logo .tower { width: 0.48em; height: 1.24em; margin-bottom: 0.04em; }
+.logo .tower .heart { fill: var(--rose); }
+
+/* Word of the day headline, today's lesson, fix phase */
+.wodh { display: flex; flex-direction: column; gap: 6px; padding: 16px 18px; border-radius: 20px; background: linear-gradient(135deg, var(--rose-soft), var(--accent-soft)); }
+.wlabel { margin: 0; font-size: 0.78rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--rose); }
+.wtitle { margin: 0; font-family: var(--font-display); font-weight: 600; font-size: 1.75rem; line-height: 1.2; text-wrap: balance; overflow-wrap: anywhere; }
+.wtitle .ww { color: var(--ink); }
+.wtitle .wdash { color: var(--muted); font-weight: 400; }
+.wtitle .wua { color: var(--accent); font-family: var(--font-body); font-weight: 700; font-size: 0.72em; }
+.wodh .wex { margin: 0; color: var(--muted); font-size: 0.92rem; font-style: italic; overflow-wrap: anywhere; }
+.wtools { display: flex; gap: 8px; align-items: center; margin-top: 4px; }
+.wtools .qskip { margin-left: auto; background: var(--surface); }
+.daily { gap: 14px; background: linear-gradient(135deg, var(--mint-soft), var(--surface) 75%); }
+.daily .ckind { color: var(--mint); }
+.dtext { display: flex; flex-direction: column; gap: 4px; }
+.daily .htitle { font-size: 1.3rem; }
+.daily .btn.big { background: var(--mint); color: var(--on-accent); }
+.cont .btn.ghost.big { background: var(--surface); }
+.fixintro .htitle { font-size: 1.4rem; }
+.mistakes .bad-ans, .bad-ans { color: var(--bad); text-decoration: line-through; text-decoration-thickness: 1.5px; }
+.fixdone { margin: 0; font-weight: 700; color: var(--good); }
