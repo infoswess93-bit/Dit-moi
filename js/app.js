@@ -32,10 +32,11 @@
       if (!AC) return;
       if (!actx) actx = new AC();
       if (actx.state === "suspended") actx.resume();
-      var notes = ok ? [660, 880] : [220, 180], t = actx.currentTime;
+      var pack = (typeof eco !== "undefined" && eco.equip.sound) || "";
+      var notes = ok ? (pack === "cafe" ? [1046, 1318] : pack === "accordeon" ? [523, 659, 784] : pack === "minimal" ? [1200] : [660, 880]) : (pack === "minimal" ? [300] : [220, 180]), t = actx.currentTime;
       for (var i = 0; i < notes.length; i++) {
         var o = actx.createOscillator(), g = actx.createGain();
-        o.type = ok ? "sine" : "triangle";
+        o.type = pack === "accordeon" ? "sawtooth" : (ok ? "sine" : "triangle");
         o.frequency.value = notes[i];
         g.gain.setValueAtTime(0.0001, t + i * 0.11);
         g.gain.exponentialRampToValueAtTime(0.18, t + i * 0.11 + 0.02);
@@ -120,19 +121,18 @@
   function saveGame() {
     try { localStorage.setItem("fr-game", JSON.stringify({ xp: xp, got: got, stars: stars, streak: streak, prog: prog, lastL: lastL })); } catch (e) {}
   }
+  function lvStart(n) { return 50 * n * (n - 1); }
   function levelOf(x) {
-    var i = 0;
-    while (i + 1 < LEVEL_AT.length && x >= LEVEL_AT[i + 1]) i++;
-    var from = LEVEL_AT[i], to = i + 1 < LEVEL_AT.length ? LEVEL_AT[i + 1] : from + 800 * (1 + Math.floor((x - from) / 800)) ;
-    if (i + 1 >= LEVEL_AT.length) { var extra = Math.floor((x - LEVEL_AT[i]) / 800); i += extra; from = LEVEL_AT[LEVEL_AT.length - 1] + extra * 800; to = from + 800; }
-    return { n: i + 1, name: LEVEL_NAME[Math.min(i, LEVEL_NAME.length - 1)], from: from, to: to };
+    var n = 1;
+    while (lvStart(n + 1) <= x) n++;
+    return { n: n, name: titleOf(n), from: lvStart(n), to: lvStart(n + 1) };
   }
   function addXp(n) {
     if (!n) return;
     var before = levelOf(xp).n;
     xp += n;
     var after = levelOf(xp);
-    if (after.n > before) toast("Новий рівень: " + after.n + " · " + after.name);
+    if (after.n > before) toast("🎉 Новий рівень: " + after.n + " · " + after.name);
     refreshGame();
   }
   function dayStr(d) {
@@ -140,7 +140,7 @@
     return d.getFullYear() + "-" + z(d.getMonth() + 1) + "-" + z(d.getDate());
   }
   function touchStreak() {
-    if (todayCount() < dailyGoal) return;
+    if (todayCount() < dayGoal()) return;
     var now = new Date(), t = dayStr(now);
     if (streak.last === t) return;
     var y = new Date(now.getTime()); y.setDate(y.getDate() - 1);
@@ -162,11 +162,14 @@
     if (today.d !== t) today = { d: t, n: 0 };
     today.n++;
     try { localStorage.setItem("fr-day", JSON.stringify(today)); } catch (e) {}
-    if (today.n >= dailyGoal) {
+    if (today.n >= dayGoal()) {
       var before = streak.last;
       touchStreak();
       saveGame();
-      if (before !== streak.last) { refreshGame(); toast("🎯 Денну мету виконано! Серія: " + streak.n + " " + daysWord(streak.n)); }
+      if (before !== streak.last) {
+        refreshGame(); toast("🎯 Денну мету виконано! Серія: " + streak.n + " " + daysWord(streak.n));
+        eco.ach.bestStreak = Math.max(eco.ach.bestStreak || 0, streak.n); achCheck();
+      }
     }
   }
 
@@ -256,11 +259,14 @@
     var lv = levelOf(xp);
     document.getElementById("gxp").textContent = String(xp);
     var gl = document.getElementById("glvl");
-    gl.textContent = "Рівень " + lv.n;
-    gl.title = lv.name + ". До наступного рівня: " + (lv.to - xp) + " балів";
-    var sn = streakNow(), gs = document.getElementById("gstreak");
-    gs.textContent = sn ? "🔥 " + sn : "";
-    gs.title = sn ? "Серія: " + sn + " " + daysWord(sn) + " поспіль" : "";
+    gl.textContent = "Niv. " + lv.n;
+    gl.title = lv.name + ". До наступного рівня: " + (lv.to - xp) + " XP";
+    var sn = streakNow(), gs = document.getElementById("gstreak"), done = streak.last === dayStr(new Date());
+    var protectedNow = typeof eco !== "undefined" && eco.vac && eco.vac >= dayStr(new Date());
+    gs.textContent = "🔥 " + sn;
+    gs.className = "fire" + (protectedNow ? " ice" : (sn >= 30 && done ? " gold" : (done ? " on" : "")));
+    gs.title = done ? "Сьогодні зараховано" : "Сьогодні ще не зараховано";
+    var ge = document.getElementById("gecusn"); if (ge && typeof eco !== "undefined") ge.textContent = String(eco.ecus);
     document.getElementById("gbarfill").style.width = Math.max(0, Math.min(100, (xp - lv.from) / (lv.to - lv.from) * 100)) + "%";
   }
 
@@ -278,7 +284,7 @@
   }
   function bankCountFor(key, l) {
     var n = 0;
-    for (var id in bank) { var q = ALL[id]; if (q && q.set === key && q.lesson === l) n++; }
+    for (var id in bank) { var q = ALL[id]; if (q && q.set === key && q.lesson === l && !((typeof eco !== "undefined" && eco.beat[id]) >= 1)) n++; }
     return n;
   }
   function lessonStatus(key, l) {
@@ -381,6 +387,7 @@
   var bar = document.getElementById("bar");
   var countEl = document.getElementById("count");
 
+  var lessonEcus = 0;
   var queue, pos, score, wrong, answered, kind = "main", lessonPts = 0;
 
   function shuffle(arr) {
@@ -405,6 +412,8 @@
     queue = list;
     kind = k || "main";
     lessonPts = res ? (res.p || 0) : 0;
+    if (!res && k !== "fix") lessonEcus = 0;
+    secondArmed = false;
     pos = res ? res.n : 0; score = res ? res.s : 0; wrong = res ? res.w : []; answered = false;
     render();
   }
@@ -447,7 +456,8 @@
     html += '<div class="meta"><span class="chip">' + esc(SETS[q.set].label + (inErrors ? " · урок " + (q.lesson + 1) : "")) + '</span>' + (hist[q.id] ? '<span class="chip warn">помилок раніше: ' + hist[q.id] + '</span>' : '') + (q.verb ? '<span class="verb">(' + wrapWords(q.verb) + ')</span>' : '') + '</div>';
     html += '<p class="sentence" id="sentence">' + wrapWords(q.pre) + '<span class="blank" id="blank">&nbsp;&nbsp;&nbsp;&nbsp;</span>' + wrapWords(q.post) + '</p>';
     html += '<p class="tr">' + esc(q.tr) + '</p>';
-    html += '<div class="seg amode" role="group" aria-label="Спосіб відповіді"><button type="button" class="segbtn" data-am="choice" aria-pressed="' + !typed + '">Варіанти</button><button type="button" class="segbtn" data-am="typed" aria-pressed="' + typed + '">Вписати <small>+50%</small></button></div>';
+    if ((eco.combo || 0) >= 2) html += '<p class="combo' + (eco.combo >= 3 ? " hot" : "") + '">🔥 ' + eco.combo + ' поспіль' + (eco.combo >= 3 ? ' · XP ×1,5' : '') + '</p>';
+    html += '<div class="seg amode" role="group" aria-label="Спосіб відповіді"><button type="button" class="segbtn" data-am="choice" aria-pressed="' + !typed + '">Варіанти</button><button type="button" class="segbtn" data-am="typed" aria-pressed="' + typed + '">Вписати</button></div>';
     if (!typed) {
       html += '<div class="opts" id="opts">';
       for (var i = 0; i < opts.length; i++) {
@@ -461,6 +471,7 @@
       html += '<button type="submit" class="btn" id="check">Перевірити</button>';
       html += '</form>';
     }
+    html += boostRow();
     html += '<div id="fb" aria-live="polite"></div>';
     html += '<div class="nextrow" id="nextrow" hidden>' + sayBtn(q.pre + q.a[0] + q.post, "") + '<button type="button" class="btn" id="next">' + (pos === queue.length - 1 ? "Показати результат" : "Далі") + '</button></div>';
     html += '</section>';
@@ -493,6 +504,45 @@
       try { document.getElementById("answer").focus({ preventScroll: true }); } catch (e3) {}
     }
     document.getElementById("next").addEventListener("click", function () { pos++; render(); keepInView(); });
+    var br = document.getElementById("boosts");
+    if (br) br.addEventListener("click", function (e) { var b = e.target.closest("[data-boost]"); if (b && !answered) useBoost(b.getAttribute("data-boost")); });
+  }
+
+  /* Boosters during a lesson (bought in La Boutique; one tap buys when you have none). */
+  var BOOSTS = [["indice", "Indice"], ["motcle", "Mot clé"], ["joker", "Joker"], ["seconde", "Seconde chance"]];
+  var secondArmed = false;
+  function boostRow() {
+    var h = '<div class="boosts" id="boosts" role="group" aria-label="Підказки">';
+    BOOSTS.forEach(function (b) {
+      var n = eco.inv[b[0]] || 0, it = shopItem(b[0]);
+      h += '<button type="button" class="boost' + (b[0] === "seconde" && secondArmed ? " armed" : "") + '" data-boost="' + b[0] + '"><b>' + b[1] + '</b><small>' + (n ? "×" + n : '<span class="coin">●</span>' + priceOf(it)) + '</small></button>';
+    });
+    return h + '</div>';
+  }
+  function useBoost(id) {
+    if (!(eco.inv[id] > 0)) { if (!buy(id)) return; }
+    var q = queue[pos];
+    if (id === "joker") {
+      var used = {}; queue.forEach(function (x) { used[x.id] = 1; });
+      var pool = []; SETS[q.set].lessons.forEach(function (l) { l.forEach(function (x) { if (!used[x.id]) pool.push(x); }); });
+      if (!pool.length) { toast("У цій темі немає інших вправ для заміни."); return; }
+      eco.inv.joker--; ecoSave(); queue[pos] = pool[Math.floor(Math.random() * pool.length)]; render(); toast("Joker: нова вправа"); return;
+    }
+    if (id === "seconde") { if (secondArmed) return; eco.inv.seconde--; secondArmed = true; ecoSave(); document.querySelector('[data-boost="seconde"]').classList.add("armed"); toast("Seconde chance увімкнено для цієї вправи"); return; }
+    if (id === "indice") {
+      var ob = document.querySelectorAll("#opts .opt:not(:disabled)"), cut = 0;
+      if (ob.length) { for (var i = 0; i < ob.length && cut < 2; i++) { if (q.a.indexOf(ob[i].getAttribute("data-v")) < 0) { ob[i].disabled = true; ob[i].classList.add("gone"); cut++; } } }
+      else { var inp = document.getElementById("answer"); if (inp) inp.placeholder = "Починається з «" + q.a[0].charAt(0) + "…»"; }
+      eco.inv.indice--; ecoSave(); return;
+    }
+    if (id === "motcle") {
+      var words = (q.pre + " " + q.post).toLowerCase().replace(/[’]/g, "'").match(/\p{L}+(?:-\p{L}+)*'?/gu) || [], hit = null;
+      for (var w = 0; w < words.length && !hit; w++) { if (glossFor(words[w]) && words[w].length > 3) hit = words[w]; }
+      if (!hit && glossFor((q.verb || "").toLowerCase())) hit = q.verb.toLowerCase();
+      if (!hit) { toast("Тут немає слова з перекладом у словнику. Підказку не витрачено."); return; }
+      eco.inv.motcle--; ecoSave();
+      var fb = document.getElementById("fb"); fb.innerHTML = '<div class="feedback hint"><strong>Mot clé</strong><span><b>' + esc(hit) + '</b> — ' + esc(glossFor(hit)) + '</span></div>';
+    }
   }
 
   function submit(value, mode) {
@@ -504,22 +554,47 @@
       if (nv === na) ok = true;
       else if (strip(nv) === strip(na)) near = true;
     }
+    if (!ok && secondArmed && mode === "choice") {
+      secondArmed = false;
+      bank[q.id] = (bank[q.id] || 0) + 1; hist[q.id] = (hist[q.id] || 0) + 1; saveState();
+      var wb = document.querySelector('#opts .opt[data-v="' + (window.CSS && CSS.escape ? CSS.escape(value) : value) + '"]');
+      if (wb) { wb.disabled = true; wb.className = "opt bad"; }
+      document.getElementById("fb").innerHTML = '<div class="feedback bad"><strong>Seconde chance</strong><span>Не те. Спробуй ще раз — комбо збережено. Помилку записано в Mes erreurs.</span></div>';
+      var sb = document.querySelector('[data-boost="seconde"]'); if (sb) sb.classList.remove("armed");
+      return;
+    }
+    secondArmed = false;
     answered = true;
-    var pts = 0;
+    var pts = 0, rw = { x: 0, c: 0 }, extra = "";
+    var st0 = eco.stats[q.set] || (eco.stats[q.set] = { c: 0, w: 0 });
     if (ok) {
       score++;
-      if (kind === "fix" || inErrors) { delete bank[q.id]; pts = kind === "fix" ? 2 : (mode === "typed" ? 8 : 5); }
-      else if (kind === "daily") { delete bank[q.id]; pts = mode === "typed" ? 8 : 5; }
-      else if (kind === "main" && !got[q.id]) { pts = mode === "typed" ? 15 : 10; got[q.id] = 1; }
+      eco.combo = (eco.combo || 0) + 1; st0.c++;
+      qBump("combo", eco.combo, true);
+      if (q.set === "pc") eco.pcRight = (eco.pcRight || 0) + 1;
+      if (["cod", "coi", "codcoi", "dp", "yen"].indexOf(q.set) >= 0) { eco.codRun = (eco.codRun || 0) + 1; eco.ach.ninjaBest = Math.max(eco.ach.ninjaBest || 0, eco.codRun); }
+      var mult = eco.combo >= 3 ? 1.5 : 1;
+      if (kind === "fix") { eco.beat[q.id] = Math.max(1, eco.beat[q.id] || 0); rw = gain(15, 3); qBump("fix"); extra = "Помилку виправлено (1/2)"; }
+      else if (inErrors || (kind === "daily" && bank[q.id])) {
+        var bt = (eco.beat[q.id] || 0) + 1; eco.beat[q.id] = bt; qBump("fix");
+        if (bt >= 2) { delete bank[q.id]; delete eco.beat[q.id]; eco.beaten = (eco.beaten || 0) + 1; rw = gain(25, 10); extra = "Помилку переможено (2/2)!"; }
+        else { rw = gain(15, 3); extra = "Виправлено (1/2)"; }
+      }
+      else if (kind === "main" && got[q.id]) rw = gain(5 * mult, 0.5);
+      else { if (kind === "main") got[q.id] = 1; rw = gain(10 * mult, 1); }
+      pts = rw.x; lessonEcus += rw.c;
+      achCheck();
     } else {
+      eco.combo = 0; eco.codRun = 0; st0.w++;
       if (kind === "fix") queue.push(q); /* comes back until it is right */
       else wrong.push({ q: q, given: value });
       bank[q.id] = (bank[q.id] || 0) + 1;
       hist[q.id] = (hist[q.id] || 0) + 1;
     }
+    ecoSave();
     touchStreak();
     bumpDay();
-    if (pts) { lessonPts += pts; addXp(pts); }
+    if (pts) { lessonPts += pts; }
     saveProg();
     saveGame();
     saveState();
@@ -545,10 +620,12 @@
     var fb = document.getElementById("fb");
     var msg;
     if (ok) {
-      msg = '<div class="feedback good"><strong>Правильно' + (pts ? ' <span class="pts">+' + pts + ' балів</span>' : '') + '</strong><span>' + esc(q.why) + '</span></div>';
+      var cheer = eco.combo >= 3 ? MINOU_CHEER[eco.combo % MINOU_CHEER.length] : ["Parfait !", "Très bien !", "Exact !"][score % 3];
+      msg = '<div class="feedback good"><strong>' + cheer + (rewardText(rw) ? ' <span class="pts">' + rewardText(rw) + '</span>' : '') + '</strong>' + (extra ? '<span class="xtra">' + extra + '</span>' : '') + '<span>' + esc(q.why) + '</span></div>';
     } else {
-      var head = near ? "Майже, перевірте діакритику" : "Не зовсім";
-      msg = '<div class="feedback bad"><strong>' + head + '</strong><span>Правильна відповідь: <b>' + wrapWords(q.a[0]) + '</b></span><span>' + esc(q.why) + '</span></div>';
+      var head = near ? "Майже — перевір діакритику" : MINOU_SOFT[hist[q.id] % MINOU_SOFT.length];
+      msg = '<div class="feedback bad"><strong>' + head + '</strong><span>Правильна відповідь: <b>' + wrapWords(q.a[0]) + '</b></span><span>' + esc(q.why) + '</span>' +
+        (kind === "fix" ? '<span class="tobank">↺ Приклад повернеться ще раз у цьому раунді</span>' : '<span class="tobank">↺ Додано в Mes erreurs — виправиш пізніше за +3 Écus</span>') + '</div>';
     }
     fb.innerHTML = msg;
     var nr = document.getElementById("nextrow");
@@ -561,21 +638,28 @@
   /* End of a lesson: record the result once (stars, green status, daily bonus). */
   var mainRes = null;
   function finishMain() {
-    var res = { kind: kind, score: score, total: queue.length, wrong: wrong.slice(), pts: lessonPts, award: 0, stars: 0 };
-    if (kind === "main" && !inErrors) {
-      var lk = currentKey + ":" + currentLesson;
-      finished[lk] = true;
-      res.stars = res.score >= res.total ? 3 : (res.score >= res.total * 0.8 ? 2 : (res.score >= res.total * 0.6 ? 1 : 0));
-      var prev = stars[lk] || 0;
-      if (res.stars > prev) { res.award = STAR_BONUS[res.stars] - STAR_BONUS[prev]; stars[lk] = res.stars; }
-      if (res.award) { lessonPts += res.award; res.pts = lessonPts; addXp(res.award); }
-      delete prog[lk];
-    } else if (kind === "daily") {
-      daily.done = true; daily.score = res.score; daily.total = res.total;
-      if (!daily.awarded) { daily.awarded = true; res.award = 20; lessonPts += 20; res.pts = lessonPts; addXp(20); }
-      saveDaily();
+    var res = { kind: kind, score: score, total: queue.length, wrong: wrong.slice(), pts: lessonPts, ecus: lessonEcus, rows: [], stars: 0 };
+    if ((kind === "main" && !inErrors) || kind === "daily") {
+      res.stars = res.score >= res.total ? 3 : (res.score >= res.total * 0.8 ? 2 : 1);
+      if (res.score === res.total - 1 && (eco.inv.bouclier || 0) > 0) { eco.inv.bouclier--; res.stars = 3; res.shield = true; }
+      var repeat = false;
+      if (kind === "main") {
+        var lk = currentKey + ":" + currentLesson;
+        repeat = !!finished[lk]; finished[lk] = true;
+        if (res.stars > (stars[lk] || 0)) stars[lk] = res.stars;
+        delete prog[lk];
+        if (res.stars === 3 && !eco.stamps[currentKey]) { eco.stamps[currentKey] = 1; res.stamp = SETS[currentKey].label; }
+        if (currentKey === "leq" && res.score === res.total) eco.ach.lequelDone = 1;
+      } else {
+        repeat = !!daily.awarded; daily.awarded = true;
+        daily.done = true; daily.score = res.score; daily.total = res.total; saveDaily();
+      }
+      var r1 = gain(repeat ? 10 : 20, repeat ? 5 : 10); res.rows.push(["Урок завершено" + (repeat ? " (повтор, ½)" : ""), r1]);
+      if (res.score === res.total) { var r2 = gain(repeat ? 15 : 30, repeat ? 7 : 15); res.rows.push(["Без помилок", r2]); }
+      if (new Date().getHours() < 7) eco.ach.leveDone = 1;
+      qBump("lesson"); achCheck();
     }
-    touchStreak(); saveGame(); saveState(); refreshStatus();
+    touchStreak(); saveGame(); saveState(); ecoSave(); refreshStatus();
     return res;
   }
   function renderFixIntro() {
@@ -600,39 +684,57 @@
   function renderSummary() {
     var res = kind === "fix" ? mainRes : finishMain();
     if (kind === "fix") { refreshStatus(); }
+    if (kind === "errors") { res = { kind: "errors", score: score, total: queue.length, wrong: wrong.slice(), pts: lessonPts, ecus: lessonEcus, rows: [] }; }
     var total = res.total;
     barFill.style.width = "100%";
     bar.setAttribute("aria-valuenow", String(queue.length));
-    countEl.textContent = queue.length + " / " + queue.length;
-    var html = '<section class="card summary">';
-    html += '<p class="label" style="margin:0">' + (res.kind === "daily" ? "Сьогоднішній урок пройдено" : "Результат") + '</p>';
+    countEl.textContent = total + " / " + total;
+    var ansX = res.pts + (kind === "fix" ? lessonPts : 0), ansC = res.ecus + (kind === "fix" ? lessonEcus : 0);
+    var html = '<section class="card summary result">';
+    html += '<p class="label" style="margin:0">' + (res.kind === "daily" ? "Сьогоднішній урок пройдено" : (res.kind === "errors" ? "Mes erreurs · раунд" : "Résultat")) + '</p>';
+    if (res.stars) html += '<div class="bigstars pop" aria-label="Зірок: ' + res.stars + ' з 3">' + starsText(res.stars) + '</div>';
     html += '<div class="score">' + res.score + '<small> / ' + total + '</small></div>';
-    if (res.kind === "main") {
-      html += '<div class="reward"><span class="bigstars" aria-label="Зірок: ' + res.stars + ' з 3">' + starsText(res.stars) + '</span>' +
-        '<span>' + (res.pts || lessonPts ? 'Бали за урок: <b>+' + (res.pts + (kind === "fix" ? lessonPts : 0)) + '</b>' : 'Бали за ці приклади вже були нараховані раніше.') + (res.award ? ' Із них бонус за зірки: ' + res.award + '.' : '') + '</span>' +
-        '<span style="color:var(--muted);font-size:0.88rem">Зірки: 10 з 10 дає ★★★, від 8 ★★☆, від 6 ★☆☆. Бонус лише за покращення результату.</span></div>';
-    } else if (res.kind === "daily") {
-      html += '<div class="reward"><span>Бали: <b>+' + (res.pts + (kind === "fix" ? lessonPts : 0)) + '</b>' + (res.award ? ' (із них бонус за сьогоднішній урок: ' + res.award + ')' : '') + '</span></div>';
-    }
-    if (res.wrong.length) html += '<p class="fixdone">✓ Усі помилки виправлено.</p>';
-    else html += '<p style="margin:0">Усі відповіді правильні. Bravo !</p>';
+    html += '<ul class="rows"><li><span>Відповіді' + (ansX ? '' : '') + '</span><b>' + rewardText({ x: ansX, c: ansC }) + '</b></li>';
+    (res.rows || []).forEach(function (r) { html += '<li><span>' + r[0] + '</span><b>' + rewardText(r[1]) + '</b></li>'; });
+    html += '</ul>';
+    if (res.shield) html += '<p class="xtra">🛡 Bouclier d\'étoile зберіг зірку.</p>';
+    if (res.stamp) html += '<p class="xtra">✉ Нова марка в альбомі: «' + esc(res.stamp) + '»</p>';
+    if (res.wrong.length && res.kind !== "errors") html += '<p class="fixdone">✓ Усі помилки виправлено (1/2). Другий раз — у «Mes erreurs» за +3 Écus.</p>';
+    else if (!res.wrong.length) html += '<p style="margin:0">Усі відповіді правильні. Bravo !</p>';
+    var q = questsToday(), qd = questsDone();
+    html += '<div class="qmini"><span>Квести сьогодні: ' + qd + '/3</span><div class="hbar"><i style="width:' + (qd / 3 * 100) + '%"></i></div></div>';
     if (res.kind === "main") {
       var hasNext = currentLesson + 1 < SETS[currentKey].lessons.length;
       html += '<p style="margin:0;color:var(--muted)">' + (lessonStatus(currentKey, currentLesson) === "done" ? "Урок позначено зеленим. " : "") + (hasNext ? "Можна переходити до уроку " + (currentLesson + 2) + "." : esc(SETS[currentKey].next)) + '</p>';
     }
     html += '<div class="actions">';
+    if (qd === 3 && !q.chest) html += '<button type="button" class="btn gold" id="sumchest">Відкрити срібну скриню</button>';
     if (res.kind === "main") {
       if (currentLesson + 1 < SETS[currentKey].lessons.length) html += '<button type="button" class="btn" id="nextlesson">Урок ' + (currentLesson + 2) + ' →</button>';
       html += '<button type="button" class="btn ghost" id="restart">Пройти урок ще раз</button>';
     }
+    if (res.kind === "errors" && bankTotal()) html += '<button type="button" class="btn" data-goto="errors">Mes erreurs</button>';
     html += '<button type="button" class="btn ghost" id="tohome">На головну</button>';
     html += '</div></section>';
     stage.innerHTML = html;
+    if (res.stars === 3 && !(window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches)) confetti();
+    var sc = document.getElementById("sumchest");
+    if (sc) sc.addEventListener("click", function () { q.chest = true; ecoSave(); openChest("silver", function () { renderSummaryAgain(); }); });
+    function renderSummaryAgain() { var b2 = document.getElementById("sumchest"); if (b2) b2.remove(); }
     var rs = document.getElementById("restart");
     if (rs) rs.addEventListener("click", function () { delete prog[currentKey + ":" + currentLesson]; saveGame(); start(shuffle(SETS[currentKey].lessons[currentLesson]), "main"); keepInView(); });
     var nl = document.getElementById("nextlesson");
     if (nl) nl.addEventListener("click", function () { openSet(currentKey, currentLesson + 1); keepInView(); });
     document.getElementById("tohome").addEventListener("click", function () { openHome(); window.scrollTo(0, 0); });
+  }
+  function confetti() {
+    var cols = ["#2d5bff", "#e8473f", "#f5b731", "#2bb673", "#9b8afb"];
+    for (var i = 0; i < 28; i++) {
+      var c = document.createElement("span"); c.className = "confetti";
+      c.style.left = (Math.random() * 100) + "vw"; c.style.background = cols[i % cols.length];
+      c.style.animationDelay = (Math.random() * 0.3) + "s"; c.style.setProperty("--dx", (Math.random() * 120 - 60) + "px");
+      document.body.appendChild(c); setTimeout(function (n) { return function () { n.remove(); }; }(c), 1800);
+    }
   }
 
   /* Today's lesson: 20 exercises from all tenses (open mistakes first), one per day, resumable. */
@@ -682,6 +784,7 @@
     return ids;
   }
   function openDaily(again) {
+    inPage = "";
     var t = dailyToday();
     if (!t || again) { var rk = ruleOfDay(); daily = { d: dayStr(new Date()), rule: rk, ids: buildDaily(rk), n: 0, s: 0, w: [], p: 0, done: false, awarded: t ? !!t.awarded : false }; }
     inDaily = true; inHome = false; inSettings = false; inErrors = false; inVocab = false; inGram = false;
@@ -822,7 +925,8 @@
     if (!tb) award = 20 + tscore * 5; else if (tscore > tb.best) award = (tscore - tb.best) * 5;
     tests[tkey] = { best: Math.max(tscore, tb ? tb.best : 0), of: n, runs: (tb ? tb.runs : 0) + 1 };
     saveTests();
-    if (award) addXp(award);
+    if (award) gain(award, Math.round(award / 5));
+    if (tscore / n >= 0.8 && eco.stamps[tkey] !== "rare") { eco.stamps[tkey] = "rare"; ecoSave(); toast("✉ Рідкісна марка: " + SETS[tkey].label); achCheck(); }
     touchStreak(); saveGame(); refreshStatus();
     barFill.style.width = "100%";
     countEl.textContent = n + " / " + n;
@@ -856,14 +960,15 @@
     }
     var fin = 0;
     for (var tl2 = 0; tl2 < set.lessons.length; tl2++) { if (finished[currentKey + ":" + tl2]) fin++; }
-    var unlocked = fin >= set.lessons.length, tb = tests[currentKey];
+    var unlocked = fin >= set.lessons.length || !!(eco.early && eco.early[currentKey]), tb = tests[currentKey];
+    if (!unlocked && (eco.bossToken || 0) > 0) { lh += '<button type="button" class="lesson testchip ok" id="testbtn" data-boss="1">🏆 Défi Boss · використати жетон (' + eco.bossToken + ')</button>'; document.getElementById("lessons").innerHTML = lh; return; }
     lh += '<button type="button" class="lesson testchip' + (unlocked ? " ok" : "") + '" id="testbtn"' + (unlocked ? "" : " disabled") + '>' +
       (unlocked ? "🏆 Підсумковий тест" + (tb ? " · найкращий " + tb.best + "/" + tb.of : "") : "🔒 Підсумковий тест · пройдено уроків " + fin + " з " + set.lessons.length) + '</button>';
     document.getElementById("lessons").innerHTML = lh;
   }
 
   function curGroup() {
-    return inDaily ? "daily" : inSettings ? "settings" : inHome ? "home" : inErrors ? "err" : inVocab ? "vocab" : inGram ? "gram" : SETS[currentKey].group;
+    return inPage ? "page:" + inPage : inDaily ? "daily" : inSettings ? "settings" : inHome ? "home" : inErrors ? "err" : inVocab ? "vocab" : inGram ? "gram" : SETS[currentKey].group;
   }
   function groupStatus(g) {
     var any = false, allDone = true, todo = false;
@@ -887,7 +992,7 @@
   }
   function syncTabs() {
     var g = curGroup();
-    var tg = (g === "tenses" || g === "topics") ? "lessons" : (g === "daily" ? "home" : g);
+    var tg = (g === "tenses" || g === "topics") ? "lessons" : (g === "daily" || g === "err" ? "home" : (g.indexOf("page:") === 0 ? PAGE_TAB[g.slice(5)] : g));
     var tabs = document.querySelectorAll("#maintabs .tab");
     for (var i = 0; i < tabs.length; i++) tabs[i].setAttribute("aria-current", tabs[i].getAttribute("data-g") === tg ? "true" : "false");
     var ec = bankTotal(), eb = document.getElementById("errcount");
@@ -936,18 +1041,18 @@
   function refreshStatus() {
     syncTabs();
     syncNav();
-    if (!inErrors && !inVocab && !inGram && !inHome && !inSettings && !inDaily) renderLessonChips();
+    if (!inErrors && !inVocab && !inGram && !inHome && !inSettings && !inDaily && !inPage) renderLessonChips();
     refreshGame();
   }
 
   function setMode() {
-    var other = inErrors || inVocab || inGram || inHome || inSettings || inDaily;
+    var other = inErrors || inVocab || inGram || inHome || inSettings || inDaily || !!inPage;
     document.getElementById("setbtn").setAttribute("aria-pressed", String(inSettings));
     document.getElementById("lessons").hidden = other;
     document.getElementById("recapbox").hidden = other;
     syncNav();
     document.getElementById("errnote").hidden = !inErrors;
-    document.getElementById("progress").hidden = inVocab || inGram || inHome || inSettings;
+    document.getElementById("progress").hidden = inVocab || inGram || inHome || inSettings || !!inPage;
   }
   function dueCount() {
     var now = Date.now(), n = 0;
@@ -1049,6 +1154,8 @@
     if (r === 1) cur.lapses = (cur.lapses || 0) + 1;
     saveVocab();
     bumpDay();
+    if (r >= 3) gain(2, 0);
+    qBump("cards");
     if (vibOn && canVib) { try { navigator.vibrate(15); } catch (e) {} }
     fq.shift();
     if (r === 1) fq.push(cur.w); else fdone++;
@@ -1232,11 +1339,16 @@
     });
     document.getElementById("glist").addEventListener("toggle", function (e) {
       var d = e.target;
-      if (d && d.getAttribute && d.getAttribute("data-i")) gopen[d.getAttribute("data-i")] = d.open;
+      if (d && d.getAttribute && d.getAttribute("data-i")) {
+        gopen[d.getAttribute("data-i")] = d.open;
+        var rk = todayS() + ":" + d.getAttribute("data-i");
+        if (d.open && !eco.rules[rk]) { eco.rules[rk] = 1; for (var oldk in eco.rules) { if (oldk.slice(0, 10) !== todayS()) delete eco.rules[oldk]; } gain(5, 0); qBump("rule"); toast("+5 XP за прочитане правило"); }
+      }
     }, true);
   }
   function openGram(topic) {
     if (typeof topic === "string") gq = topic;
+    inPage = "";
     inGram = true; inHome = false; inSettings = false; inDaily = false; inVocab = false; inErrors = false;
     setMode();
     refreshStatus();
@@ -1245,6 +1357,7 @@
   }
 
   function openVocab() {
+    inPage = "";
     photoOpen = false;
     inVocab = true; inHome = false; inSettings = false; inDaily = false;
     inGram = false;
@@ -1256,7 +1369,8 @@
     renderVocabView();
   }
 
-  function openErrors() {
+  function openErrors() { openPage("errors"); }
+  function openErrorsOld() {
     inErrors = true; inHome = false; inSettings = false; inDaily = false;
     inVocab = false;
     inGram = false;
@@ -1295,6 +1409,7 @@
     if (idx < 0 || idx >= set.lessons.length) idx = 0;
     currentKey = key;
     currentLesson = idx;
+    inPage = "";
     inHome = false;
     inSettings = false;
     inDaily = false;
@@ -1332,6 +1447,7 @@
     if (!t) return;
     var g = t.getAttribute("data-g");
     if (g === "home") { openHome(); window.scrollTo(0, 0); return; }
+    if (g === "profile") { openPage("profile"); return; }
     if (g === "err") { openErrors(); window.scrollTo(0, 0); return; }
     if (g === "vocab") { openVocab(); window.scrollTo(0, 0); return; }
     if (g === "gram") { openGram(); window.scrollTo(0, 0); return; }
@@ -1378,7 +1494,7 @@
   document.getElementById("lessons").addEventListener("click", function (e) {
     var b = e.target.closest(".lesson");
     if (!b) return;
-    if (b.id === "testbtn") { navOpen = false; openTest(); return; }
+    if (b.id === "testbtn") { if (b.getAttribute("data-boss")) { eco.bossToken--; eco.early = eco.early || {}; eco.early[currentKey] = 1; ecoSave(); } navOpen = false; openTest(); return; }
     var n = parseInt(b.getAttribute("data-lesson"), 10);
     navOpen = false;
     if (n !== currentLesson) openSet(currentKey, n); else syncNav();
@@ -1445,6 +1561,7 @@
     return { k: t.k, l: t.l, act: "Повторити урок", done: 0 };
   }
   function openHome() {
+    inPage = "";
     inHome = true; inSettings = false; inDaily = false; inErrors = false; inVocab = false; inGram = false;
     navOpen = false;
     setMode();
@@ -1519,30 +1636,43 @@
     t.querySelector("span:last-child").textContent = ec ? plural(ec, "помилка", "помилки", "помилок") + " на повтор" : "помилок немає";
   }
   function ringSvg() {
-    var n = todayCount(), g = dailyGoal, f = Math.min(1, n / g), C = 2 * Math.PI * 30;
+    var n = todayCount(), g = dayGoal(), f = Math.min(1, n / g), C = 2 * Math.PI * 30;
     return '<svg viewBox="0 0 72 72" class="ring" aria-hidden="true"><circle cx="36" cy="36" r="30" class="rbg"/><circle cx="36" cy="36" r="30" class="rfg' + (f >= 1 ? " done" : "") + '" stroke-dasharray="' + C.toFixed(1) + '" stroke-dashoffset="' + (C * (1 - f)).toFixed(1) + '"/></svg>' +
       '<span class="rnum">' + (f >= 1 ? "✓" : n) + '<small>' + (f >= 1 ? "мета" : "з " + g) + '</small></span>';
   }
   function updateRing() { var r = document.getElementById("ringbox"); if (r) r.innerHTML = ringSvg(); var t = document.getElementById("hgoal"); if (t) t.textContent = goalText(); }
   function goalText() {
     var n = todayCount();
-    if (n >= dailyGoal) return "Денну мету виконано. Bravo !";
-    if (!n) return "Почнімо: денна мета " + dailyGoal + " відповідей";
-    return "Ще " + (dailyGoal - n) + " до денної мети";
+    var g = dayGoal();
+    if (n >= g) return "Денну мету виконано. Bravo !";
+    if (!n) return "Почнімо: денна мета " + g + " відповідей";
+    return "Ще " + (g - n) + " до денної мети";
   }
   function renderHome() {
     var c = contTarget(), set = SETS[c.k], total = set.lessons[c.l].length, gr = greeting(), sn = streakNow(), lv = levelOf(xp);
-    var h = '<section class="hello"><div class="htext"><p class="hi">' + gr[0] + ' !</p><p class="hisub" id="hgoal">' + goalText() + '</p>' +
-      '<p class="hchips"><span class="hchip">🔥 ' + (sn ? sn + ' ' + daysWord(sn) + ' поспіль' : 'серія ще попереду') + '</span><span class="hchip" title="' + esc(lv.name) + '">Рівень ' + lv.n + ' · ще ' + (lv.to - xp) + '</span></p></div>' +
-      '<button type="button" class="ringbox" id="ringbox" aria-label="Денна мета: ' + todayCount() + ' з ' + dailyGoal + '. Змінити в налаштуваннях">' + ringSvg() + '</button></section>';
-
+    var h = '<section class="hello"><div class="htext"><p class="hi">' + gr[0] + '&nbsp;!</p><p class="hisub" id="hgoal">' + goalText() + '</p>' +
+      '<p class="hchips"><span class="hchip">' + esc(titleOf(lv.n)) + ' · Niv. ' + lv.n + '</span><span class="hchip">ще ' + (lv.to - xp) + ' XP</span></p></div>' +
+      '<button type="button" class="ringbox" id="ringbox" aria-label="Денна мета: ' + todayCount() + ' з ' + dayGoal() + '. Змінити в налаштуваннях">' + ringSvg() + '</button></section>';
     var hideHint = false; try { hideHint = localStorage.getItem("fr-hint-chrome") === "1"; } catch (e0) {}
     if ((inWebView || !canSpeak) && !hideHint) h += '<section class="card chome">' + chromeHint("Ви відкрили застосунок у Claude на Android: тут не працюють озвучка 🔊 і камера для «Слів з фото». Відкрийте цю сторінку в Chrome, і все запрацює. Прогрес можна перенести в ⚙️ Налаштуваннях.") + '<button type="button" class="qskip chx" id="hidehint" aria-label="Сховати">×</button></section>';
-    var wd = wordOfDay();
-    h += '<section class="wodh" aria-label="Слово дня"><p class="wlabel">Слово дня</p>' +
-      '<h2 class="wtitle"><span class="ww">' + esc(wd.w) + '</span> <span class="wdash">—</span> <span class="wua">' + esc(wd.ua) + '</span></h2>' +
-      (wd.ex ? '<p class="wex">' + esc(wd.ex) + '</p>' : '') +
-      '<div class="wtools">' + sayBtn(wd.w + (wd.ex ? ". " + wd.ex : ""), "") + (wd.mine || vocabHas(wd.w) ? '' : '<button type="button" class="btn ghost" id="wadd">+ У словник</button>') + '<button type="button" class="qskip" id="wnext" aria-label="Інше слово">↻</button></div></section>';
+
+    h += '<section class="card cont"><div class="ctop">' + minouSvg(56) + '<div class="ctext"><p class="ckind">' + (set.group === "tenses" ? "Часи" : "Практика · " + set.level) + '</p><p class="htitle">' + esc(set.label) + '</p><p class="clesson">Урок ' + (c.l + 1) + ' з ' + set.lessons.length + (c.done ? " · вправа " + (c.done + 1) + " з " + total : "") + '</p></div></div>';
+    if (c.done) h += '<div class="hbar" aria-hidden="true"><i style="width:' + Math.round(c.done / total * 100) + '%"></i></div>';
+    h += '<button type="button" class="btn big" id="hgo">' + c.act + ' →</button></section>';
+
+    if (streak.n >= 7 && streak.n % 7 === 0 && streak.last === todayS() && eco.goldAt !== streak.n) h += '<section class="card gchest"><div>' + chestSvg("gold") + '</div><div><p class="htitle">' + streak.n + ' днів серії!</p><p class="clesson">Золота скриня: 60–100 Écus</p><button type="button" class="btn gold" id="goldgo">Відкрити</button></div></section>';
+
+    var q = questsToday(), qd = questsDone();
+    h += '<section class="card quests"><div class="qhead"><p class="label" style="margin:0">Щоденні квести</p><span class="count">' + qd + '/3</span></div><ul class="qlist">';
+    q.list.forEach(function (k) { var g = QUESTS[k].goal, n = Math.min(g, q.n[k] || 0); h += '<li class="' + (n >= g ? "done" : "") + '"><span>' + esc(QUESTS[k].t) + '</span><div class="hbar"><i style="width:' + pct(n, g) + '%"></i></div><b>' + (n >= g ? "✓" : n + "/" + g) + '</b></li>'; });
+    h += '</ul><div class="qchest">' + chestSvg("silver") + '<span>' + (q.chest ? "Скриню відкрито ✓" : (qd === 3 ? "Усі квести виконано!" : "Срібна скриня за всі три (20–40 Écus)")) + '</span>' + (qd === 3 && !q.chest ? '<button type="button" class="btn gold" id="qchest">Відкрити</button>' : '') + '</div></section>';
+
+    var ec = bankTotal();
+    h += '<div class="tiles two">';
+    h += '<button type="button" class="tile t-warm" data-goto="errors"><b>' + (ec || "✓") + '</b><span class="tname">Mes erreurs</span><span>' + (ec ? "+3 Écus за кожну" : "порожньо") + '</span></button>';
+    var dd = eco.defi[todayS()];
+    h += '<button type="button" class="tile t-lav" data-goto="defi"><b class="tsm">Le Défi du jour</b><span>' + (dd ? (dd.ok ? "виконано ✓" : "завтра новий") : "+50 XP · +20 Écus") + '</span></button>';
+    h += '</div>';
 
     var t = dailyToday(), dn = t && !t.done ? Math.min(t.n || 0, 20) : 0;
     h += '<section class="card daily"><div class="dtext"><p class="ckind">Сьогоднішній урок</p><p class="htitle">' + (t && t.done ? "Пройдено ✓" : "20 завдань") + '</p>' +
@@ -1550,17 +1680,22 @@
       (dn ? '<div class="hbar" aria-hidden="true"><i style="width:' + (dn * 5) + '%"></i></div>' : '') + '</div>' +
       '<button type="button" class="btn big" id="dgo">' + (t && t.done ? "Пройти ще раз" : (dn ? "Продовжити" : "Пройти")) + '</button></section>';
 
-    h += '<section class="card cont"><div class="ctop"><span class="cico">' + ico("book") + '</span><div class="ctext"><p class="ckind">' + (set.group === "tenses" ? "Часи" : "Практика") + (c.done ? " · " + c.done + " з " + total : "") + '</p><p class="htitle">' + esc(set.label) + '</p><p class="clesson">Урок ' + (c.l + 1) + ' з ' + set.lessons.length + '</p></div></div>';
-    if (c.done) h += '<div class="hbar" aria-hidden="true"><i style="width:' + Math.round(c.done / total * 100) + '%"></i></div>';
-    h += '<button type="button" class="btn ghost big" id="hgo">' + c.act + ' →</button></section>';
+    var wd = wordOfDay();
+    h += '<section class="wodh" aria-label="Слово дня"><p class="wlabel">Слово дня</p>' +
+      '<h2 class="wtitle"><span class="ww">' + esc(wd.w) + '</span> <span class="wdash">—</span> <span class="wua">' + esc(wd.ua) + '</span></h2>' +
+      (wd.ex ? '<p class="wex">' + esc(wd.ex) + '</p>' : '') +
+      '<div class="wtools">' + sayBtn(wd.w + (wd.ex ? ". " + wd.ex : ""), "") + (wd.mine || vocabHas(wd.w) ? '' : '<button type="button" class="btn ghost" id="wadd">+ У словник</button>') + '<button type="button" class="qskip" id="wnext" aria-label="Інше слово">↻</button></div></section>';
 
     var dc = dueCount();
     h += '<div class="tiles">';
     h += '<button type="button" class="tile t-blue" data-act="cards"><span class="tico">' + ico("cards") + '</span><b>' + (dc || "✓") + '</b><span>' + (dc ? plural(dc, "картка", "картки", "карток") + " до повтору" : "картки повторено") + '</span></button>';
     h += '<button type="button" class="tile t-rose" data-act="photo"><span class="tico">' + ico("photo") + '</span><b class="tsm">Слова з фото</b><span>знімок → словник</span></button>';
+    h += '<button type="button" class="tile t-mint" data-goto="story"><span class="tico">' + ico("book") + '</span><b class="tsm">Mini-histoire</b><span>' + (bonusOpen("histoire") ? "історії з озвученням" : "🔒 рівень 16 або в магазині") + '</span></button>';
+    h += '<button type="button" class="tile t-gold" data-goto="scenario"><span class="tico">' + ico("err") + '</span><b class="tsm">Scénario</b><span>' + (bonusOpen("scenario") ? "лікар, робота, установа" : "🔒 рівень 16 або в магазині") + '</span></button>';
     h += '</div>';
 
-    h += '<section class="card quick" id="quick"><div class="qhead"><p class="label" style="margin:0">Швидке питання</p><button type="button" class="qskip" id="qskip" aria-label="Інше питання">↻</button></div><div class="qbody">' + quickHtml() + '</div></section>';
+    var sx = seasonXp(), tier = Math.min(30, Math.floor(sx / 300));
+    h += '<button type="button" class="card seasonstrip" data-goto="season"><span class="ckind">La Saison · ' + esc(REGIONS[seasonIdx() % 10][0]) + '</span><span class="sline"><b>' + tier + '/30</b><span class="hbar"><i style="width:' + pct(sx % 300, 300) + '%"></i></span><small>ще ' + (300 - sx % 300) + ' XP</small></span></button>';
     stage.innerHTML = h;
 
     var hh = document.getElementById("hidehint");
@@ -1568,14 +1703,16 @@
     document.getElementById("dgo").addEventListener("click", function () { openDaily(!!(t && t.done)); window.scrollTo(0, 0); });
     document.getElementById("hgo").addEventListener("click", function () { openSet(c.k, c.l); window.scrollTo(0, 0); });
     document.getElementById("ringbox").addEventListener("click", function () { openSettings(); window.scrollTo(0, 0); });
-    stage.querySelector(".tiles").addEventListener("click", function (e) {
-      var b = e.target.closest(".tile"); if (!b) return;
-      var a = b.getAttribute("data-act");
-      if (a === "photo") { openVocab(); openPhoto(); }
-      else if (a === "cards") { vmode = "cards"; try { localStorage.setItem("fr-vmode", "cards"); } catch (e2) {} openVocab(); }
-      window.scrollTo(0, 0);
+    var qc = document.getElementById("qchest"); if (qc) qc.addEventListener("click", function () { q.chest = true; ecoSave(); openChest("silver", renderHome); });
+    var gg = document.getElementById("goldgo"); if (gg) gg.addEventListener("click", function () { eco.goldAt = streak.n; ecoSave(); openChest("gold", renderHome); });
+    stage.querySelectorAll(".tile[data-act]").forEach(function (b) {
+      b.addEventListener("click", function () {
+        var a = b.getAttribute("data-act");
+        if (a === "photo") { openVocab(); openPhoto(); }
+        else if (a === "cards") { vmode = "cards"; try { localStorage.setItem("fr-vmode", "cards"); } catch (e2) {} openVocab(); }
+        window.scrollTo(0, 0);
+      });
     });
-    wireQuick();
     document.getElementById("wnext").addEventListener("click", function () { wodShift++; renderHome(); });
     var wa = document.getElementById("wadd");
     if (wa) wa.addEventListener("click", function () {
@@ -1873,6 +2010,528 @@
     updateList(); updatePins();
   }
 
+  /* ===================== Dix Mois game system: Écus, quests, chests, shop, season, league, profile ===================== */
+  var eco = { ecus: 0, frac: 0, inv: {}, owned: {}, equip: {}, stats: {}, beat: {}, beaten: 0, ach: {}, stamps: {}, cards: {}, xplog: {},
+    q: {}, freeze: 0, vac: "", night: "", last: "", start: "", combo: 0, maxCombo: {}, codRun: 0, pcRight: 0, boost: 0, shield: 0,
+    league: { tier: 0, week: "" }, season: {}, defi: {}, rules: {}, early: {}, bossToken: 0, greeted: "" };
+  try {
+    var e0 = JSON.parse(localStorage.getItem("fr-eco") || "{}");
+    if (e0 && typeof e0 === "object") for (var ek in e0) eco[ek] = e0[ek];
+  } catch (e) {}
+  if (!eco.start) eco.start = dayStr(new Date());
+  function ecoSave() { try { localStorage.setItem("fr-eco", JSON.stringify(eco)); } catch (e) {} }
+  function daysBetween(a, b) { return Math.round((new Date(b + "T12:00:00") - new Date(a + "T12:00:00")) / DAY_MS); }
+  var DAY_MS = 86400000;
+  function addDays(ds, n) { var d = new Date(ds + "T12:00:00"); d.setDate(d.getDate() + n); return dayStr(d); }
+  function todayS() { return dayStr(new Date()); }
+  function boostOn() { return eco.boost && Date.now() < eco.boost; }
+
+  /* Rewards. XP never decreases; Écus are spent in the shop. */
+  function gain(x, c, why) {
+    x = Math.round(x * (boostOn() ? 2 : 1));
+    var whole = Math.floor(c + (eco.frac || 0) + 1e-9);
+    eco.frac = Math.round(((c + (eco.frac || 0)) - whole) * 100) / 100;
+    if (x) { addXp(x); var t = todayS(); eco.xplog[t] = (eco.xplog[t] || 0) + x; seasonCheck(); }
+    if (whole) eco.ecus += whole;
+    ecoSave(); refreshGame();
+    return { x: x, c: whole };
+  }
+  function spend(n) { if (eco.ecus < n) return false; eco.ecus -= n; ecoSave(); refreshGame(); return true; }
+  function rewardText(r) { return (r.x ? "+" + r.x + " XP" : "") + (r.c ? (r.x ? " · " : "") + "+" + r.c + " Écus" : ""); }
+
+  /* Titles by level: level N needs 100 × N XP. */
+  var TITLES = [[1, "Touriste"], [6, "Voyageur"], [16, "Résident"], [26, "Habitant"], [41, "Francophone"]];
+  function titleOf(n) { var t = TITLES[0][1]; for (var i = 0; i < TITLES.length; i++) if (n >= TITLES[i][0]) t = TITLES[i][1]; return t; }
+
+  /* Daily quests: three a day from a pool, all three = silver chest. */
+  var QUESTS = {
+    lesson: { t: "Пройди 1 урок з будь-якої теми", goal: 1 },
+    fix: { t: "Виправ 3 помилки з «Mes erreurs»", goal: 3 },
+    cards: { t: "Повтори 10 карток словника", goal: 10 },
+    combo: { t: "Зроби комбо з 5 правильних відповідей", goal: 5 },
+    rule: { t: "Прочитай 1 правило з довідника граматики", goal: 1 }
+  };
+  function questsToday() {
+    var t = todayS();
+    if (eco.q.d !== t) {
+      var keys = Object.keys(QUESTS), h = 0;
+      for (var i = 0; i < t.length; i++) h = (h * 31 + t.charCodeAt(i)) >>> 0;
+      var pick = [];
+      while (pick.length < 3) { var k = keys[h % keys.length]; if (pick.indexOf(k) < 0) pick.push(k); h = (h * 1103515245 + 12345) >>> 0; }
+      eco.q = { d: t, list: pick, n: {}, chest: false };
+      ecoSave();
+    }
+    return eco.q;
+  }
+  function qBump(kind, n, isMax) {
+    var q = questsToday();
+    if (q.list.indexOf(kind) < 0) return;
+    var before = Math.min(q.n[kind] || 0, QUESTS[kind].goal);
+    q.n[kind] = isMax ? Math.max(q.n[kind] || 0, n) : (q.n[kind] || 0) + (n || 1);
+    if (before < QUESTS[kind].goal && q.n[kind] >= QUESTS[kind].goal) toast("✓ Квест виконано: " + QUESTS[kind].t);
+    ecoSave();
+  }
+  function questsDone() { var q = questsToday(), d = 0; for (var i = 0; i < q.list.length; i++) if ((q.n[q.list[i]] || 0) >= QUESTS[q.list[i]].goal) d++; return d; }
+
+  /* Chests: the range is shown before opening. */
+  var CHESTS = { wood: { name: "Дерев'яна скриня", min: 10, max: 20 }, silver: { name: "Срібна скриня", min: 20, max: 40 }, gold: { name: "Золота скриня", min: 60, max: 100 } };
+  function chestSvg(kind) {
+    var c = kind === "gold" ? ["#f5b731", "#c98d0c"] : kind === "silver" ? ["#c9d1de", "#8e99ad"] : ["#b9773f", "#7d4b22"];
+    return '<svg viewBox="0 0 120 100" class="chest-svg" aria-hidden="true"><rect x="12" y="44" width="96" height="48" rx="8" fill="' + c[0] + '" stroke="' + c[1] + '" stroke-width="4"/>' +
+      '<path d="M12 46 Q12 14 60 14 Q108 14 108 46 Z" fill="' + c[0] + '" stroke="' + c[1] + '" stroke-width="4" class="chest-lid"/>' +
+      '<rect x="52" y="40" width="16" height="22" rx="4" fill="' + c[1] + '"/><rect x="12" y="62" width="96" height="6" fill="' + c[1] + '" opacity=".5"/></svg>';
+  }
+  function openChest(kind, after) {
+    var ch = CHESTS[kind], amount = ch.min + Math.floor(Math.random() * (ch.max - ch.min + 1));
+    var ov = document.createElement("div");
+    ov.className = "modal";
+    ov.innerHTML = '<div class="mcard chestbox"><p class="ckind">' + ch.name + '</p><div class="chest shake">' + chestSvg(kind) + '</div><p class="chest-range">Усередині: ' + ch.min + '–' + ch.max + ' Écus</p>' +
+      '<button type="button" class="btn big gold" id="chopen">Відкрити</button></div>';
+    document.body.appendChild(ov);
+    ov.querySelector("#chopen").addEventListener("click", function () {
+      var box = ov.querySelector(".chest");
+      box.classList.remove("shake"); box.classList.add("burst");
+      eco.ecus += amount; ecoSave(); refreshGame(); beep(true);
+      setTimeout(function () {
+        ov.querySelector(".mcard").innerHTML = '<p class="ckind">' + ch.name + '</p><div class="chest open">' + chestSvg(kind) + '</div><p class="loot"><span class="coin">●</span> +' + amount + ' Écus</p><button type="button" class="btn big" id="chok">Чудово!</button>';
+        ov.querySelector("#chok").addEventListener("click", function () { ov.remove(); if (after) after(); });
+      }, 420);
+    });
+  }
+  function modal(html, wire) {
+    var ov = document.createElement("div");
+    ov.className = "modal";
+    ov.innerHTML = '<div class="mcard">' + html + '</div>';
+    document.body.appendChild(ov);
+    ov.addEventListener("click", function (e) { if (e.target === ov || e.target.closest("[data-close]")) ov.remove(); });
+    if (wire) wire(ov);
+    return ov;
+  }
+
+  /* Streak protection: freezes, holidays, night weeks, repair. */
+  function dayGoal() { return eco.night && todayS() <= eco.night ? 5 : dailyGoal; }
+  function protectStreak() {
+    var t = todayS(), y = addDays(t, -1);
+    if (!streak.last || streak.last >= y) return;
+    var gap = daysBetween(streak.last, y); /* missed days */
+    var used = 0;
+    for (var i = 1; i <= gap; i++) {
+      var d = addDays(streak.last, i);
+      if (eco.vac && d <= eco.vac) continue;
+      if (eco.freeze > 0) { eco.freeze--; used++; continue; }
+      return; /* streak broken: Réparation can bring it back within 48 h */
+    }
+    streak.last = y; saveGame(); ecoSave();
+    if (used) setTimeout(function () { toast("❄ Використано «Jour de repos»: " + used + ". Серію збережено."); }, 600);
+  }
+  function canRepair() { return streak.n > 1 && streakNow() === 0 && streak.last && daysBetween(streak.last, todayS()) <= 3; }
+
+  /* Season = one month = one region of the map. 30 tiers × 300 XP. */
+  var REGIONS = [["Paris", "Ейфелева вежа й кафе"], ["Normandie", "скелі Етрета, сидр"], ["Bretagne", "маяки, млинці"], ["Lyon", "бушони, Сона й Рона"], ["Provence", "лаванда, ринки"],
+    ["Alsace", "фахверкові будиночки"], ["Genève", "Женевське озеро, фонтан"], ["Lausanne", "Лозанна над Леманом"], ["Jura", "ліси, сир Gruyère"], ["Québec", "фінал: французька Америка"]];
+  function seasonIdx() { var s = new Date(eco.start + "T12:00:00"), n = new Date(); return Math.max(0, (n.getFullYear() - s.getFullYear()) * 12 + n.getMonth() - s.getMonth()); }
+  function monthKey() { var n = new Date(); return n.getFullYear() + "-" + (n.getMonth() + 1); }
+  function seasonXp() { var m = todayS().slice(0, 7), s = 0; for (var d in eco.xplog) if (d.slice(0, 7) === m) s += eco.xplog[d]; return s; }
+  function tierReward(t) { return t === 30 ? 100 : (t % 5 === 0 ? 30 : 10); }
+  function seasonCheck() {
+    var mk = monthKey(), st = eco.season[mk] || (eco.season[mk] = { claimed: 0 });
+    var tier = Math.min(30, Math.floor(seasonXp() / 300));
+    while (st.claimed < tier) {
+      st.claimed++;
+      var r = tierReward(st.claimed);
+      eco.ecus += r;
+      if (st.claimed === 30) { st.postcard = true; toast("🏆 Сезон завершено! Листівка «" + REGIONS[seasonIdx() % 10][0] + "» + " + r + " Écus"); }
+      else toast("Сезон: рівень " + st.claimed + " · +" + r + " Écus");
+    }
+  }
+
+  /* League against yourself: this week vs last week. */
+  function weekStart(ds) { var d = new Date(ds + "T12:00:00"), wd = (d.getDay() + 6) % 7; d.setDate(d.getDate() - wd); return dayStr(d); }
+  function weekXp(ws) { var s = 0; for (var i = 0; i < 7; i++) s += eco.xplog[addDays(ws, i)] || 0; return s; }
+  var TIERS = ["Bronze", "Argent", "Or", "Platine", "Diamant"];
+  function leagueUpdate() {
+    var ws = weekStart(todayS());
+    if (!eco.league.week) { eco.league.week = ws; return; }
+    while (eco.league.week < ws) {
+      var w = eco.league.week, prev = addDays(w, -7), a = weekXp(w), b = weekXp(prev);
+      if (a > b && a > 0) eco.league.tier = Math.min(4, eco.league.tier + 1);
+      else if (a < b * 0.5) eco.league.tier = Math.max(0, eco.league.tier - 1);
+      eco.league.week = addDays(w, 7);
+    }
+    ecoSave();
+  }
+
+  /* Achievements. */
+  var ACH = [
+    { id: "passe", t: "Maître du Passé", d: "100 правильних у passé composé", goal: 100, v: function () { return eco.pcRight || 0; } },
+    { id: "chasseur", t: "Chasseur d'erreurs", d: "Переможено 50 помилок", goal: 50, v: function () { return eco.beaten || 0; } },
+    { id: "lequel", t: "Lequel ?", d: "Урок на lequel без помилок", goal: 1, v: function () { return eco.ach.lequelDone ? 1 : 0; } },
+    { id: "ninja", t: "COD/COI Ninja", d: "20 займенників поспіль без помилки", goal: 20, v: function () { return eco.ach.ninjaBest || 0; } },
+    { id: "leve", t: "Lève-tôt", d: "Урок до 7:00", goal: 1, v: function () { return eco.ach.leveDone ? 1 : 0; } },
+    { id: "jours", t: "Une semaine", d: "Серія 7 днів", goal: 7, v: function () { return Math.max(streakNow(), eco.ach.bestStreak || 0); } },
+    { id: "defi", t: "Défi relevé", d: "10 щоденних викликів", goal: 10, v: function () { return eco.ach.defiWins || 0; } },
+    { id: "collect", t: "Philatéliste", d: "10 марок у колекції", goal: 10, v: function () { return Object.keys(eco.stamps).length; } }
+  ];
+  function achCheck() {
+    for (var i = 0; i < ACH.length; i++) {
+      var a = ACH[i];
+      if (!eco.ach["got_" + a.id] && a.v() >= a.goal) { eco.ach["got_" + a.id] = todayS(); toast("🏅 Досягнення: " + a.t); }
+    }
+    ecoSave();
+  }
+
+  /* Shop. */
+  var SHOP = [
+    { tab: "help", id: "indice", t: "Indice", d: "Прибирає 2 неправильні варіанти або показує першу літеру", p: 20 },
+    { tab: "help", id: "motcle", t: "Mot clé", d: "Показує переклад слова з речення", p: 10 },
+    { tab: "help", id: "seconde", t: "Seconde chance", d: "Друга спроба без втрати комбо (помилка все одно йде в банк)", p: 25 },
+    { tab: "help", id: "joker", t: "Joker", d: "Замінити вправу іншою з тієї ж теми", p: 30 },
+    { tab: "help", id: "bouclier", t: "Bouclier d'étoile", d: "Одна помилка не знімає зірку за урок", p: 40 },
+    { tab: "help", id: "xp2", t: "XP ×2 (15 хв)", d: "Подвійний досвід протягом 15 хвилин", p: 50, now: true },
+    { tab: "streak", id: "repos", t: "Jour de repos", d: "Заморозка серії на 1 день (максимум 2 в запасі)", p: 100, max: 2 },
+    { tab: "streak", id: "vacances", t: "Vacances", d: "Режим відпустки на 7 днів: серія не згорає", p: 400, now: true },
+    { tab: "streak", id: "reparation", t: "Réparation", d: "Відновити втрачену серію (протягом 48 год)", p: 250, now: true },
+    { tab: "streak", id: "nuit", t: "Semaine de nuit", d: "Нічні зміни: мета дня 5 відповідей на 7 днів", p: 150, now: true },
+    { tab: "bonus", id: "histoire", t: "Mini-histoire", d: "Короткі історії з озвученням і питаннями (безкоштовно з рівня 16)", p: 120, once: true },
+    { tab: "bonus", id: "scenario", t: "Scénario", d: "Фрази: «В лікаря», «На зміні», «У префектурі» (безкоштовно з рівня 16)", p: 200, once: true },
+    { tab: "bonus", id: "boss", t: "Défi Boss", d: "Відкриває підсумковий тест будь-якої теми достроково; нагорода — рідкісна марка", p: 150 },
+    { tab: "style", id: "skin-nuit", t: "Тема «Paris la nuit»", d: "Темно-синя з золотом", p: 400, once: true, equip: ["skin", "nuit"] },
+    { tab: "style", id: "skin-lavande", t: "Тема «Lavande de Provence»", d: "Лавандова", p: 300, once: true, equip: ["skin", "lavande"] },
+    { tab: "style", id: "skin-jura", t: "Тема «Forêt du Jura»", d: "Лісова зелена", p: 300, once: true, equip: ["skin", "jura"] },
+    { tab: "style", id: "skin-leman", t: "Тема «Lac Léman»", d: "Озерна бірюзова", p: 500, once: true, equip: ["skin", "leman"] },
+    { tab: "style", id: "out-echarpe", t: "Шарф для Minou", d: "Червоний шарф", p: 80, once: true, equip: ["outfit", "echarpe"] },
+    { tab: "style", id: "out-mariniere", t: "Тільняшка для Minou", d: "Футболка в смужку", p: 150, once: true, equip: ["outfit", "mariniere"] },
+    { tab: "style", id: "out-casque", t: "Каска техніка", d: "Для змінної роботи", p: 250, once: true, equip: ["outfit", "casque"] },
+    { tab: "style", id: "frame-or", t: "Золота рамка аватара", d: "Рамка в профілі", p: 150, once: true, equip: ["frame", "or"] },
+    { tab: "style", id: "frame-tricolore", t: "Рамка «Tricolore»", d: "Синьо-біло-червона", p: 150, once: true, equip: ["frame", "tricolore"] },
+    { tab: "style", id: "snd-cafe", t: "Звуки «Café»", d: "М'які дзвіночки", p: 200, once: true, equip: ["sound", "cafe"] },
+    { tab: "style", id: "snd-accordeon", t: "Звуки «Accordéon»", d: "Акордеонні акорди", p: 200, once: true, equip: ["sound", "accordeon"] },
+    { tab: "style", id: "snd-minimal", t: "Звуки «Мінімалізм»", d: "Ледь чутне клацання", p: 200, once: true, equip: ["sound", "minimal"] },
+    { tab: "style", id: "title-conj", t: "Титул «Le Conjugueur»", d: "Показується в профілі", p: 100, once: true, equip: ["title", "Le Conjugueur"] },
+    { tab: "style", id: "title-coi", t: "Титул «Roi du COI»", d: "Показується в профілі", p: 100, once: true, equip: ["title", "Roi du COI"] }
+  ];
+  function shopItem(id) { for (var i = 0; i < SHOP.length; i++) if (SHOP[i].id === id) return SHOP[i]; return null; }
+  function offerToday() {
+    var t = todayS(), h = 0; for (var i = 0; i < t.length; i++) h = (h * 33 + t.charCodeAt(i)) >>> 0;
+    var pool = SHOP.filter(function (s) { return !(s.once && eco.owned[s.id]); });
+    return pool.length ? pool[h % pool.length].id : null;
+  }
+  function priceOf(it) { return it.id === offerToday() ? Math.round(it.p * 0.7) : it.p; }
+  function buy(id) {
+    var it = shopItem(id); if (!it) return false;
+    if (it.once && eco.owned[id]) return false;
+    if (it.max && (eco.inv[id] || 0) >= it.max) { toast("Уже є максимум: " + it.max); return false; }
+    if (id === "reparation" && !canRepair()) { toast("Серія не втрачена або минуло більше 48 годин."); return false; }
+    var pr = priceOf(it);
+    if (!spend(pr)) {
+      var need = pr - eco.ecus;
+      toast("Бракує " + need + " Écus. Виправ " + Math.ceil(need / 3) + " помилок або пройди урок без помилок.");
+      return false;
+    }
+    if (id === "xp2") eco.boost = Date.now() + 15 * 60000;
+    else if (id === "vacances") eco.vac = addDays(todayS(), 7);
+    else if (id === "nuit") eco.night = addDays(todayS(), 6);
+    else if (id === "reparation") { streak.last = addDays(todayS(), -1); saveGame(); }
+    else if (id === "repos") eco.freeze = (eco.freeze || 0) + 1;
+    else if (id === "boss") eco.bossToken = (eco.bossToken || 0) + 1;
+    else if (it.once) { eco.owned[id] = todayS(); if (it.equip) { eco.equip[it.equip[0]] = it.equip[1]; applySkin(); } }
+    else eco.inv[id] = (eco.inv[id] || 0) + 1;
+    ecoSave(); refreshGame(); beep(true);
+    toast("Куплено: " + it.t + " (−" + pr + " Écus)");
+    return true;
+  }
+  function applySkin() {
+    var s = eco.equip.skin || "";
+    if (s) document.documentElement.setAttribute("data-skin", s); else document.documentElement.removeAttribute("data-skin");
+  }
+  applySkin();
+
+  /* Minou, the companion cat (outfit and frame from the shop). */
+  function minouSvg(size, mood) {
+    var o = eco.equip.outfit || "", fr = eco.equip.frame || "";
+    var ring = fr === "or" ? '<circle cx="60" cy="60" r="57" fill="none" stroke="#f5b731" stroke-width="6"/>' :
+      fr === "tricolore" ? '<circle cx="60" cy="60" r="57" fill="none" stroke="#2d5bff" stroke-width="6" stroke-dasharray="120 240"/><circle cx="60" cy="60" r="57" fill="none" stroke="#ffffff" stroke-width="6" stroke-dasharray="120 240" stroke-dashoffset="-120"/><circle cx="60" cy="60" r="57" fill="none" stroke="#e8473f" stroke-width="6" stroke-dasharray="120 240" stroke-dashoffset="-240"/>' : "";
+    var body = o === "mariniere" ? '<path d="M28 118 Q30 84 60 84 Q90 84 92 118Z" fill="#fff"/><path d="M30 96h60M29 104h62M28 112h64" stroke="#1b2a4a" stroke-width="4"/>' :
+      '<path d="M28 118 Q30 84 60 84 Q90 84 92 118Z" fill="#f2a65a"/>';
+    var scarf = o === "echarpe" ? '<path d="M36 84 Q60 96 84 84 L84 92 Q60 104 36 92Z" fill="#e8473f"/><rect x="70" y="90" width="9" height="20" rx="3" fill="#e8473f"/>' : "";
+    var hat = o === "casque" ? '<path d="M30 40 Q32 14 60 14 Q88 14 90 40Z" fill="#f5b731"/><rect x="26" y="38" width="68" height="7" rx="3" fill="#c98d0c"/>' :
+      '<ellipse cx="62" cy="26" rx="27" ry="10" fill="#1b2a4a"/><circle cx="62" cy="15" r="4" fill="#1b2a4a"/>';
+    var eyes = mood === "wow" ? '<circle cx="47" cy="58" r="6" fill="#1b2a4a"/><circle cx="73" cy="58" r="6" fill="#1b2a4a"/>' :
+      '<path d="M41 59 Q47 53 53 59M67 59 Q73 53 79 59" stroke="#1b2a4a" stroke-width="4" fill="none" stroke-linecap="round"/>';
+    return '<svg viewBox="0 0 120 120" width="' + size + '" height="' + size + '" class="minou" aria-label="Кіт Minou"><circle cx="60" cy="60" r="54" fill="var(--gold-soft)"/>' + ring +
+      '<g clip-path="url(#mclip' + size + ')"><clipPath id="mclip' + size + '"><circle cx="60" cy="60" r="54"/></clipPath>' + body + scarf +
+      '<path d="M32 42 L28 16 L50 32Z M88 42 L92 16 L70 32Z" fill="#f2a65a"/><circle cx="60" cy="58" r="30" fill="#f2a65a"/>' +
+      '<path d="M36 26 L33 20 M84 26 L87 20" stroke="#f2a65a" stroke-width="2"/>' + eyes +
+      '<path d="M57 68 L63 68 L60 72Z" fill="#e8473f"/><path d="M60 72 Q55 78 50 74 M60 72 Q65 78 70 74" stroke="#1b2a4a" stroke-width="2.5" fill="none" stroke-linecap="round"/>' +
+      '<path d="M28 66 L44 68 M28 74 L44 72 M92 66 L76 68 M92 74 L76 72" stroke="#1b2a4a" stroke-width="1.6" opacity=".6"/>' + hat + '</g></svg>';
+  }
+  var MINOU_CHEER = ["Bravo !", "Super combo !", "Continue comme ça !", "Magnifique !"];
+  var MINOU_SOFT = ["Pas grave, on réessaie.", "Помилка — це майбутні Écus.", "Courage ! Ти майже там.", "On apprend en se trompant."];
+
+  /* ===================== Game screens ===================== */
+  var inPage = "";
+  var PAGE_TAB = { shop: "profile", season: "profile", league: "profile", profile: "profile", map: "profile", errors: "home", defi: "home", story: "home", scenario: "home" };
+  function openPage(name, arg) {
+    inPage = name; inHome = false; inSettings = false; inDaily = false; inVocab = false; inGram = false; inErrors = false;
+    navOpen = false;
+    setMode(); refreshStatus();
+    var r = PAGES[name];
+    if (r) r(arg);
+    window.scrollTo(0, 0);
+  }
+  function backBtn(label, to) { return '<button type="button" class="btn ghost pback" data-goto="' + to + '">← ' + label + '</button>'; }
+  document.addEventListener("click", function (e) {
+    var b = e.target.closest ? e.target.closest("[data-goto]") : null;
+    if (!b) return;
+    var g = b.getAttribute("data-goto");
+    if (g === "home") openHome(); else if (g === "settings") openSettings(); else openPage(g, b.getAttribute("data-arg"));
+    window.scrollTo(0, 0);
+  });
+  function pct(a, b) { return Math.max(0, Math.min(100, b ? a / b * 100 : 0)); }
+
+  /* Mes erreurs: every mistake must be answered right twice (end of lesson + later). */
+  function errorItems() {
+    var out = [];
+    for (var id in bank) { if (ALL[id]) out.push({ q: ALL[id], b: eco.beat[id] || 0 }); }
+    return out;
+  }
+  function renderErrorsPage() {
+    var items = errorItems(), by = {};
+    items.forEach(function (it) { (by[it.q.set] = by[it.q.set] || []).push(it); });
+    var h = '<section class="card"><div class="vhead"><p class="label" style="margin:0">Mes erreurs</p><span class="count">' + items.length + '</span></div>';
+    if (!items.length) {
+      h += '<div class="empty">' + minouSvg(84) + '<p>Банк помилок порожній. Помилки з уроків з\'являтимуться тут, і кожна виправлена принесе <b>+3 Écus</b>.</p></div>';
+    } else {
+      h += '<p class="hint" style="margin:0;color:var(--muted)">Кожну помилку треба виправити двічі: у кінці уроку і тут. Виправлена: <b>+15 XP · +3 Écus</b>; переможена (2/2): <b>+25 XP · +10 Écus</b>.</p>';
+      h += '<button type="button" class="btn big" id="ertrain">Тренувати помилки (' + Math.min(10, items.length) + ')</button>';
+      Object.keys(by).forEach(function (k) {
+        h += '<h3 class="ehead">' + esc(SETS[k].label) + '</h3><ul class="elist">';
+        by[k].forEach(function (it) {
+          h += '<li><span class="etext">' + esc(it.q.pre) + '<b>' + esc(it.q.a[0]) + '</b>' + esc(it.q.post) + '</span><span class="ebeat b' + it.b + '">' + it.b + '/2</span></li>';
+        });
+        h += '</ul>';
+      });
+    }
+    h += '<p class="hint" style="margin:0;color:var(--muted)">Переможено всього: <b>' + (eco.beaten || 0) + '</b></p></section>';
+    stage.innerHTML = h;
+    var tb = document.getElementById("ertrain");
+    if (tb) tb.addEventListener("click", function () { startErrorsRound(); });
+  }
+  function startErrorsRound() {
+    inPage = ""; inErrors = true; inHome = false; inSettings = false; inDaily = false; inVocab = false; inGram = false;
+    setMode(); refreshStatus();
+    var items = errorItems().sort(function (a, b) { return b.b - a.b; });
+    var list = shuffle(items.slice(0, 10)).map(function (it) { return it.q; });
+    document.getElementById("errnote").hidden = true;
+    start(list, "errors");
+    window.scrollTo(0, 0);
+  }
+
+  /* Le Défi du jour: one harder sentence a day, typed. */
+  function defiQ() {
+    var pool = [];
+    ["B1", "B2"].forEach(function (lv) { setsOfLevel(lv).forEach(function (k) { SETS[k].lessons.forEach(function (l) { pool = pool.concat(l); }); }); });
+    ["cond", "sbj"].forEach(function (k) { SETS[k].lessons.forEach(function (l) { pool = pool.concat(l); }); });
+    return pool[dayHash() % pool.length];
+  }
+  function renderDefi() {
+    var q = defiQ(), d = eco.defi[todayS()];
+    var h = '<section class="card defi"><p class="ckind">Le Défi du jour · ' + esc(SETS[q.set].label) + '</p><p class="htitle">Одне складне речення на день</p>';
+    h += '<p class="sentence">' + esc(q.pre) + '<span class="blank' + (d ? (d.ok ? " good" : " bad") : "") + '" id="dblank">' + (d ? esc(d.ok ? q.a[0] : d.given) : "&nbsp;&nbsp;&nbsp;&nbsp;") + '</span>' + esc(q.post) + '</p><p class="tr">' + esc(q.tr) + (q.verb ? ' <span class="verb">(' + esc(q.verb) + ')</span>' : '') + '</p>';
+    if (!d) {
+      h += '<p class="hint" style="margin:0;color:var(--muted)">Без варіантів, одна спроба. Нагорода: <b>+50 XP · +20 Écus</b>.</p>';
+      h += '<form class="type" id="dform" autocomplete="off"><input class="field" id="danswer" type="text" placeholder="Ваша відповідь" autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="Відповідь">' + keysHtml() + '<button type="submit" class="btn">Перевірити</button></form>';
+    } else {
+      h += '<div class="feedback ' + (d.ok ? "good" : "bad") + '"><strong>' + (d.ok ? "Parfait ! +50 XP · +20 Écus" : "Не цього разу") + '</strong><span>Правильно: <b>' + esc(q.a[0]) + '</b></span><span>' + esc(q.why) + '</span></div>';
+      h += '<p class="hint" style="margin:0;color:var(--muted)">Новий виклик з\'явиться завтра.</p>';
+    }
+    h += '<div class="actions">' + sayBtn(q.pre + q.a[0] + q.post, "") + backBtn("На головну", "home") + '</div></section>';
+    stage.innerHTML = h;
+    var f = document.getElementById("dform");
+    if (f) {
+      wireKeys("danswer");
+      f.addEventListener("submit", function (e) {
+        e.preventDefault();
+        var v = document.getElementById("danswer").value; if (!norm(v)) return;
+        var ok = q.a.some(function (a) { return norm(a) === norm(v); });
+        eco.defi[todayS()] = { ok: ok, given: v };
+        if (ok) { gain(50, 20); eco.ach.defiWins = (eco.ach.defiWins || 0) + 1; achCheck(); }
+        else { bank[q.id] = (bank[q.id] || 0) + 1; saveState(); }
+        answerFx(ok, q.pre + q.a[0] + q.post); bumpDay(); ecoSave(); renderDefi();
+      });
+    }
+  }
+
+  /* La Boutique. */
+  var shopTab = "help";
+  function renderShop() {
+    var off = offerToday(), offIt = off ? shopItem(off) : null;
+    var h = '<section class="card shop"><div class="vhead"><p class="label" style="margin:0">La Boutique</p><span class="ecus"><span class="coin">●</span> ' + eco.ecus + '</span></div>';
+    if (offIt) h += '<div class="offer"><span class="ckind">Offre du jour · −30%</span><b>' + esc(offIt.t) + '</b><span>' + esc(offIt.d) + '</span><button type="button" class="btn gold" data-buy="' + offIt.id + '"><s>' + offIt.p + '</s> ' + priceOf(offIt) + ' Écus</button></div>';
+    var tabs = [["help", "Допомога"], ["streak", "Серія"], ["bonus", "Бонуси"], ["style", "Стиль"]];
+    h += '<div class="seg wide" role="group">' + tabs.map(function (t) { return '<button type="button" class="segbtn" data-stab="' + t[0] + '" aria-pressed="' + (shopTab === t[0]) + '">' + t[1] + '</button>'; }).join("") + '</div><ul class="items">';
+    SHOP.filter(function (s) { return s.tab === shopTab; }).forEach(function (it) {
+      var have = it.once ? (eco.owned[it.id] ? "є" : "") : (it.id === "repos" ? (eco.freeze || 0) : (it.id === "boss" ? (eco.bossToken || 0) : (eco.inv[it.id] || 0)));
+      var status = "";
+      if (it.id === "xp2" && boostOn()) status = "активно ще " + Math.ceil((eco.boost - Date.now()) / 60000) + " хв";
+      if (it.id === "vacances" && eco.vac >= todayS()) status = "до " + eco.vac;
+      if (it.id === "nuit" && eco.night >= todayS()) status = "до " + eco.night;
+      var owned = it.once && eco.owned[it.id];
+      var equipped = it.equip && eco.equip[it.equip[0]] === it.equip[1];
+      h += '<li class="item"><div class="itext"><b>' + esc(it.t) + '</b><span>' + esc(it.d) + '</span>' + (have !== "" && !it.once ? '<small>У тебе: ' + have + '</small>' : '') + (status ? '<small>' + status + '</small>' : '') + '</div>';
+      if (owned && it.equip) h += '<button type="button" class="btn ' + (equipped ? "" : "ghost") + '" data-equip="' + it.id + '">' + (equipped ? "Знято" : "Вдягти") + '</button>';
+      else if (owned) h += '<span class="ownd">Куплено ✓</span>';
+      else h += '<button type="button" class="btn gold" data-buy="' + it.id + '">' + priceOf(it) + '</button>';
+      h += '</li>';
+    });
+    h += '</ul><p class="hint" style="margin:0;color:var(--muted)">Пояснення правил і довідник завжди безкоштовні. Скрізь лише Écus, жодних справжніх грошей.</p>' + backBtn("Профіль", "profile") + '</section>';
+    stage.innerHTML = h;
+    stage.querySelector(".shop").addEventListener("click", function (e) {
+      var t = e.target.closest("[data-stab]"); if (t) { shopTab = t.getAttribute("data-stab"); renderShop(); return; }
+      var b = e.target.closest("[data-buy]"); if (b) { if (buy(b.getAttribute("data-buy"))) { coinBurst(b); renderShop(); } return; }
+      var q = e.target.closest("[data-equip]");
+      if (q) { var it = shopItem(q.getAttribute("data-equip")); var on = eco.equip[it.equip[0]] === it.equip[1]; eco.equip[it.equip[0]] = on ? "" : it.equip[1]; ecoSave(); applySkin(); renderShop(); }
+    });
+  }
+  function coinBurst(el) {
+    try {
+      var r = el.getBoundingClientRect();
+      for (var i = 0; i < 6; i++) {
+        var c = document.createElement("span"); c.className = "flycoin"; c.textContent = "●";
+        c.style.left = (r.left + r.width / 2) + "px"; c.style.top = (r.top) + "px"; c.style.setProperty("--dx", (Math.random() * 80 - 40) + "px");
+        document.body.appendChild(c); setTimeout(function (n) { return function () { n.remove(); }; }(c), 700);
+      }
+    } catch (e) {}
+  }
+
+  /* La Saison. */
+  function renderSeason() {
+    var sx = seasonXp(), tier = Math.min(30, Math.floor(sx / 300)), reg = REGIONS[seasonIdx() % 10];
+    var now = new Date(), end = new Date(now.getFullYear(), now.getMonth() + 1, 1), left = Math.ceil((end - now) / DAY_MS);
+    var h = '<section class="card"><p class="ckind">La Saison · ' + esc(reg[0]) + '</p><p class="htitle">Рівень сезону ' + tier + ' з 30</p>';
+    h += '<p class="clesson">Ще ' + (tier < 30 ? (300 - sx % 300) + ' XP до наступної нагороди' : 'сезон завершено') + ' · до кінця місяця ' + left + ' ' + daysWord(left) + '</p><div class="hbar"><i style="width:' + pct(sx % 300, 300) + '%"></i></div>';
+    h += '<div class="tiers">';
+    for (var t = 1; t <= 30; t++) h += '<div class="tier' + (t <= tier ? " got" : "") + (t === 30 ? " final" : "") + '"><b>' + t + '</b><span>' + (t === 30 ? "листівка + 100" : tierReward(t)) + '</span></div>';
+    h += '</div><p class="hint" style="margin:0;color:var(--muted)">Кожні 300 XP цього місяця — нагорода в Écus. Рівень 30 дає листівку регіону «' + esc(reg[0]) + '» на карту.</p>' + backBtn("Профіль", "profile") + '</section>';
+    stage.innerHTML = h;
+  }
+
+  /* La Ligue: you against last week's you. */
+  function renderLeague() {
+    leagueUpdate();
+    var ws = weekStart(todayS()), prev = addDays(ws, -7), a = weekXp(ws), b = weekXp(prev), mx = 1, i;
+    for (i = 0; i < 7; i++) mx = Math.max(mx, eco.xplog[addDays(ws, i)] || 0, eco.xplog[addDays(prev, i)] || 0);
+    var days = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Нд"];
+    var h = '<section class="card"><p class="ckind">La Ligue · ' + TIERS[eco.league.tier] + '</p><p class="htitle">Ти проти себе минулого тижня</p>';
+    h += '<p class="clesson">Цей тиждень: <b>' + a + ' XP</b> · минулий: <b>' + b + ' XP</b>. ' + (a > b ? "Ти попереду, так тримати!" : "Ще " + (b - a + 1) + " XP, щоб обігнати себе.") + '</p>';
+    h += '<div class="lchart" role="img" aria-label="XP по днях: цей і минулий тиждень">';
+    for (i = 0; i < 7; i++) {
+      var x1 = eco.xplog[addDays(ws, i)] || 0, x0 = eco.xplog[addDays(prev, i)] || 0;
+      h += '<div class="lday"><div class="lbars"><i class="old" style="height:' + pct(x0, mx) + '%" title="' + x0 + '"></i><i class="new" style="height:' + pct(x1, mx) + '%" title="' + x1 + '"></i></div><span>' + days[i] + '</span></div>';
+    }
+    h += '</div><p class="legend"><span class="sw old"></span> минулий тиждень <span class="sw new"></span> цей тиждень</p>';
+    h += '<div class="ltiers">' + TIERS.map(function (t, k) { return '<span class="' + (k === eco.league.tier ? "on" : "") + '">' + t + '</span>'; }).join("") + '</div>';
+    h += '<p class="hint" style="margin:0;color:var(--muted)">У неділю ввечері: обігнав себе — ліга вище; менше половини минулого — на крок нижче.</p>' + backBtn("Профіль", "profile") + '</section>';
+    stage.innerHTML = h;
+  }
+
+  /* La Carte: ten regions, one per month. */
+  function renderMap() {
+    var cur = seasonIdx(), h = '<section class="card"><p class="ckind">La Carte · подорож на 10 місяців</p><p class="htitle">Регіон ' + (Math.min(cur, 9) + 1) + ' з 10</p><ol class="map">';
+    REGIONS.forEach(function (r, i) {
+      var past = i < cur, now = i === cur % 10 && cur < 10, mk = (function () { var s = new Date(eco.start + "T12:00:00"); s.setMonth(s.getMonth() + i); return s.getFullYear() + "-" + (s.getMonth() + 1); })();
+      var pc = eco.season[mk] && eco.season[mk].postcard;
+      h += '<li class="reg' + (past ? " past" : "") + (now ? " now" : "") + '"><span class="dot">' + (pc ? "✉" : (past ? "✓" : i + 1)) + '</span><div><b>' + esc(r[0]) + '</b><span>' + esc(r[1]) + (pc ? " · листівку отримано" : "") + '</span></div>' + (now ? minouSvg(44) : "") + '</li>';
+    });
+    h += '</ol><p class="hint" style="margin:0;color:var(--muted)">Кожен місяць — новий регіон. Пройди 30 рівнів сезону, щоб отримати його листівку.</p>' + backBtn("Профіль", "profile") + '</section>';
+    stage.innerHTML = h;
+  }
+
+  /* Profil. */
+  function renderProfile() {
+    var lv = levelOf(xp), sn = streakNow();
+    var h = '<section class="card prof"><div class="phead">' + minouSvg(96) + '<div><p class="htitle">' + esc(eco.equip.title || titleOf(lv.n)) + '</p><p class="clesson">Рівень ' + lv.n + ' · ' + titleOf(lv.n) + ' · ' + xp + ' XP</p><div class="hbar"><i style="width:' + pct(xp - lv.from, lv.to - lv.from) + '%"></i></div><p class="clesson">Ще ' + (lv.to - xp) + ' XP до рівня ' + (lv.n + 1) + '</p></div></div>';
+    h += '<div class="pstats"><div><b>' + sn + '</b><span>днів серії</span></div><div><b class="gold-t">' + eco.ecus + '</b><span>Écus</span></div><div><b>' + (eco.beaten || 0) + '</b><span>переможено помилок</span></div><div><b>' + Object.keys(eco.stamps).length + '</b><span>марок</span></div></div>';
+    h += '<div class="plinks"><button type="button" class="tile t-gold" data-goto="shop"><b class="tsm">La Boutique</b><span>магазин за Écus</span></button><button type="button" class="tile t-lav" data-goto="season"><b class="tsm">La Saison</b><span>' + Math.min(30, Math.floor(seasonXp() / 300)) + '/30</span></button><button type="button" class="tile t-blue" data-goto="league"><b class="tsm">La Ligue</b><span>' + TIERS[eco.league.tier] + '</span></button><button type="button" class="tile t-mint" data-goto="map"><b class="tsm">La Carte</b><span>' + esc(REGIONS[seasonIdx() % 10][0]) + '</span></button></div></section>';
+    h += '<section class="card"><p class="label" style="margin:0">Досягнення</p><div class="achs">';
+    ACH.forEach(function (a) { var got = eco.ach["got_" + a.id], v = Math.min(a.goal, a.v()); h += '<div class="ach' + (got ? " got" : "") + '"><span class="apin">' + (got ? "★" : "☆") + '</span><b>' + esc(a.t) + '</b><span>' + esc(a.d) + '</span>' + (got ? '' : '<small>' + v + '/' + a.goal + '</small>') + '</div>'; });
+    h += '</div></section>';
+    var stampKeys = Object.keys(eco.stamps);
+    h += '<section class="card"><p class="label" style="margin:0">Альбом марок (Timbres)</p>' + (stampKeys.length ? '<div class="stamps">' + stampKeys.map(function (k) { return '<span class="stamp' + (eco.stamps[k] === "rare" ? " rare" : "") + '">' + esc(SETS[k] ? SETS[k].label : k) + '</span>'; }).join("") + '</div>' : '<p class="hint" style="margin:0;color:var(--muted)">Марку дає урок теми на 3 зірки, рідкісну — підсумковий тест (Défi Boss).</p>') + '</section>';
+    var acc = Object.keys(eco.stats).map(function (k) { var s = eco.stats[k]; return { k: k, n: s.c + s.w, p: Math.round(s.c / Math.max(1, s.c + s.w) * 100) }; }).filter(function (x) { return x.n >= 5 && SETS[x.k]; }).sort(function (a, b) { return a.p - b.p; }).slice(0, 6);
+    if (acc.length) {
+      h += '<section class="card"><p class="label" style="margin:0">Точність: найслабші теми</p><ul class="accl">' + acc.map(function (x) { return '<li><span>' + esc(SETS[x.k].label) + '</span><div class="hbar"><i style="width:' + x.p + '%"></i></div><b>' + x.p + '%</b></li>'; }).join("") + '</ul></section>';
+    }
+    stage.innerHTML = h;
+  }
+
+  /* Bonus content: mini stories and scenarios. Free from level 16 (Résident), earlier when bought. */
+  var STORIES = [
+    { t: "Le premier jour", text: "Lundi matin, Olena commence un nouveau travail à Lausanne. Elle prend le bus de six heures et arrive en avance. Son chef, Monsieur Favre, lui montre l'atelier et lui présente ses collègues. À midi, ils mangent ensemble à la cantine. Olena ne comprend pas tout, mais elle pose des questions. Le soir, elle est fatiguée mais contente : demain, elle connaîtra déjà le chemin.",
+      qs: [["Де Олена починає нову роботу?", ["У Лозанні", "У Женеві", "У Парижі"]], ["Коли вона приходить?", ["Раніше часу", "Із запізненням", "Опівдні"]], ["Хто показує їй майстерню?", ["Начальник", "Сусідка", "Водій автобуса"]], ["Що вони роблять опівдні?", ["Обідають у їдальні", "Ідуть додому", "Пишуть звіт"]], ["Як Олена почувається ввечері?", ["Втомлена, але задоволена", "Сумна", "Сердита"]]] },
+    { t: "Chez le médecin", text: "Depuis trois jours, Marc a mal à la gorge et il tousse beaucoup. Il appelle le cabinet et prend un rendez-vous pour le lendemain. Le médecin l'examine, prend sa température et lui dit que ce n'est pas grave. Il lui prescrit un sirop et lui conseille de boire du thé chaud et de se reposer. Marc doit rester à la maison pendant deux jours.",
+      qs: [["Що болить у Марка?", ["Горло", "Нога", "Спина"]], ["Як давно?", ["Три дні", "Тиждень", "Одну годину"]], ["Що каже лікар?", ["Нічого серйозного", "Треба в лікарню", "Треба операцію"]], ["Що він призначає?", ["Сироп", "Окуляри", "Нічого"]], ["Скільки днів Марк має бути вдома?", ["Два", "П'ять", "Жодного"]]] },
+    { t: "Un samedi au marché", text: "Le samedi, Sophie va toujours au marché de Vevey. Elle achète des légumes, du fromage et du pain frais. Aujourd'hui, il fait beau et il y a beaucoup de monde. Au stand de fruits, elle rencontre son voisin Paul. Ils boivent un café ensemble au bord du lac. Avant de partir, Sophie achète des fleurs pour sa mère.",
+      qs: [["Коли Софі ходить на ринок?", ["У суботу", "У понеділок", "Щодня"]], ["Що вона купує?", ["Овочі, сир і хліб", "Одяг", "Книжки"]], ["Яка сьогодні погода?", ["Гарна", "Іде дощ", "Сніг"]], ["Кого вона зустрічає?", ["Сусіда Поля", "Маму", "Лікаря"]], ["Що вона купує для мами?", ["Квіти", "Фрукти", "Каву"]]] }
+  ];
+  var SCENARIOS = [
+    { t: "Chez le médecin · В лікаря", ph: [["J'ai pris rendez-vous pour 10 heures.", "Я записаний на 10:00."], ["J'ai mal à la tête depuis deux jours.", "У мене два дні болить голова."], ["J'ai de la fièvre.", "У мене температура."], ["Je tousse beaucoup la nuit.", "Я сильно кашляю вночі."], ["Je suis allergique à la pénicilline.", "У мене алергія на пеніцилін."], ["Combien de fois par jour dois-je le prendre ?", "Скільки разів на день це приймати?"], ["Pouvez-vous me faire un certificat médical ?", "Можете дати мені медичну довідку?"], ["Est-ce que c'est remboursé par l'assurance ?", "Чи це покриває страховка?"], ["Je travaille de nuit, est-ce un problème ?", "Я працюю вночі, це проблема?"], ["Merci, docteur. Bonne journée !", "Дякую, лікарю. Гарного дня!"]] },
+    { t: "Au travail · На зміні", ph: [["Je commence à six heures ce matin.", "Я починаю сьогодні о шостій."], ["Je suis de nuit cette semaine.", "Цього тижня я в нічну зміну."], ["Est-ce que tu peux échanger ton horaire avec moi ?", "Можеш помінятися зі мною зміною?"], ["La machine est en panne.", "Машина зламалася."], ["Où est-ce que je mets ces cartons ?", "Куди мені поставити ці коробки?"], ["J'ai fini ma pause.", "Я закінчив перерву."], ["Peux-tu répéter plus lentement, s'il te plaît ?", "Можеш повторити повільніше?"], ["Je dois partir plus tôt aujourd'hui.", "Мені сьогодні треба піти раніше."], ["Qui est responsable de l'équipe ?", "Хто відповідає за бригаду?"], ["Bonne fin de service !", "Гарного кінця зміни!"]] },
+    { t: "À la préfecture · В установі", ph: [["Je voudrais renouveler mon permis de séjour.", "Я хотів би продовжити дозвіл на проживання."], ["Quels documents faut-il apporter ?", "Які документи треба принести?"], ["Voici mon passeport et mon contrat de travail.", "Ось мій паспорт і трудовий договір."], ["Il me manque une photo d'identité.", "Мені бракує фото на документи."], ["Faut-il prendre un rendez-vous ?", "Чи треба записуватися?"], ["Combien coûte la demande ?", "Скільки коштує заява?"], ["Je n'ai pas bien compris le formulaire.", "Я не зовсім зрозумів анкету."], ["Pouvez-vous m'aider à le remplir ?", "Чи можете допомогти мені її заповнити?"], ["Quand est-ce que je recevrai la réponse ?", "Коли я отримаю відповідь?"], ["Je vous remercie de votre aide.", "Дякую вам за допомогу."]] }
+  ];
+  function bonusOpen(id) { return levelOf(xp).n >= 16 || eco.owned[id]; }
+  var storyIdx = 0, storyAns = {};
+  function renderStory() {
+    if (!bonusOpen("histoire")) { lockedBonus("histoire", "Mini-histoire"); return; }
+    var st = STORIES[storyIdx % STORIES.length];
+    var h = '<section class="card story"><p class="ckind">Mini-histoire ' + (storyIdx % STORIES.length + 1) + ' з ' + STORIES.length + '</p><p class="htitle">' + esc(st.t) + '</p>';
+    h += '<p class="stext">' + wrapWords(st.text) + '</p><div class="actions">' + sayBtn(st.text, "") + '</div>';
+    st.qs.forEach(function (q, i) {
+      var key = storyIdx + ":" + i, a = storyAns[key];
+      h += '<div class="sq"><p><b>' + (i + 1) + '.</b> ' + esc(q[0]) + '</p><div class="qopts">';
+      var opts = q[1].slice().sort();
+      opts.forEach(function (o) { var cls = a ? (o === q[1][0] ? " good" : (o === a ? " bad" : "")) : ""; h += '<button type="button" class="opt' + cls + '" data-sq="' + i + '" data-v="' + esc(o) + '"' + (a ? " disabled" : "") + '>' + esc(o) + '</button>'; });
+      h += '</div></div>';
+    });
+    h += '<div class="actions"><button type="button" class="btn ghost" id="snext">Наступна історія →</button>' + backBtn("На головну", "home") + '</div></section>';
+    stage.innerHTML = h;
+    stage.querySelector(".story").addEventListener("click", function (e) {
+      var b = e.target.closest("[data-sq]");
+      if (b) { var i = +b.getAttribute("data-sq"), v = b.getAttribute("data-v"), ok = v === st.qs[i][1][0]; storyAns[storyIdx + ":" + i] = v; if (ok) gain(10, 1); answerFx(ok, ""); bumpDay(); renderStory(); }
+      if (e.target.closest("#snext")) { storyIdx++; renderStory(); window.scrollTo(0, 0); }
+    });
+  }
+  var scenIdx = 0;
+  function renderScenario() {
+    if (!bonusOpen("scenario")) { lockedBonus("scenario", "Scénario"); return; }
+    var sc = SCENARIOS[scenIdx % SCENARIOS.length];
+    var h = '<section class="card"><p class="ckind">Scénario</p><div class="seg wide" role="group">' + SCENARIOS.map(function (s, i) { return '<button type="button" class="segbtn" data-scn="' + i + '" aria-pressed="' + (i === scenIdx) + '">' + esc(s.t.split(" · ")[1]) + '</button>'; }).join("") + '</div><p class="htitle">' + esc(sc.t) + '</p><ul class="phr">';
+    sc.ph.forEach(function (p) { h += '<li><div><b>' + esc(p[0]) + '</b><span>' + esc(p[1]) + '</span></div>' + sayBtn(p[0], "vsay") + '</li>'; });
+    h += '</ul>' + backBtn("На головну", "home") + '</section>';
+    stage.innerHTML = h;
+    stage.querySelectorAll("[data-scn]").forEach(function (b) { b.addEventListener("click", function () { scenIdx = +b.getAttribute("data-scn"); renderScenario(); }); });
+  }
+  function lockedBonus(id, name) {
+    var it = shopItem(id);
+    stage.innerHTML = '<section class="card"><p class="ckind">' + name + '</p><div class="empty">' + minouSvg(84) + '<p>Відкривається безкоштовно з рівня 16 (Résident). Зараз у тебе рівень ' + levelOf(xp).n + '. Можна відкрити раніше в магазині за <b>' + priceOf(it) + ' Écus</b>.</p></div><div class="actions"><button type="button" class="btn gold" id="lbuy">Відкрити за ' + priceOf(it) + '</button>' + backBtn("На головну", "home") + '</div></section>';
+    document.getElementById("lbuy").addEventListener("click", function () { if (buy(id)) openPage(id === "histoire" ? "story" : "scenario"); });
+  }
+
+  /* Welcome back after a break: gift, never blame. */
+  function greetReturn() {
+    var t = todayS(), last = eco.last;
+    eco.last = t;
+    if (last && last !== t && daysBetween(last, t) >= 3 && eco.greeted !== t) {
+      eco.greeted = t; eco.ecus += 30; ecoSave(); refreshGame();
+      modal('<div class="empty">' + minouSvg(96, "wow") + '<p class="htitle">Bon retour !</p><p>Minou скучав. Ось подарунок: <b>+30 Écus</b>. Почнімо з легкого розігріву.</p></div>' +
+        (canRepair() ? '<p class="hint">Серію можна відновити в магазині («Réparation»).</p>' : '') + '<button type="button" class="btn big" data-close="1">Allons-y !</button>');
+    }
+    ecoSave();
+  }
+
+  var PAGES = { errors: renderErrorsPage, defi: renderDefi, shop: renderShop, season: renderSeason, league: renderLeague, map: renderMap, profile: renderProfile, story: renderStory, scenario: renderScenario };
+
+
   /* Settings screen. */
   var importText = "", importMsg = null, importReady = null;
   function exportData() {
@@ -1897,6 +2556,7 @@
     return { data: o.data, date: o.date, xp: g.xp || 0, words: Array.isArray(v) ? v.length : 0 };
   }
   function openSettings() {
+    inPage = "";
     inSettings = true; inHome = false; inDaily = false; inErrors = false; inVocab = false; inGram = false;
     navOpen = false;
     importMsg = null; importReady = null;
@@ -2018,10 +2678,12 @@
     window.scrollTo(0, 0);
   });
 
+  protectStreak(); leagueUpdate(); seasonCheck(); questsToday();
   (function () {
     var lt = lastTarget();
     currentKey = lt.k; currentLesson = lt.l;
     lastSet[SETS[lt.k].group] = lt.k;
   })();
   openHome();
+  setTimeout(greetReturn, 300);
 })();
