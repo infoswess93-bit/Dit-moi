@@ -1,0 +1,301 @@
+# Рівень A1
+@ a1pron | Особові займенники | Особові займенники
+recap: <p class="formula">je · tu · il / elle / on · nous · vous · ils / elles</p><p>Перед голосною je → j'. Ils, якщо в групі є хоч один чоловік.</p>
+|Je| suis étudiant.|займенник|Я студент.|Tu;Il;Nous|Suis відповідає особі je.
+Marie et Julie ? |Elles| sont au cinéma.|займенник|Марі та Жюлі? Вони в кіно.|Ils;Elle;Vous|Лише жінки → elles.
+Paul et Anne ? |Ils| habitent à Lyon.|займенник|Поль і Анна? Вони живуть у Ліоні.|Elles;Il;Nous|Чоловік і жінка разом → ils.
+Madame, |vous| êtes française ?|займенник|Пані, ви француженка?|tu;elle;nous|До незнайомої людини звертаємося на vous.
+Toi et moi, |nous| sommes amis.|займенник|Ти і я, ми друзі.|vous;ils;on|Toi et moi = nous.
+|J'| ai vingt ans.|займенник|Мені двадцять років.|Je;Tu;Il|Je перед голосною стає j'.
+Mon père ? |Il| travaille à Genève.|займенник|Мій батько? Він працює в Женеві.|Elle;Tu;Ils|Mon père → il.
+Ta sœur ? |Elle| est très gentille.|займенник|Твоя сестра? Вона дуже мила.|Il;On;Tu|Ta sœur → elle.
+Salut Léa ! |Tu| vas bien ?|займенник|Привіт, Леа! Як справи?|Vous;Il;Je|Подрузі кажемо tu: tu vas.
+Les enfants ? |Ils| jouent dans le jardin.|займенник|Діти? Вони граються в саду.|Il;Elles;Nous|Les enfants → ils.
+@ a1spell | Вимова й правопис | Наголоси й правопис
+recap: <p>Діакритика розрізняє слова: <b>a</b> (має) / <b>à</b> (в, до), <b>ou</b> (або) / <b>où</b> (де), <b>la</b> (артикль) / <b>là</b> (там), <b>sur</b> (на) / <b>sûr</b> (впевнений).</p>
+Je vais |à| Paris demain.|a / à|Завтра я їду до Парижа.|a;as;ah|À означає напрямок: до, в.
+Il |a| un chat noir.|a / à|У нього чорний кіт.|à;as;â|A — форма дієслова avoir.
+Tu préfères le thé |ou| le café ?|ou / où|Ти віддаєш перевагу чаю чи каві?|où;oû;u|Ou без наголосу означає «або».
+|Où| habites-tu ?|ou / où|Де ти живеш?|Ou;Oû;Au|Où з наголосом означає «де».
+Pose le livre |là|, sur la table.|la / là|Поклади книжку туди, на стіл.|la;le;las|Là з наголосом означає «там».
+Le livre est |sur| la table de la cuisine.|sur / sûr|Книжка лежить на кухонному столі.|sûr;sûre;sour|Sur без наголосу означає «на».
+Tu es |sûr| de toi ?|sur / sûr|Ти впевнений у собі?|sur;sure;sùr|Sûr з наголосом означає «впевнений».
+J'aime beaucoup le |café|.|café / cafe|Я дуже люблю каву.|cafe;cafè;caffé|У café наприкінці é.
+Mon frère est |élève|.|élève / eleve|Мій брат учень.|eleve;élevé;elève|Élève: é на початку, è в середині.
+C'est un |très| garçon.|très / tres|Це дуже гарний хлопець.|tres;trés;três|Très пишеться з è.
+@ a1noun | Рід і число іменників | Рід і множина іменників
+recap: <p>Множина: +s. <b>-al → -aux</b>, <b>-eau → -eaux</b>, <b>-s, -x, -z</b> без змін.</p>
+un livre, des |livres|.|livre|книжка, книжки|livre;livrex;livrent|Звичайна множина: +s.
+un journal, des |journaux|.|journal|газета, газети|journals;journales;journalx|-al → -aux.
+un gâteau, des |gâteaux|.|gâteau|торт, торти|gâteaus;gâteau;gâtaux|-eau → -eaux.
+un bus, des |bus|.|bus|автобус, автобуси|buss;buses;bux|Слова на -s у множині не змінюються.
+un prix, des |prix|.|prix|ціна, ціни|prixs;prixes;prise|Слова на -x не змінюються.
+un œil, des |yeux|.|œil|око, очі|œils;œilles;yeuxs|Œil має особливу множину: yeux.
+J'ai acheté |une| table.|un / une|Я купив стіл.|un;des;le|Table жіночого роду: une table.
+C'est |un| problème.|un / une|Це проблема.|une;des;la|Problème чоловічого роду, хоч і на -e.
+|La| solution est simple.|le / la|Рішення просте.|Le;Les;L'|Слова на -tion жіночого роду.
+Il a deux |chevaux|.|cheval|У нього два коні.|chevals;chevales;chevaus|-al → -aux: chevaux.
+@ a1etre | Être та avoir (présent) | Être та avoir
+recap: <div class="mnemonic"><span>je suis / j'ai</span><span>tu es / tu as</span><span>il est / il a</span><span>nous sommes / avons</span><span>vous êtes / avez</span><span>ils sont / ont</span></div>
+Nous |sommes| fatigués ce soir.|être|Ми втомлені сьогодні ввечері.|avons;êtes;sont|Nous + être → sommes.
+Tu |as| un frère ?|avoir|У тебе є брат?|es;a;ai|Tu + avoir → as.
+Ils |sont| en vacances.|être|Вони у відпустці.|ont;est;sommes|Ils + être → sont.
+Vous |avez| faim ?|avoir|Ви голодні?|êtes;avons;ont|Avoir faim: vous avez.
+Elle |est| infirmière.|être|Вона медсестра.|a;es;ai|Elle + être → est.
+J' |ai| une voiture rouge.|avoir|У мене червона машина.|est;as;suis|J' + avoir → ai.
+Vous |êtes| très gentils.|être|Ви дуже милі.|avez;sont;est|Vous + être → êtes.
+Nous |avons| trois enfants.|avoir|У нас троє дітей.|sommes;avez;ont|Nous + avoir → avons.
+Je |suis| content de te voir.|être|Я радий тебе бачити.|ai;es;est|Je + être → suis.
+Mes parents |ont| une maison à la campagne.|avoir|У моїх батьків будинок за містом.|sont;a;avons|Ils + avoir → ont.
+@ a1ir | Дієслова на -ir і часті нерегулярні | Дієслова на -ir
+recap: <p><b>finir</b>: je finis, tu finis, il finit, nous finissons, vous finissez, ils finissent. <b>partir</b>: je pars, nous partons.</p>
+Je |finis| à 17 h.|finir|Я закінчую о 17:00.|finit;finissons;finir|Je → finis.
+Nous |choisissons| le menu du jour.|choisir|Ми вибираємо комплексне меню.|choisons;choisissez;choisient|У множині з'являється -iss-: choisissons.
+Ils |partent| à 8 h.|partir|Вони вирушають о 8:00.|partissent;part;partons|Partir: ils partent, без -iss-.
+Tu |dors| bien ?|dormir|Ти добре спиш?|dormis;dort;dormes|Dormir: tu dors.
+Elle |remplit| le formulaire.|remplir|Вона заповнює анкету.|remplie;remplis;remplissent|Elle → remplit.
+Vous |réussissez| toujours vos examens.|réussir|Ви завжди складаєте іспити.|réussez;réussisez;réussit|Vous → réussissez.
+Le soir, je |sors| avec mes amis.|sortir|Увечері я гуляю з друзями.|sortis;sort;sortes|Sortir: je sors.
+Les enfants |grandissent| vite à cet âge.|grandir|У цьому віці діти швидко ростуть.|grandent;grandit;grandissons|Ils → grandissent.
+Il |sert| du café.|servir|Він подає каву.|servit;servis;servent|Servir: il sert.
+Nous |partons| à la maison.|partir|Ми їдемо додому.|partissons;partez;pars|Partir: nous partons.
+@ a1neg | Заперечення ne … pas | Заперечення ne … pas
+recap: <p class="formula">ne + дієслово + pas</p><p>Перед голосною ne → n'. Після заперечення un/une/des/du → <b>de</b>.</p>
+Je |n'aime| pas le fromage.|ne + aimer|Я не люблю сир.|ne aime;n'aime pas;aime ne|Перед голосною ne → n': je n'aime pas.
+Il |n'habite| pas à Paris.|ne + habiter|Він не живе в Парижі.|ne habite;habite ne;ne pas habite|N' перед голосною: il n'habite pas.
+Nous |n'avons| pas de voiture.|ne + avoir|У нас немає машини.|ne avons;n'avons pas;avons ne|N'avons … pas.
+Tu |n'es| pas content ?|ne + être|Ти не задоволений?|ne es;es ne;ne pas es|Ne … pas обгортає дієслово: tu n'es pas.
+Je n'ai pas |de| frère.|un / de|У мене немає брата.|un;des;le|Після заперечення un → de.
+Elle ne boit pas |de| café.|du / de|Вона не п'є каву.|du;le;un|Після заперечення du → de.
+Ils |ne viennent| pas ce soir.|ne + venir|Вони не прийдуть сьогодні ввечері.|venir ne;ne viennent pas;viennent ne|Ne + дієслово + pas.
+Je ne |comprends| pas la question.|comprendre|Я не розумію питання.|comprend;comprendre;compris|Je comprends; ne … pas навколо.
+Ce n'est pas |un| problème.|un / de|Це не проблема.|de;des;du|З être артикль після заперечення не змінюється: ce n'est pas un problème.
+Vous ne |travaillez| pas ?|travailler|Ви не працюєте?|travaille;travailler;travaillent|Vous travaillez.
+@ a1num | Числівники, дата і час | Числа, дата, час
+recap: <p>70 = soixante-dix, 80 = quatre-vingts, 90 = quatre-vingt-dix. Дата: <b>le 3 mai</b>, але <b>le premier mai</b>. Час: <i>Il est 8 h et demie.</i></p>
+Il est huit heures et |demie|.|30 хв|Зараз пів на дев'яту.|demi;moitié;trente demie|Et demie після heures: жіночий рід.
+J'ai |soixante-dix| ans.|70|Мені сімдесят років.|septante;soixante-et-dix;sept-dix|У Франції 70 = soixante-dix.
+Aujourd'hui, c'est le |premier| mai.|1|Сьогодні перше травня.|un;premier mai le;unième|Перше число місяця: le premier.
+Ça coûte |quatre-vingts| euros.|80|Це коштує вісімдесят євро.|huitante;quatre-vingt-dix;quatre-vingt|80 = quatre-vingts (з -s).
+Il est midi et |quart|.|15 хв|Зараз чверть на першу.|quart et;un quart;quinze et|Et quart = і чверть.
+Mon fils a |vingt et un| ans.|21|Моєму синові двадцять один рік.|vingt-un;vingt et une;vingt-et-deux|21 = vingt et un.
+Le magasin ferme à dix-neuf |heures|.|година|Магазин зачиняється о дев'ятнадцятій.|heure;heurs;horas|Після числа більше 1: heures.
+Nous sommes le |quatorze| juillet.|14|Сьогодні чотирнадцяте липня.|quatorzième;quatre-dix;quatorz|У датах звичайне число: le quatorze juillet.
+Il est onze heures moins le |quart|.|10:45|Зараз за чверть одинадцята.|demie;quart d'heure;moins|Moins le quart = без чверті.
+J'habite au numéro |quatre-vingt-dix| .|90|Я живу в будинку номер дев'яносто.|nonante;quatre-vingts-dix;neuf-dix|90 = quatre-vingt-dix.
+@ a1ilya | Il y a, c'est та il est | Il y a, c'est, il est
+recap: <p><b>Il y a</b> = є, існує. <b>C'est</b> + іменник з артиклем або ім'я. <b>Il / elle est</b> + прикметник або професія без артикля.</p>
+|Il y a| un parc près de chez moi.|il y a / c'est|Біля мого дому є парк.|C'est;Il est;Il a|Наявність чогось: il y a.
+Qui est-ce ? |C'est| mon voisin.|c'est / il est|Хто це? Це мій сусід.|Il est;Il y a;Elle est|Перед артиклем чи присвійним: c'est.
+Ton frère ? |Il est| très sympa.|c'est / il est|Твій брат? Він дуже симпатичний.|C'est;Il y a;Ce sont|Про людину + прикметник: il est.
+Dans le frigo, |il y a| du lait.|il y a / c'est|У холодильнику є молоко.|c'est;il est;il a|Що є десь: il y a.
+|C'est| une belle ville.|c'est / elle est|Це гарне місто.|Elle est;Il y a;Il est|Перед un/une + іменник: c'est.
+Marie ? |Elle est| dentiste.|elle est / c'est|Марі? Вона стоматолог.|C'est;Il y a;Elle a|Професія без артикля: elle est.
+|Il y a| beaucoup de monde ici.|il y a / c'est|Тут багато людей.|C'est;Il est;Ils sont|Кількість чогось: il y a.
+Ce film ? |C'est| génial !|c'est / il est|Цей фільм? Він чудовий!|Il y a;Ils sont;C'sont|Загальна оцінка: c'est génial.
+|Ce sont| mes amis.|ce sont / il y a|Це мої друзі.|C'est;Ils sont;Il y a|Перед множиною: ce sont.
+Dans ma classe, |il y a| vingt élèves.|il y a / ce sont|У моєму класі двадцять учнів.|ce sont;ils sont;c'est|Кількість: il y a.
+@ a1elis | Апостроф та елізія | Апостроф і елізія
+recap: <p><b>le, la, je, me, te, se, de, ne, que</b> перед голосною або h німим втрачають голосну: <i>l'ami, j'aime, n'est, qu'il</i>.</p>
+C'est |un| homme très gentil.|un / l'|Це дуже мила людина.|l';le;la|Перед іменником з un елізії немає: un homme.
+J'ouvre |la| fenêtre.|la / l'|Я відчиняю вікно.|l';le;les|Fenêtre починається з приголосної: la.
+Je cherche |l'| hôtel.|le / l'|Я шукаю готель.|le;la;les|H німе: l'hôtel.
+Il pense |qu'| elle viendra.|que / qu'|Він думає, що вона прийде.|que;qu;quelle|Que перед голосною → qu'.
+Nous parlons |d'| Anne.|de / d'|Ми говоримо про Анну.|de;du;des|De перед голосною → d'.
+Je |m'| appelle Pierre.|me / m'|Мене звати П'єр.|me;moi;mi|Me перед голосною → m'.
+|J'| arrive demain.|je / j'|Я приїжджаю завтра.|Je;Jé;Ja|Je перед голосною → j'.
+|C'| est où, la gare ?|ce / c'|Де вокзал?|Ce;Ça;Se|Ce перед est → c'.
+C'est |un| haricot vert.|un / l'|Це зелена квасолина.|l';d';n'|Haricot має h придихове: без елізії.
+Il |n'| est pas là.|ne / n'|Його немає.|ne;nʼa;non|Ne перед голосною → n'.
+@ a1caps | Великі літери та пунктуація | Великі літери
+recap: <p>З малої: мови, національності-прикметники, дні, місяці: <i>le français, un film italien, lundi, mai</i>. З великої: люди-національності: <i>les Français</i>.</p>
+Je parle |français|.|мова|Я розмовляю французькою.|Français;FRANÇAIS;Francais|Мови пишуться з малої літери.
+Les |Français| aiment le fromage.|люди|Французи люблять сир.|français;françaises;Francais|Народ як іменник пишеться з великої.
+C'est un film |italien|.|прикметник|Це італійський фільм.|Italien;Italie;ITALIEN|Прикметник національності з малої.
+Nous sommes |lundi|.|день|Сьогодні понеділок.|Lundi;LUNDI;Lundy|Дні тижня з малої літери.
+Mon anniversaire est en |mars|.|місяць|Мій день народження в березні.|Mars;MARS;Mar|Місяці з малої літери.
+Il habite en |Allemagne|.|країна|Він живе в Німеччині.|allemagne;Allemand;allemande|Назви країн з великої.
+Nous partons en |août|.|місяць|Ми їдемо в серпні.|Août;AOÛT;Aout|Місяці пишуться з малої: août.
+Elle est |suisse| et elle habite à Berne.|національність|Вона швейцарка й живе в Берні.|Suisse;SUISSE;Suissesse|Після être національність з малої.
+J'apprends l'|anglais|.|мова|Я вивчаю англійську.|Anglais;ANGLAIS;Angleterre|Мова з малої: l'anglais.
+Les |Italiens| sont très accueillants.|люди|Італійці дуже гостинні.|italiens;italiennes;Italie|Народ як іменник з великої: les Italiens.
+@ a1re | Дієслова на -re (vendre, attendre, répondre) | Дієслова на -re
+recap: <p class="formula">-s, -s, — , -ons, -ez, -ent</p><p><i>j'attends, tu attends, il attend, nous attendons, vous attendez, ils attendent</i></p>
+Il |attend| le bus numéro 12.|attendre|Він чекає на автобус номер 12.|attende;attends;attendt|Il → attend (без закінчення).
+Nous |vendons| notre voiture.|vendre|Ми продаємо нашу машину.|vendez;vendent;vendrons|Nous → vendons.
+Je |réponds| au téléphone.|répondre|Я відповідаю на дзвінок.|répond;réponde;répondre|Je → réponds.
+Vous |entendez| ce bruit ?|entendre|Ви чуєте цей шум?|entendons;entendent;entends|Vous → entendez.
+Elles |perdent| souvent leurs clés.|perdre|Вони часто гублять ключі.|perdes;perd;perdons|Elles → perdent.
+Tu |descends| l'escalier.|descendre|Ти спускаєшся сходами.|descend;descende;descendez|Tu → descends.
+Le boulanger |vend| du pain.|vendre|Пекар продає хліб.|vends;vende;vendent|Il → vend.
+J' |attends| mon ami à la gare.|attendre|Я чекаю друга на вокзалі.|attend;attendent;attendre|J' → attends.
+Ils ne |répondent| pas aux e-mails.|répondre|Вони не відповідають на листи.|répond;répondez;réponds|Ils → répondent.
+Nous |entendons| du bruit dans la rue.|entendre|Ми чуємо шум на вулиці.|entendez;entendent;entendrons|Nous → entendons.
+@ a1irr | Ще часті нерегулярні дієслова (présent) | Нерегулярні дієслова
+recap: <p><b>aller</b>: vais, vas, va, allons, allez, vont · <b>faire</b>: fais, fais, fait, faisons, faites, font · <b>prendre</b>: prends… prenons, prennent · <b>venir</b>: viens… venons, viennent</p>
+Vous |faites| quoi ce soir ?|faire|Що ви робите сьогодні ввечері?|faisez;font;faisons|Faire: vous faites.
+Ils |vont| au travail en bus.|aller|Вони їздять на роботу автобусом.|allent;vont pas;vas|Aller: ils vont.
+Je |viens| de Kyiv.|venir|Я з Києва.|vient;venons;vene|Venir: je viens.
+Nous |prenons| un taxi pour l'aéroport.|prendre|Ми беремо таксі до аеропорту.|prendons;prennons;prenez|Prendre: nous prenons.
+Elles |font| la cuisine ensemble.|faire|Вони разом готують.|faisent;fait;faites|Faire: elles font.
+Tu |veux| partir maintenant ?|vouloir|Ти хочеш піти зараз?|veut;voulez;vouloir|Vouloir: tu veux.
+Il |peut| venir demain.|pouvoir|Він може прийти завтра.|peux;pouvent;pouve|Pouvoir: il peut.
+Je |sais| l'adresse.|savoir|Я знаю адресу.|sait;savons;sache|Savoir: je sais.
+Mes amis |viennent| ce soir.|venir|Мої друзі прийдуть сьогодні ввечері.|venent;vient;venons|Venir: ils viennent.
+Vous |prenez| du café ?|prendre|Ви будете каву?|prendez;prennez;prendre|Prendre: vous prenez.
+@ a1expr | Вирази з avoir та faire | Вирази з avoir і faire
+recap: <p><b>avoir</b> faim, soif, froid, chaud, peur, raison, besoin de, envie de · <b>faire</b> du sport, la cuisine, les courses, beau, froid</p>
+J'ai |soif|, je voudrais de l'eau.|відчуття|Мені хочеться пити, я хотів би води.|faim;froid;sommeil|Хочеться пити: avoir soif.
+Il fait |froid| aujourd'hui, mets un pull.|погода|Сьогодні холодно, вдягни светр.|chaud;soif;faim|Про погоду: il fait froid.
+Tu as |raison| : c'est la bonne réponse.|правота|Ти маєш рацію: це правильна відповідь.|tort;peur;envie|Мати рацію: avoir raison.
+Nous faisons |les courses| le samedi.|покупки|Ми ходимо по продукти в суботу.|les achats;la course;des courses|Робити покупки: faire les courses.
+J'ai |besoin| d'un nouveau téléphone.|потреба|Мені потрібен новий телефон.|faim;peur;soif|Потребувати: avoir besoin de; de вже в реченні.
+Elle a |peur| des chiens.|страх|Вона боїться собак.|faim;mal;raison|Боятися: avoir peur de.
+Il |fait| du vélo tous les week-ends.|faire|Він катається на велосипеді щовихідних.|a;joue;va|Займатися видом спорту: faire du vélo.
+J'ai |mal| à la tête.|біль|У мене болить голова.|peur;froid;besoin|Біль: avoir mal à.
+Tu as |envie| d'une glace ?|бажання|Хочеш морозива?|besoin;faim;soif|Хотіти чогось: avoir envie de.
+Qui fait |la cuisine| ce soir ?|готувати|Хто сьогодні готує?|le cuisine;cuisiner;la cuisinière|Готувати: faire la cuisine.
+@ a1like | Подобається: aimer, préférer, adorer, détester | Aimer, préférer, adorer
+recap: <p>Після aimer, adorer, préférer, détester іменник з <b>означеним артиклем</b>: <i>j'aime <b>le</b> café</i>. Дієслово після них в інфінітиві: <i>j'aime lire</i>.</p>
+J'aime |le| chocolat.|артикль|Я люблю шоколад.|du;un;de|Після aimer загальне поняття: le.
+Elle déteste |repasser|.|дієслово|Вона ненавидить прасувати.|repasse;repassé;repasser de|Після détester інфінітив: repasser.
+Tu préfères |le| thé ou le café ?|артикль|Ти любиш більше чай чи каву?|du;un;de|Після préférer: le thé.
+Nous adorons |marcher| en montagne.|дієслово|Ми обожнюємо гуляти в горах.|marchons;marché;de marcher|Adorer + інфінітив.
+Je n'aime pas |les| légumes.|артикль|Я не люблю овочі.|des;de;aux|З aimer артикль не змінюється на de: les légumes.
+Il |préfère| les films d'horreur.|préférer|Він більше любить фільми жахів.|préfére;préfèrent;préférent|Il préfère: è перед німою закінченням.
+Vous aimez |danser| ?|дієслово|Ви любите танцювати?|dansez;dansé;à danser|Aimer + інфінітив: danser.
+Mes enfants |détestent| les épinards.|détester|Мої діти ненавидять шпинат.|déteste;détestez;détestes|Ils détestent.
+J'adore |la| musique classique.|артикль|Я обожнюю класичну музику.|de la;une;du|Після adorer: la musique.
+Nous |préférons| partir tôt.|préférer|Ми воліємо поїхати рано.|préfèrons;préfèrent;préférez|Nous préférons: é залишається.
+@ a1meteo | Погода та безособові конструкції | Погода
+recap: <p><b>Il fait</b> beau / mauvais / chaud / froid · <b>il pleut</b> · <b>il neige</b> · <b>il y a</b> du vent / du soleil · <b>il faut</b> + інфінітив</p>
+Aujourd'hui, il |fait| beau.|погода|Сьогодні гарна погода.|est;a;y a|Про погоду: il fait beau.
+Prends ton parapluie, il |pleut|.|дощ|Візьми парасольку, іде дощ.|pleuve;plu;fait pluie|Дощить: il pleut.
+En hiver, il |neige| souvent à la montagne.|сніг|Узимку в горах часто йде сніг.|neigé;fait neige;neiger|Сніжить: il neige.
+Il y a |du| vent ce matin.|вітер|Сьогодні вранці вітряно.|le;un;de|Il y a du vent.
+|Il faut| partir maintenant, le train arrive.|необхідність|Треба йти зараз, потяг прибуває.|Il fait;Il faux;Il y a|Треба: il faut + інфінітив.
+Il fait |vingt| degrés.|температура|Зараз двадцять градусів.|vingts;vingtième;à vingt|Il fait vingt degrés.
+Quel temps |fait|-il ?|погода|Яка погода?|est;y a;a|Quel temps fait-il ?
+Il y a |du| soleil.|сонце|Сонячно.|le;un;de la|Il y a du soleil.
+En été, il fait très |chaud|.|погода|Улітку дуже спекотно.|chaude;chaleur;froide|Il fait chaud: прикметник чоловічого роду.
+Il |fait| gris et humide.|погода|Похмуро й волого.|y a;est;a|Il fait gris.
+@ a1order | Порядок слів у реченні | Порядок слів
+recap: <p class="formula">підмет + дієслово + додаток + місце + час</p><p>Короткі прислівники стоять після дієслова: <i>je parle bien</i>; у passé composé між допоміжним і дієприкметником: <i>j'ai bien mangé</i>.</p>
+Il |parle bien| français.|parler + bien|Він добре розмовляє французькою.|bien parle;parlez bien;bien parlez|Прислівник після дієслова: parle bien.
+J' |ai bien mangé|.|avoir + bien + manger|Я добре поїв.|ai mangé bien;bien ai mangé;ai mangé de bien|У passé composé bien між ai і mangé.
+C'est une |petite| voiture.|petite|Це маленька машина.|petit;petites;petits|Короткі прикметники petit, grand, beau стоять перед іменником.
+C'est une voiture |rouge|.|rouge|Це червона машина.|rouges;rougie;rouger|Колір стоїть після іменника.
+Nous |allons souvent| à Paris.|aller + souvent|Ми часто їздимо до Парижа.|souvent allons;souvent allez;allons à souvent|Прислівник частоти після дієслова: allons souvent.
+Je ne |comprends| pas cette phrase.|comprendre|Я не розумію цього речення.|pas comprends;comprends ne;comprendre|Ne + дієслово + pas.
+Elle |est| toujours en retard.|être|Вона завжди запізнюється.|toujours est;sont;es|Дієслово перед toujours.
+Ils ont |beaucoup| travaillé hier.|beaucoup|Вони багато працювали вчора.|beaucoup de;beaucoups;très|Beaucoup між допоміжним і дієприкметником.
+J'habite dans une |grande| maison.|grande|Я живу у великому будинку.|grand;grandes;grands|Grand перед іменником.
+C'est un |livre| intéressant.|livre|Це цікава книжка.|livres;libre;livré|Довгі прикметники після іменника: un livre intéressant.
+@ a1quel | Quel, quelle, quels, quelles | Quel, quelle
+recap: <div class="mnemonic"><span>quel + ч. р. одн.</span><span>quelle + ж. р. одн.</span><span>quels + ч. р. мн.</span><span>quelles + ж. р. мн.</span></div>
+|Quelle| heure est-il maintenant ?|quel?|Котра зараз година?|Quel;Quels;Quelles|Heure жіночого роду: quelle.
+|Quel| âge as-tu ?|quel?|Скільки тобі років?|Quelle;Quels;Qu'elle|Âge чоловічого роду: quel.
+|Quelles| langues parlez-vous ?|quel?|Якими мовами ви розмовляєте?|Quel;Quelle;Quels|Langues ж. р. мн.: quelles.
+Tu aimes |quels| films ?|quel?|Які фільми тобі подобаються?|quel;quelle;quelles|Films ч. р. мн.: quels.
+|Quelle| est ton adresse ?|quel?|Яка твоя адреса?|Quel;Quels;Qu'elle|Adresse жіночого роду: quelle.
+|Quel| temps fait-il ?|quel?|Яка погода?|Quelle;Quels;Quelles|Temps чоловічого роду: quel.
+|Quelle| belle maison !|quel?|Який гарний будинок!|Quel;Quels;Quelles|Оклик теж з quel: maison ж. р. → quelle.
+Dans |quelle| ville habites-tu ?|quel?|У якому місті ти живеш?|quel;quels;quelles|Ville ж. р.: quelle.
+|Quels| sont tes livres préférés ?|quel?|Які твої улюблені книжки?|Quel;Quelle;Quelles|Livres ч. р. мн.: quels.
+|Quel| jour sommes-nous ?|quel?|Який сьогодні день?|Quelle;Quels;Quelles|Jour чоловічого роду: quel.
+@ a1polite | Привітання, знайомство й ввічливість | Привітання й ввічливість
+recap: <p>Офіційно: <i>Bonjour, madame. Comment allez-vous ? Enchanté.</i> Дружньо: <i>Salut ! Ça va ? À plus !</i> Подяка: <i>merci, de rien, je vous en prie.</i></p>
+|Bonjour|, monsieur Dupont.|вітання офіційно|Добрий день, пане Дюпон.|Salut;Coucou;Ciao|Офіційно вітаємося Bonjour.
+Comment |allez| -vous ?|aller|Як ви поживаєте?|vas;va;allons|Ввічливо: comment allez-vous ?
+Merci beaucoup ! — |De rien|.|відповідь|Дуже дякую! — Нема за що.|De quoi;Pas merci;Bienvenue|Відповідь на дякую: de rien.
+Je m'appelle Anna. — |Enchanté| !|знайомство|Мене звати Анна. — Дуже приємно!|De rien;Bon appétit;Santé|При знайомстві: enchanté(e).
+Salut Marc ! Ça |va| ?|питання|Привіт, Марку! Як справи?|vais;allez;est|Дружньо: ça va ?
+|Excusez-moi|, je cherche la gare.|звертання|Перепрошую, я шукаю вокзал.|Pardonne;De rien;Merci|Ввічливо звернутися: excusez-moi.
+Bonne |soirée| !|вечір|Гарного вечора!|soir;soirs;nuitée|Побажання: bonne soirée.
+|Au revoir|, à demain !|прощання|До побачення, до завтра!|Bonjour;Enchanté;Bienvenue|Прощання: au revoir.
+Vous voulez un café ? — Oui, |s'il vous plaît|.|ввічливо|Хочете кави? — Так, будь ласка.|de rien;merci beaucoup de rien;pardon|Будь ласка (прохання): s'il vous plaît.
+Je vous présente |mon| collègue.|знайомство|Знайомтеся, це мій колега.|ma;mon la;mes|Collègue тут чоловічого роду: mon collègue.
+@ a1date | Дні, місяці, пори року, дата | Дні, місяці, пори року
+recap: <p><b>en</b> été, en automne, en hiver, але <b>au</b> printemps · <b>en</b> mai / <b>au mois de</b> mai · <b>le</b> lundi = щопонеділка</p>
+Je pars |en| été.|пора року|Я їду влітку.|au;à;dans|En été.
+Les fleurs arrivent |au| printemps.|пора року|Квіти з'являються навесні.|en;à;le|Виняток: au printemps.
+Mon anniversaire est |en| juin.|місяць|Мій день народження в червні.|au;à;dans le|Місяць: en juin.
+|Le lundi|, je vais à la piscine.|щопонеділка|По понеділках я ходжу в басейн.|En lundi;À lundi;Au lundi|Регулярно: le lundi.
+Nous sommes |le| 12 mars.|дата|Сьогодні дванадцяте березня.|à;en;au|Дата: le 12 mars.
+Il neige souvent |en| hiver.|пора року|Узимку часто йде сніг.|au;à l';dans|En hiver.
+On se voit |à demain| !|наступного дня|Побачимося завтра!|à la demain;au demain;de demain|Побачимося завтра: à demain.
+Le magasin est fermé |le| dimanche.|у неділю|Магазин зачинений у неділю.|en;au;à|Конкретний або кожен день: le dimanche.
+Les vacances commencent |en| juillet.|місяць|Канікули починаються в липні.|au;le;à|Місяць: en juillet.
+Je suis né |en| 1995.|рік|Я народився в 1995 році.|au;à;le|Рік: en 1995.
+@ a1ord | Порядкові числівники | Порядкові числівники
+recap: <p>Число + <b>-ième</b>: deuxième, troisième, vingtième. Винятки: <b>premier / première</b>, cinquième (+u), neuvième (f → v).</p>
+C'est la |première| fois que je viens ici.|1|Я приходжу сюди вперше.|premier;unième;première fois|Fois жіночого роду: la première.
+J'habite au |troisième| étage.|3|Я живу на третьому поверсі.|troisième étage;trois;troisièmes|3 → troisième.
+Il est arrivé |deuxième| à la course.|2|Він прийшов другим у перегонах.|deuxièmes;second deux;deuxième fois|2 → deuxième.
+C'est le |cinquième| anniversaire de ma fille.|5|Це п'ятий день народження моєї доньки.|cinqième;cinquèime;cinq|Cinq → cinquième (з u).
+La |première| rue à droite.|1|Перша вулиця праворуч.|premier;première rue;un|Rue ж. р.: première.
+Le |vingtième| siècle.|20|Двадцяте століття.|vingtième siècle;vingt;vingtièmes|20 → vingtième.
+C'est son |neuvième| enfant.|9|Це її дев'ята дитина.|neufième;neuvième enfant;neuf|Neuf → neuvième (f → v).
+Le |premier| jour, il a plu.|1|Першого дня йшов дощ.|première;un;unième|Jour ч. р.: premier.
+Elle est en |quatrième| année d'université.|4|Вона на четвертому курсі університету.|quatreième;quatrième année;quatre|Quatre → quatrième (без e).
+C'est le |dixième| arrêt.|10|Це десята зупинка.|dixième arrêt;dix;dixiéme|Dix → dixième.
+@ a1trans | Транспорт і спосіб пересування | Транспорт
+recap: <p><b>en</b> voiture, en train, en bus, en avion, en métro (усередині) · <b>à</b> pied, à vélo, à cheval (зверху)</p>
+Je vais au travail |à| vélo.|прийменник|Я їжджу на роботу велосипедом.|en;par;avec|На чому їдемо зверху: à vélo.
+Nous partons |en| avion.|прийменник|Ми летимо літаком.|à;par;au|Усередині транспорту: en avion.
+Elle rentre |à| pied.|прийменник|Вона повертається пішки.|en;par;avec|Пішки: à pied.
+Ils voyagent |en| train.|прийменник|Вони подорожують потягом.|à;au;par le|En train.
+Tu viens |en| voiture ?|прийменник|Ти приїдеш машиною?|à;au;par|En voiture.
+Je prends |le| bus de 8 h.|артикль|Я сідаю на автобус о 8:00.|en;à;un en|Prendre + артикль: le bus.
+On va à Lyon |en| TGV.|прийменник|Ми їдемо до Ліона швидкісним потягом.|à;au;avec|En TGV.
+Il monte |dans un| taxi.|прийменник|Він сідає в таксі.|à;en le;sur|Monter dans un taxi.
+Les enfants vont à l'école |à| trottinette.|прийменник|Діти їздять до школи на самокаті.|par;au;dans|Зверху: à trottinette.
+Je descends |du| métro à Bastille.|прийменник|Я виходжу з метро на Бастилії.|de;au;en|Descendre du métro.
+@ a1intens | Інтенсивність і міра: très, trop, assez, beaucoup | Très, trop, beaucoup
+recap: <p><b>très</b> + прикметник/прислівник · <b>beaucoup</b> після дієслова · <b>trop</b> = надто · <b>assez</b> = достатньо · beaucoup <b>de</b> / trop <b>de</b> + іменник</p>
+Ce café est |trop| chaud, je ne peux pas le boire.|надто|Ця кава надто гаряча, я не можу її пити.|beaucoup;assez;très beaucoup|Надмір: trop chaud.
+J'aime |beaucoup| ce film.|дуже|Мені дуже подобається цей фільм.|très;trop de;beaucoup de|Після дієслова: aimer beaucoup.
+Elle est |très| gentille.|дуже|Вона дуже мила.|beaucoup;beaucoup de;trop de|Перед прикметником: très.
+Il y a |beaucoup de| monde ici.|багато|Тут багато людей.|beaucoup;très;beaucoup du|Перед іменником: beaucoup de.
+Tu as |assez| d'argent pour le billet ?|достатньо|У тебе достатньо грошей на квиток?|assez de;très;bien|Assez de + іменник; d' вже в реченні.
+Il parle |trop| vite, je ne comprends rien.|надто|Він говорить надто швидко, я нічого не розумію.|beaucoup;assez de;trop de|Trop vite.
+Nous avons |trop de| travail cette semaine.|забагато|У нас забагато роботи цього тижня.|trop;très;beaucoup|Trop de + іменник.
+Cette robe est |très| jolie.|дуже|Ця сукня дуже гарна.|beaucoup;assez de;beaucoup de|Très jolie.
+Je ne dors pas |assez|.|достатньо|Я сплю недостатньо.|assez de;très;trop de|Після дієслова: assez.
+Ils mangent |beaucoup de| légumes.|багато|Вони їдять багато овочів.|beaucoup des;très;beaucoup|Beaucoup de légumes (без des).
+@ a1on | Займенник on | Займенник on
+recap: <p><b>On</b> = «ми» або «люди». Дієслово в 3-й особі однини: <i>on va, on fait, on est</i>.</p>
+On |va| au théâtre ce soir ?|aller|Підемо в театр сьогодні ввечері?|allons;vont;allez|Після on дієслово як після il: va.
+En Suisse, on |parle| trois langues.|parler|У Швейцарії розмовляють трьома мовами.|parlons;parlent;parlez|On parle.
+On |fait| du sport le dimanche.|faire|Ми займаємося спортом у неділю.|faisons;font;faites|On fait.
+Ici, on ne |fume| pas.|fumer|Тут не курять.|fumons;fument;fumer|On fume: 3-тя особа однини.
+On |est| prêts !|être|Ми готові!|sommes;sont;êtes|On est.
+Qu'est-ce qu'on |mange| ce soir ?|manger|Що ми їмо сьогодні ввечері?|mangeons;mangent;manger|Qu'est-ce qu'on mange.
+On |doit| partir maintenant.|devoir|Нам треба йти зараз.|devons;doivent;devez|On doit.
+On m' |a volé| mon portefeuille !|voler|У мене вкрали гаманець!|ont volé;avons volé;volé a|On a volé: 3-тя особа однини.
+Le samedi, on |dort| tard.|dormir|У суботу ми довго спимо.|dormons;dorment;dors|On dort.
+On |vient| ensemble ?|venir|Підемо разом?|venons;viennent;venez|On vient.
+@ a1de | Приналежність з de: le livre de Paul | Приналежність з de
+recap: <p class="formula">le livre de Paul</p><p><b>de + le = du</b>, <b>de + les = des</b>: <i>la voiture du voisin, la maison des Martin</i></p>
+C'est le vélo |de| Thomas.|чий?|Це велосипед Тома.|du;à;des|Перед ім'ям: de Thomas.
+La porte |du| garage est ouverte.|de + le|Двері гаража відчинені.|de le;de la;des|De + le = du.
+Le chien |des| voisins aboie.|de + les|Собака сусідів гавкає.|de les;du;aux|De + les = des.
+Voici la chambre |des| enfants.|de + les|Ось кімната дітей.|du;de les;à les|Des enfants.
+C'est le bureau |de la| directrice.|de + la|Це кабінет директорки.|du;de le;des|De la не змінюється.
+La fin |du| film est triste.|de + le|Кінець фільму сумний.|de le;des;de la|Du film.
+J'aime la cuisine |de| ma grand-mère.|чий?|Я люблю бабусину кухню.|du;à;des|Перед присвійним: de ma grand-mère.
+Le prix |du| billet est de 20 euros.|de + le|Ціна квитка 20 євро.|de le;des;au|Du billet.
+C'est l'adresse |de l'| hôtel.|de + l'|Це адреса готелю.|du;de le;des|De l' не змінюється.
+Les jouets |de l'| enfant sont partout.|de + l'|Іграшки дитини скрізь.|du;de le;des|De l'enfant.
+@ a1nat | Національності та професії: жіночий рід | Національності й професії
+recap: <p>+e: français → française. <b>-ien → -ienne, -er → -ère, -eur → -euse, -teur → -trice</b>. Після être без артикля: <i>elle est avocate</i>.</p>
+Il est français, elle est |française|.|французький|Він француз, вона француженка.|français;françaisse;francaise|+e: française.
+Il est italien, elle est |italienne|.|італійський|Він італієць, вона італійка.|italiene;italien;italiane|-ien → -ienne.
+Il est boulanger, elle est |boulangère|.|пекар|Він пекар, вона пекарка.|boulangèr;boulangere;boulangeuse|-er → -ère.
+Il est serveur, elle est |serveuse|.|офіціант|Він офіціант, вона офіціантка.|serveure;servrice;serveuse e|-eur → -euse.
+Il est acteur, elle est |actrice|.|актор|Він актор, вона акторка.|acteuse;acteure;acteuresse|-teur → -trice.
+Il est suisse, elle est |suisse|.|швейцарський|Він швейцарець, вона швейцарка.|suissee;suissesse;suisseuse|Слова на -e не змінюються.
+Elle est |médecin|.|лікар|Вона лікарка.|une médecin;la médecin;médecine|Після être професія без артикля.
+Il est canadien, elle est |canadienne|.|канадський|Він канадець, вона канадка.|canadiene;canadien;canadiane|-ien → -ienne.
+C'est |une| infirmière très gentille.|артикль|Це дуже мила медсестра.|—;la une;des|З c'est потрібен артикль: une infirmière.
+Il est espagnol, elle est |espagnole|.|іспанський|Він іспанець, вона іспанка.|espagnolle;espagnol;espagnole e|+e: espagnole.

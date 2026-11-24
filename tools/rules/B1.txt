@@ -1,0 +1,85 @@
+# Рівень B1. Короткий формат: початок|кінець|підказка|переклад|ВІДПОВІДЬ;неправильний;неправильний;неправильний|пояснення
+@ b1futant | Futur antérieur | Futur antérieur
+recap: <p class="formula">avoir / être у futur simple + participe passé</p><p>Дія, що завершиться до іншої в майбутньому: <i>Quand tu <b>auras fini</b>, tu pourras sortir.</i></p>
+Quand tu | tes devoirs, tu pourras jouer.|finir|Коли закінчиш домашнє завдання, зможеш гратися.|auras fini;finiras;as fini;finissais|Дія до іншої в майбутньому: futur antérieur.
+Dès qu'il |, nous partirons.|arriver|Щойно він приїде, ми вирушимо.|sera arrivé;arrivera;est arrivé;aura arrivé|Arriver з être: sera arrivé.
+À 18 h, j' | mon rapport.|terminer|До 18:00 я закінчу звіт.|aurai terminé;terminerai;ai terminé;serai terminé|До певного моменту: futur antérieur.
+Lorsque nous | le repas, nous irons nous promener.|manger|Коли ми поїмо, підемо гуляти.|aurons mangé;mangerons;avons mangé;serons mangés|Nous aurons mangé.
+Elle te téléphonera quand elle | la nouvelle.|apprendre|Вона подзвонить тобі, коли дізнається новину.|aura appris;apprendra;a appris;sera apprise|Elle aura appris.
+Dans un an, ils | leur maison.|construire|Через рік вони вже збудують будинок.|auront construit;construiront;ont construit;seront construits|Ils auront construit.
+Une fois que vous |, appelez-moi.|partir|Коли ви поїдете, зателефонуйте мені.|serez partis;partirez;êtes partis;aurez parti|Partir з être: serez partis.
+Je te rendrai ton livre quand je l' |.|lire|Я поверну тобі книжку, коли прочитаю її.|aurai lu;lirai;ai lu;serai lu|J'aurai lu.
+Après qu'il |, il se sentira mieux.|dormir|Після того як він поспить, йому стане краще.|aura dormi;dormira;a dormi;sera dormi|Il aura dormi.
+D'ici lundi, tu | ma lettre.|recevoir|До понеділка ти отримаєш мій лист.|auras reçu;recevras;as reçu;seras reçu|Tu auras reçu.
+@ b1pronposs | Вказівні й присвійні займенники | Celui-ci, le mien
+recap: <div class="mnemonic"><span>celui / celle / ceux / celles</span><span>le mien / la mienne</span><span>le tien / la tienne</span><span>le sien / la sienne</span><span>le nôtre / le vôtre / le leur</span></div>
+Quel pull préfères-tu ? | -ci ou celui-là ?|вказівний|Який светр тобі більше подобається? Цей чи той?|Celui;Celle;Ceux;Celles|Pull ч. р. одн.: celui.
+Ma voiture est rouge, | est bleue.|присвійний (твоя)|Моя машина червона, твоя синя.|la tienne;le tien;la tien;ta|Voiture ж. р.: la tienne.
+Ces chaussures ? Je préfère | de Marie.|вказівний|Ці туфлі? Мені більше подобаються Марині.|celles;ceux;celle;celui|Chaussures ж. р. мн.: celles.
+Ce n'est pas mon stylo, c'est |.|присвійний (його)|Це не моя ручка, а його.|le sien;la sienne;son;le leur|Stylo ч. р.: le sien.
+Nos enfants jouent avec |.|присвійний (їхні)|Наші діти граються з їхніми.|les leurs;les leur;leurs;les siens|Множина: les leurs.
+Les gâteaux ? | au chocolat sont délicieux.|вказівний|Тістечка? Шоколадні дуже смачні.|Ceux;Celles;Celui;Ce|Gâteaux ч. р. мн.: ceux.
+Ta maison est grande, | est petite.|присвійний (наша)|Твій будинок великий, наш маленький.|la nôtre;le nôtre;notre;la notre|Maison ж. р.: la nôtre.
+Cette chambre est | de ma sœur.|вказівний|Ця кімната моєї сестри.|celle;celui;ceux;cette|Chambre ж. р. одн.: celle.
+J'ai oublié mes clés. Tu as | ?|присвійний (твої)|Я забув ключі. У тебе є твої?|les tiennes;les tiens;tes;la tienne|Clés ж. р. мн.: les tiennes.
+Quel livre ? | que tu m'as prêté.|вказівний|Яка книжка? Та, що ти мені позичив.|Celui;Celle;Ceux;Ce|Livre ч. р.: celui que.
+@ b1passif | Пасив | Пасивний стан
+recap: <p class="formula">être (у потрібному часі) + participe passé (+ par)</p><p>Participe passé узгоджується з підметом: <i>La lettre <b>a été écrite</b> par Marie.</i></p>
+Ce roman | par Victor Hugo.|écrire, PC|Цей роман написав Віктор Гюго.|a été écrit;a écrit;est écrivant;a été écrite|Пасив у passé composé: a été + PP.
+La maison | en 1900.|construire, PC|Будинок збудували 1900 року.|a été construite;a été construit;a construit;est construit|Maison ж. р.: construite.
+Les résultats | demain.|publier, futur|Результати опублікують завтра.|seront publiés;publieront;sont publié;seront publiées|Futur: seront + PP.
+Le voleur | par la police.|arrêter, PC|Злодія затримала поліція.|a été arrêté;a arrêté;est arrêtant;a été arrêtée|A été arrêté.
+Ces gâteaux | par ma grand-mère.|faire, présent|Ці тістечка пече моя бабуся.|sont faits;font;sont fait;ont faits|Présent: sont + PP.
+Le match | à cause de la pluie.|annuler, PC|Матч скасували через дощ.|a été annulé;a annulé;était annulant;a été annulée|A été annulé.
+Les lettres | chaque matin.|distribuer, présent|Листи розносять щоранку.|sont distribuées;distribuent;sont distribués;ont distribuées|Lettres ж. р. мн.: distribuées.
+La décision | par le directeur.|prendre, PC|Рішення ухвалив директор.|a été prise;a été pris;a pris;est prenant|Décision ж. р.: prise.
+Ce film | par des millions de gens.|voir, PC|Цей фільм подивилися мільйони людей.|a été vu;a vu;est vu par;a été vue|A été vu.
+Le pont | l'année prochaine.|réparer, futur|Міст відремонтують наступного року.|sera réparé;réparera;est réparé;sera réparée|Futur: sera réparé.
+@ b1verbprep | Дієслова з прийменниками | Дієслова з à і de
+recap: <p><b>à</b>: penser à, commencer à, réussir à, aider à, s'habituer à · <b>de</b>: décider de, essayer de, oublier de, arrêter de, avoir besoin de · без прийменника: aimer, vouloir, pouvoir, devoir</p>
+J'ai décidé | partir.|прийменник|Я вирішив поїхати.|de;à;pour;—|Décider de.
+Il commence | pleuvoir.|прийменник|Починає йти дощ.|à;de;pour;—|Commencer à.
+N'oublie pas | fermer la porte.|прийменник|Не забудь зачинити двері.|de;à;pour;—|Oublier de.
+Elle a réussi | trouver un travail.|прийменник|Їй вдалося знайти роботу.|à;de;pour;—|Réussir à.
+Nous essayons | comprendre.|прийменник|Ми намагаємося зрозуміти.|de;à;pour;—|Essayer de.
+Je pense | toi.|прийменник|Я думаю про тебе.|à;de;sur;pour|Penser à.
+Il a arrêté | fumer.|прийменник|Він кинув курити.|de;à;pour;—|Arrêter de.
+Tu m'aides | porter ce sac ?|прийменник|Допоможеш мені нести цю сумку?|à;de;pour;—|Aider à.
+J'ai envie | voyager.|прийменник|Мені хочеться подорожувати.|de;à;pour;—|Avoir envie de.
+Elle veut | partir tôt.|прийменник|Вона хоче поїхати рано.|—;de;à;pour|Після vouloir інфінітив без прийменника.
+@ b1avantde | Вирази часу: avant de, après, dès que | Avant de, après avoir
+recap: <p><b>avant de</b> + інфінітив · <b>après avoir/être</b> + participe passé · <b>dès que</b> / <b>quand</b> + дієслово · <b>avant que</b> + subjonctif</p>
+Lave-toi les mains | manger.|перед тим як|Помий руки перед їжею.|avant de;avant;avant que;après de|Avant de + інфінітив.
+| avoir mangé, il est parti.|після того як|Поївши, він пішов.|Après;Avant de;Dès que;Après de|Après avoir + PP.
+Appelle-moi | tu arrives.|щойно|Подзвони мені, щойно приїдеш.|dès que;avant de;après;dès|Dès que + дієслово.
+Après | rentrés, nous avons dîné.|допоміжне|Повернувшись, ми повечеряли.|être;avoir;étant;été|Rentrer з être: après être rentrés.
+Réfléchis bien avant de |.|répondre|Добре подумай перед тим, як відповісти.|répondre;répondes;répondu;réponds|Avant de + інфінітив.
+Après avoir | la lettre, elle a pleuré.|lire|Прочитавши листа, вона заплакала.|lu;lire;lisant;lit|Après avoir + PP.
+Je partirai avant qu'il |.|arriver|Я поїду до того, як він приїде.|arrive;arrivera;arriver;est arrivé|Avant que + subjonctif.
+| qu'il fait beau, nous sortons.|щойно|Щойно стає гарна погода, ми виходимо.|Dès;Avant;Après;Avant de|Dès qu' перед il.
+Il s'est couché après | la télévision.|regarder|Він ліг спати, подивившись телевізор.|avoir regardé;regarder;regardé;être regardé|Після après: avoir regardé.
+Prends ton petit-déjeuner avant de |.|partir|Поснідай, перш ніж іти.|partir;pars;parti;partes|Avant de + інфінітив.
+@ b1opinion | Висловлення думки: indicatif чи subjonctif | Думка: indicatif чи subjonctif
+recap: <p>Je pense / je crois que + <b>indicatif</b>. Je ne pense pas / je doute que + <b>subjonctif</b>.</p>
+Je pense qu'il | raison.|avoir|Я думаю, що він має рацію.|a;ait;avoir;aie|Ствердна думка: indicatif.
+Je ne pense pas qu'il | raison.|avoir|Не думаю, що він має рацію.|ait;a;aura;avait|Заперечна думка: subjonctif.
+Je crois qu'elle | demain.|venir|Я думаю, що вона прийде завтра.|viendra;vienne;venir;viennes|Je crois que + indicatif.
+Je doute qu'elle | à l'heure.|arriver|Сумніваюся, що вона прийде вчасно.|arrive;arrivera;arrivait;est arrivée|Douter que + subjonctif.
+Il me semble que tu | fatigué.|être|Мені здається, що ти втомлений.|es;sois;être;étais pas|Il me semble que + indicatif.
+Je ne crois pas que ce | possible.|être|Не думаю, що це можливо.|soit;est;sera;était|Ne pas croire que + subjonctif.
+Je suis sûr qu'il | la vérité.|dire|Я впевнений, що він каже правду.|dit;dise;dire;disent|Être sûr que + indicatif.
+Je ne suis pas sûr qu'il | la vérité.|dire|Я не впевнений, що він каже правду.|dise;dit;dira;disait|Ne pas être sûr que + subjonctif.
+Tu trouves que ce film | bien ?|être|Ти вважаєш, що цей фільм добрий?|est;soit;sera pas;être|Trouver que + indicatif.
+Il est possible qu'ils | en retard.|être|Можливо, вони запізняться.|soient;sont;seront;étaient|Il est possible que + subjonctif.
+@ b1neque | Обмеження ne … que | Ne … que
+recap: <p><b>ne … que</b> = лише. Que стоїть перед тим, що обмежуємо: <i>Je n'ai qu'une sœur.</i> Артикль не змінюється на de.</p>
+Je n'ai | dix euros.|лише|У мене лише десять євро.|que;pas;plus;rien|Ne … que = лише.
+Il ne mange | des légumes.|лише|Він їсть лише овочі.|que;pas;jamais;rien|Ne … que.
+Elle ne parle | français.|лише|Вона розмовляє лише французькою.|que;pas de;plus;rien que|Ne … que.
+Nous n'avons qu' | heure.|артикль|У нас є лише година.|une;de;d';la|Після ne … que артикль не змінюється: une heure.
+Je ne bois que | thé.|артикль|Я п'ю лише чай.|du;de;d';le de|Ne … que зберігає du.
+Il n'est venu | hier.|лише|Він прийшов лише вчора.|qu';pas;jamais;plus|Que перед голосною → qu'.
+Tu n'as que | ?|скільки|У тебе лише стільки?|ça;pas ça;de ça;rien|Ne … que ça.
+Ce magasin n'ouvre que | samedi.|день|Цей магазин відчиняється лише в суботу.|le;de;du;un|N'ouvre que le samedi.
+On ne vit | une fois.|лише|Живемо лише раз.|qu';pas;jamais;plus|Qu' перед une.
+Je n'ai lu que | pages.|артикль|Я прочитав лише кілька сторінок.|quelques;de;des de;pas de|Ne … que quelques pages.

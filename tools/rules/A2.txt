@@ -1,0 +1,265 @@
+# Рівень A2. Формат: початок|ВІДПОВІДЬ|кінець|підказка|переклад|неправильні;через;крапку з комою|пояснення
+@ a2pcimp | Passé composé чи imparfait | Passé composé чи imparfait
+recap: <p><b>Imparfait</b>: фон, опис, звичка (<i>il faisait beau, je lisais</i>). <b>Passé composé</b>: подія, що сталася (<i>le téléphone a sonné</i>).</p>
+Je lisais quand le téléphone |a sonné|.|sonner|Я читав, коли задзвонив телефон.|sonnait;sonne;sonnera|Раптова подія на фоні: passé composé.
+Quand j'étais petit, je |allais| souvent chez ma tante.|aller|Коли я був малим, я часто їздив до тітки.|suis allé;vais;irai|Звичка в минулому: imparfait.
+Hier, il |est allé| à Paris en train.|aller|Учора він поїхав до Парижа потягом.|allait;va;ira|Одна завершена дія: passé composé.
+Il |faisait| beau quand nous sommes partis.|faire|Була гарна погода, коли ми вирушили.|a fait;fait;fera|Опис обставин: imparfait.
+Elle |a trouvé| ses clés et elle est rentrée.|trouver|Вона знайшла ключі й повернулася.|trouvait;trouve;trouvera|Послідовні події: passé composé.
+Pendant que tu |dormais|, j'ai fait la vaisselle.|dormir|Поки ти спав, я помив посуд.|as dormi;dors;dormiras|Тривала дія на фоні: imparfait.
+Soudain, le chien |a aboyé|.|aboyer|Раптом собака загавкав.|aboyait;aboie;aboiera|Soudain вказує на подію: passé composé.
+Chaque été, nous |partions| à la mer.|partir|Щоліта ми їздили на море.|sommes partis;partons;partirons|Повторювана дія: imparfait.
+Il était fatigué, alors il |s'est couché| tôt.|se coucher|Він був утомлений, тож рано ліг спати.|se couchait;se couche;se couchera|Наслідок, подія: passé composé.
+La maison |était| grande et lumineuse.|être|Будинок був великий і світлий.|a été;est;sera|Опис: imparfait.
+@ a2rel | Відносні займенники qui, que, où (початок) | Qui, que, où
+recap: <p><b>qui</b> = підмет (за ним дієслово) · <b>que</b> = додаток (за ним підмет) · <b>où</b> = місце або час</p>
+C'est le garçon |qui| habite à côté.|qui / que|Це хлопець, який живе поруч.|que;où;dont|За ним одразу дієслово: qui.
+Le livre |que| je lis est passionnant.|qui / que|Книжка, яку я читаю, захоплива.|qui;où;quoi|За ним підмет je: que.
+La ville |où| je suis né est petite.|où|Місто, де я народився, маленьке.|qui;que;quand|Місце: où.
+J'ai une amie |qui| parle russe.|qui / que|У мене є подруга, яка розмовляє російською.|que;où;qu'|Підмет до parle: qui.
+Le film |que| nous avons vu était drôle.|qui / que|Фільм, який ми бачили, був смішний.|qui;où;dont|Підмет nous: que.
+Le jour |où| nous nous sommes rencontrés, il neigeait.|où|Того дня, коли ми познайомилися, ішов сніг.|que;qui;quand le|Про час після jour теж où.
+C'est la robe |que| j'ai achetée.|que|Це сукня, яку я купила.|qui;où;quoi|За ним підмет j': que.
+Le restaurant |où| nous dînons est cher.|où|Ресторан, де ми вечеряємо, дорогий.|que;qui;dont|Місце: où.
+Les enfants |qui| jouent dehors sont mes neveux.|qui / que|Діти, які граються надворі, мої племінники.|que;où;quels|Підмет до jouent: qui.
+La personne |que| tu attends est arrivée.|qui / que|Людина, на яку ти чекаєш, прийшла.|qui;où;dont|Підмет tu: que.
+@ a2modal | Devoir, pouvoir, vouloir та il faut | Devoir, pouvoir, vouloir
+recap: <p><b>devoir</b> = мусити · <b>pouvoir</b> = могти · <b>vouloir</b> = хотіти · <b>il faut</b> = треба. Після них інфінітив.</p>
+Je |dois| partir à 18 h, j'ai un rendez-vous.|devoir|Я мушу піти о 18:00, у мене зустріч.|peux;veux;faut|Обов'язок: je dois.
+Tu |peux| m'aider avec ce sac ?|pouvoir|Ти можеш допомогти мені з цією сумкою?|dois;veux;faut|Прохання про можливість: tu peux.
+Nous |voulons| voir ce film ce soir.|vouloir|Ми хочемо подивитися цей фільм увечері.|devons;pouvons;faut|Бажання: nous voulons.
+Il |doit| travailler samedi matin.|devoir|Він мусить працювати в суботу вранці.|doivent;dois;faut|Il doit.
+|Il faut| prendre un parapluie, il pleut.|il faut|Треба взяти парасольку, іде дощ.|Il doit;On faut;Il veut|Безособове «треба»: il faut.
+Vous |pouvez| entrer.|pouvoir|Можете заходити.|peuvez;pouvons;pouvez pas|Vous pouvez.
+Ils |veulent| rester encore un peu.|vouloir|Вони хочуть залишитися ще трохи.|veut;voulons;veulez|Ils veulent.
+Elles |doivent| finir avant midi.|devoir|Вони мають закінчити до обіду.|devent;doit;devez|Elles doivent.
+Je ne |peux| pas venir, je suis malade.|pouvoir|Я не можу прийти, я хворий.|peut;pouve;pouvais pas|Je peux.
+Qu'est-ce que tu |veux| manger ?|vouloir|Що ти хочеш їсти?|veut;voulez;vouloir|Tu veux.
+@ a2polite | Ввічливе прохання: je voudrais, pourriez-vous | Ввічливе прохання
+recap: <p><b>Je voudrais</b> + іменник/інфінітив · <b>Pourriez-vous</b> + інфінітив ? · <b>Est-ce que je pourrais</b> … ? · <b>Auriez-vous</b> … ?</p>
+Je |voudrais| une baguette, s'il vous plaît.|vouloir|Я хотів би багет, будь ласка.|veux bien;voudrai;voulais|Ввічливо: je voudrais.
+|Pourriez|-vous répéter, s'il vous plaît ?|pouvoir|Чи не могли б ви повторити?|Pouvez pas;Pourrez;Pouvaient|Дуже ввічливо: pourriez-vous.
+Est-ce que je |pourrais| parler au directeur ?|pouvoir|Чи можу я поговорити з директором?|pourrai;pouvons;pourrions|Ввічливо: je pourrais.
+|Auriez|-vous l'heure, s'il vous plaît ?|avoir|Не підкажете, котра година?|Avez pas;Aurez;Aviez-vous|Auriez-vous l'heure ?
+Nous |voudrions| réserver une table pour quatre.|vouloir|Ми хотіли б забронювати столик на чотирьох.|voulons bien;voudrons;voulions|Nous voudrions.
+Tu |pourrais| fermer la fenêtre ?|pouvoir|Ти не міг би зачинити вікно?|pourras;pouvais;pourrait|Tu pourrais.
+J' |aurais| une question.|avoir|У мене є запитання.|aurai;avais;aurait|Ввічливо: j'aurais une question.
+Vous |voudriez| un café ?|vouloir|Хочете кави?|voudrez;vouliez;voudrait|Пропозиція: vous voudriez.
+|Serait|-il possible de payer par carte ?|être|Чи можна було б заплатити карткою?|Sera;Était;Serais|Serait-il possible … ?
+Je |aimerais| savoir où est la gare.|aimer|Я хотів би знати, де вокзал.|aimerai;aimais;aimes|J'aimerais savoir.
+@ a2link | З'єднувальні слова | З'єднувальні слова
+recap: <p><b>et</b> і · <b>mais</b> але · <b>ou</b> або · <b>donc / alors</b> тому · <b>parce que</b> бо · <b>puis / ensuite</b> потім · <b>quand</b> коли</p>
+J'aime le café |mais| je n'aime pas le thé.|але|Я люблю каву, але не люблю чай.|donc;parce que;ou|Протиставлення: mais.
+Je reste à la maison |parce que| je suis malade.|бо|Я залишаюся вдома, бо хворію.|mais;donc;ou|Причина: parce que.
+Il pleut, |donc| je prends un parapluie.|тому|Іде дощ, тому я беру парасольку.|mais;parce que;ou|Наслідок: donc.
+Tu veux du thé |ou| du café ?|або|Хочеш чаю чи кави?|et;mais;donc|Вибір: ou.
+D'abord je me lève, |ensuite| je prends ma douche.|потім|Спочатку я встаю, потім приймаю душ.|mais;parce que;ou|Послідовність: ensuite.
+|Quand| il fait beau, nous allons au parc.|коли|Коли гарна погода, ми йдемо в парк.|Mais;Donc;Ou|Час: quand.
+Elle est fatiguée |mais| elle travaille encore.|але|Вона втомлена, але ще працює.|donc;ou;quand|Протиставлення: mais.
+J'ai faim, |alors| je vais manger.|тож|Я голодний, тож піду поїсти.|mais;ou;parce qu'|Наслідок у розмові: alors.
+Il est en retard |parce que| le bus n'est pas venu.|бо|Він запізнюється, бо автобус не приїхав.|donc;mais;alors|Причина: parce que.
+Nous avons visité le musée |et| le château.|і|Ми відвідали музей і замок.|ou;mais;donc|Додавання: et.
+@ a2savoir | Savoir чи connaître | Savoir чи connaître
+recap: <p><b>savoir</b> = знати факт, уміти (+ інфінітив, que, où, si) · <b>connaître</b> = знати людину, місце, річ</p>
+Tu |connais| Marie ?|знати|Ти знаєш Марі?|sais;savez;connaît|Людину знаємо: connaître.
+Je |sais| nager.|уміти|Я вмію плавати.|connais;connaît;sait|Уміти щось робити: savoir + інфінітив.
+Vous |savez| où est la poste ?|знати|Ви знаєте, де пошта?|connaissez;connaissons;savons|Перед où: savoir.
+Il |connaît| bien Paris.|знати|Він добре знає Париж.|sait;sais;savent|Місце: connaître.
+Nous |savons| qu'il est malade.|знати|Ми знаємо, що він хворий.|connaissons;connaissez;savez|Перед que: savoir.
+Elle |connaît| ce restaurant ?|знати|Вона знає цей ресторан?|sait;sais;savent|Місце: connaître.
+Je ne |sais| pas pourquoi il est parti.|знати|Я не знаю, чому він пішов.|connais;connaît;savons|Перед pourquoi: savoir.
+Ils |savent| conduire.|уміти|Вони вміють водити.|connaissent;connaît;savez|Savoir + інфінітив.
+Tu |sais| la réponse ?|знати|Ти знаєш відповідь?|connais;connaissez;sait|Факт, відповідь: savoir.
+Vous |connaissez| mon frère ?|знати|Ви знайомі з моїм братом?|savez;savons;sait|Людину: connaître.
+@ a2encours | Être en train de, aller, venir de | Être en train de, venir de
+recap: <p><b>être en train de</b> + інф. = саме зараз · <b>aller</b> + інф. = зараз буде · <b>venir de</b> + інф. = щойно</p>
+Je ne peux pas parler, je suis |en train de| travailler.|зараз|Не можу говорити, я саме працюю.|en train;de train de;en trains de|Процес зараз: en train de.
+Il |vient de| partir, tu l'as raté.|щойно|Він щойно пішов, ти розминувся з ним.|va;est en train de;vient|Щойно: venir de.
+Attention, le bus |va| partir !|зараз|Обережно, автобус зараз рушить!|vient de;est en train;viens|Зараз буде: aller + інф.
+Nous |venons de| manger, nous n'avons plus faim.|щойно|Ми щойно поїли, ми вже не голодні.|allons;sommes en train;venons|Venir de: nous venons de.
+Elle est en |train de| cuisiner.|процес|Вона саме готує.|train;trains de;traine de|Être en train de.
+Je |vais| arriver, attends-moi !|зараз|Я зараз буду, зачекай мене!|viens d';suis en train d';vas|Je vais arriver.
+Ils |viennent de| rentrer de vacances.|щойно|Вони щойно повернулися з відпустки.|vont;sont en train;viennent|Ils viennent de.
+Tu |viens de| lire mon message ?|щойно|Ти щойно прочитав моє повідомлення?|vas;es en train;viens|Tu viens de lire.
+Les enfants sont |en train de| jouer dehors.|процес|Діти саме граються надворі.|en train;de train de;entrain de|Sont en train de.
+Il est 8 h, le film |va| commencer.|зараз|Восьма, фільм зараз почнеться.|vient de;est en train;va de|Va commencer.
+@ a2ir3 | Дієслова на -ir 3-ї групи та споріднені | Ouvrir, venir, tenir
+recap: <p><b>ouvrir, offrir, découvrir</b> відмінюються як -er: j'ouvre, tu ouvres. <b>venir, tenir</b>: je viens, nous venons, ils viennent.</p>
+J' |ouvre| la fenêtre.|ouvrir|Я відчиняю вікно.|ouvris;ouvrit;ouvert|Ouvrir як -er: j'ouvre.
+Tu |offres| des fleurs à ta mère ?|offrir|Ти даруєш мамі квіти?|offris;offre;offrit|Tu offres.
+Ils |viennent| de Lyon.|venir|Вони з Ліона.|venent;vient;venons|Ils viennent.
+Elle |tient| la porte.|tenir|Вона тримає двері.|tiens;tenent;tenit|Elle tient.
+Nous |découvrons| la ville à pied.|découvrir|Ми відкриваємо для себе місто пішки.|découvrissons;découvrez;découvre|Nous découvrons.
+Vous |revenez| quand ?|revenir|Коли ви повертаєтеся?|revenons;reviennent;revienez|Vous revenez.
+Il |souffre| beaucoup de son dos.|souffrir|Йому дуже болить спина.|souffrit;souffris;souffert|Souffrir як -er: il souffre.
+Je |deviendrai| médecin l'année prochaine.|devenir|Наступного року я стану лікарем.|deviens pas;devient;devenirai|Майбутнє: je deviendrai.
+Le magasin |ouvre| à 9 h.|ouvrir|Магазин відчиняється о 9:00.|ouvrit;ouvris;ouvert|Il ouvre.
+Elles |tiennent| toujours leurs promesses.|tenir|Вони завжди дотримують обіцянок.|tenent;tient;tenons|Elles tiennent.
+@ a2que | Підрядні з que: je pense que, il dit que | Підрядні з que
+recap: <p class="formula">je pense / je crois / il dit / je sais + que + indicatif</p><p>Que перед голосною → qu'. Que не можна пропустити, як «що» в українській.</p>
+Je pense |qu'| il viendra demain.|що|Я думаю, що він прийде завтра.|que;qui;quoi|Перед il: qu'.
+Elle dit |qu'| elle est fatiguée.|що|Вона каже, що втомлена.|que;qui;quoi|Перед elle: qu'.
+Nous savons |que| vous êtes occupés.|що|Ми знаємо, що ви зайняті.|qu';qui;quoi|Перед приголосною: que.
+Je crois |que| c'est vrai.|що|Я вважаю, що це правда.|qu';quoi;qui|Перед c': que.
+Il dit qu'il |est| malade.|être|Він каже, що хворий.|soit;étant;être|Після dire que: indicatif.
+Tu penses que ce film |est| bien ?|être|Ти думаєш, що цей фільм добрий?|soit;sera pas;être|Після penser que: indicatif.
+J'espère |que| tu vas mieux.|що|Сподіваюся, що тобі краще.|qu';si;quoi|Перед tu: que.
+Elle trouve |que| Paris est trop cher.|що|Вона вважає, що Париж надто дорогий.|qu';qui;quoi|Перед Paris: que.
+On dit |qu'| il va neiger.|що|Кажуть, що піде сніг.|que il;qui;quoi|Перед il: qu'.
+Je suis sûr |que| tu as raison.|що|Я впевнений, що ти маєш рацію.|qu';de;si|Être sûr que.
+@ a2neginf | Заперечення інфінітива | Заперечення інфінітива
+recap: <p class="formula">ne pas + інфінітив</p><p>Обидві частини стоять разом перед інфінітивом: <i>Je te demande de <b>ne pas</b> fumer.</i></p>
+Il m'a dit de |ne pas être| en retard.|не бути|Він сказав мені не запізнюватися.|n'être pas;ne être pas;pas ne être|Ne pas перед інфінітивом: ne pas être.
+Prière de |ne pas fumer|.|не курити|Просимо не курити.|ne fumer pas;fumer ne pas;pas fumer ne|Ne pas fumer.
+Je préfère |ne pas sortir| ce soir.|не виходити|Я волію не виходити сьогодні ввечері.|ne sortir pas;pas ne sortir;sortir pas|Ne pas sortir.
+Attention à |ne pas tomber| !|не впасти|Обережно, не впади!|ne tomber pas;tomber pas;pas ne tomber|Ne pas tomber.
+Elle a décidé de |ne pas partir|.|не їхати|Вона вирішила не їхати.|ne partir pas;partir ne pas;pas partir ne|Ne pas partir.
+Je te conseille de |ne pas manger| trop.|не їсти|Раджу тобі не їсти забагато.|ne manger pas;manger pas;pas ne manger|Ne pas manger.
+C'est important de |ne pas oublier|.|не забути|Важливо не забути.|n'oublier pas;oublier pas;ne oublier pas|Ne pas oublier.
+Il essaie de |ne pas penser| à ça.|не думати|Він намагається не думати про це.|ne penser pas;penser ne pas;pas penser ne|Ne pas penser.
+Merci de |ne pas toucher|.|не торкатися|Прохання не торкатися.|ne toucher pas;toucher pas;pas ne toucher|Ne pas toucher.
+Pour |ne pas rater| le train, partons tôt.|не спізнитися|Щоб не спізнитися на потяг, вирушімо рано.|ne rater pas;rater pas;pas ne rater|Pour ne pas rater.
+@ a2propos | Пропозиції: On va …, Si on allait … | Пропозиції
+recap: <p><b>On va</b> au cinéma ? · <b>Si on allait</b> au parc ? (si + imparfait) · <b>Ça te dit de</b> … ? · <b>Tu veux</b> … ? · <b>Et si on</b> + imparfait ?</p>
+Si on |allait| au restaurant ce soir ?|aller|Може, підемо в ресторан сьогодні ввечері?|va;ira;irait|Si on + imparfait: allait.
+Et si on |regardait| un film ?|regarder|А може, подивимося фільм?|regarde;regardera;regarderait|Et si on + imparfait: regardait.
+Ça te |dit| de venir avec nous ?|dire|Хочеш піти з нами?|dis;disent;dirait|Ça te dit de … ?
+On |fait| une pause ?|faire|Зробимо перерву?|faisons;font;faisait pas|On fait une pause ?
+Si on |déjeunait| ensemble demain ?|déjeuner|Може, пообідаємо разом завтра?|déjeune;déjeunera;déjeunerait|Si on déjeunait.
+Tu |veux| aller au concert samedi ?|vouloir|Хочеш піти на концерт у суботу?|veut;voulez;voudras|Tu veux … ?
+Et si nous |allions| à la plage ?|aller|А може, поїдемо на пляж?|allons;irons;irions|Si nous allions.
+On |prend| un café ?|prendre|Вип'ємо кави?|prenons;prennent;prendra pas|On prend un café ?
+Ça vous |dit| de dîner chez nous ?|dire|Не хочете повечеряти в нас?|dites;disez;dira|Ça vous dit de … ?
+Si on |prenait| le train plutôt que la voiture ?|prendre|Може, поїдемо потягом, а не машиною?|prend;prendra;prendrait|Si on prenait.
+@ a2recip | Взаємні та ідіоматичні займенникові дієслова | Взаємні дієслова
+recap: <p>Взаємна дія: <i>ils <b>se</b> parlent</i> (один з одним). Ідіоматичні: <i>s'en aller, se rendre compte, se souvenir de, se tromper, se moquer de</i>.</p>
+Ils |se téléphonent| tous les jours.|se téléphoner|Вони телефонують одне одному щодня.|téléphonent;se téléphone;nous téléphonons|Взаємна дія: ils se téléphonent.
+Nous |nous connaissons| depuis l'école.|se connaître|Ми знайомі ще зі школи.|connaissons;se connaissons;nous connaissez|Nous nous connaissons.
+Je |me souviens| de mon premier jour d'école.|se souvenir|Я пам'ятаю свій перший шкільний день.|souviens;me souvient;se souviens|Je me souviens de.
+Tu |te trompes|, ce n'est pas la bonne adresse.|se tromper|Ти помиляєшся, це не та адреса.|trompes;te trompe;se trompes|Tu te trompes.
+Ils |se sont rencontrés| dans la rue et ils se sont parlé.|se rencontrer|Вони зустрілися на вулиці й поговорили.|ont rencontré;se ont rencontrés;sont rencontrés|PC взаємних дієслів з être.
+Il est tard, je |m'en vais|.|s'en aller|Уже пізно, я йду.|en vais;m'en va;me vais en|Je m'en vais.
+Vous |vous mariez| à l'église ?|se marier|Ви вінчаєтеся в церкві?|mariez;se mariez;vous marions|Vous vous mariez.
+Elle ne |se rend| pas compte de son erreur.|se rendre compte|Вона не усвідомлює своєї помилки.|rend;se rends;s'est rendu|Elle ne se rend pas compte.
+Les enfants |se moquent| de lui.|se moquer|Діти глузують з нього.|moquent;se moque;se moquons|Ils se moquent de.
+Nous |nous retrouvons| devant le cinéma.|se retrouver|Ми зустрічаємося перед кінотеатром.|retrouvons;se retrouvons;nous retrouvez|Nous nous retrouvons.
+@ a2indef | Неозначені займенники | Quelqu'un, quelque chose, personne
+recap: <p><b>quelqu'un</b> хтось · <b>quelque chose</b> щось · <b>personne</b> ніхто · <b>rien</b> ніщо · <b>chacun</b> кожен · <b>plusieurs</b> кілька · <b>quelques-uns</b> деякі</p>
+Il y a |quelqu'un| à la porte.|хтось|Хтось стоїть біля дверей.|quelque chose;personne;rien|Людина: quelqu'un.
+Tu veux |quelque chose| à boire ?|щось|Хочеш щось випити?|quelqu'un;personne;rien|Річ: quelque chose.
+Je n'ai vu |personne| .|нікого|Я нікого не бачив.|rien;quelqu'un;aucun|Ніхто: ne … personne.
+Il ne dit |rien| .|нічого|Він нічого не каже.|personne;quelque chose;aucune|Ніщо: ne … rien.
+|Chacun| a son opinion.|кожен|Кожен має свою думку.|Chaque;Quelques;Tout|Займенник «кожен»: chacun.
+J'ai lu |plusieurs| de ses livres.|кілька|Я прочитав кілька його книжок.|quelque;chaque;personne|Plusieurs = кілька.
+|Personne| ne m'a appelé.|ніхто|Ніхто мені не дзвонив.|Rien;Quelqu'un;Chacun|Підмет «ніхто»: personne ne.
+Tu as entendu |quelque chose| ?|щось|Ти щось почув?|quelqu'un chose;quelque un;rien de|Quelque chose.
+Il y a |quelque chose| de nouveau ?|щось|Є щось нове?|quelqu'un;personne;chacun|Quelque chose de nouveau.
+|Quelques-uns| de mes amis sont venus.|деякі|Деякі з моїх друзів прийшли.|Quelqu'un;Chacun;Personne|Quelques-uns de.
+@ a2tout | Tout, tous, toute, toutes | Tout, tous, toute, toutes
+recap: <div class="mnemonic"><span>tout le (ч. одн.)</span><span>toute la (ж. одн.)</span><span>tous les (ч. мн.)</span><span>toutes les (ж. мн.)</span></div>
+J'ai travaillé |toute| la journée.|весь|Я працював увесь день.|tout;tous;toutes|Journée ж. р. одн.: toute.
+Il pleut |tout| le temps.|весь|Увесь час іде дощ.|toute;tous;toutes|Temps ч. р. одн.: tout.
+|Tous| les enfants sont là.|всі|Усі діти тут.|Tout;Toute;Toutes|Enfants ч. р. мн.: tous.
+Je connais |toutes| les chansons.|всі|Я знаю всі пісні.|tous;tout;toute|Chansons ж. р. мн.: toutes.
+Elle mange |tout| le gâteau.|весь|Вона з'їдає весь торт.|toute;tous;toutes|Gâteau ч. р.: tout.
+|Toutes| les semaines, je vais au marché.|щотижня|Щотижня я ходжу на ринок.|Tous;Tout;Toute|Semaines ж. р. мн.: toutes.
+Merci pour |tout| !|усе|Дякую за все!|tous;toute;toutes|Займенник «усе»: tout.
+|Tous| les jours, il court.|щодня|Щодня він бігає.|Toutes;Tout;Toute|Jours ч. р. мн.: tous.
+Elle a lu |toute| la nuit.|всю|Вона читала всю ніч.|tout;tous;toutes|Nuit ж. р.: toute.
+Ils sont |tous| contents.|всі|Вони всі задоволені.|tout;toute;toutes|Займенник «всі» про чоловіків: tous.
+@ a2interp | Питальні займенники з прийменниками | Avec qui, à quoi
+recap: <p>Про людей: <b>à qui, avec qui, pour qui, de qui</b>. Про речі: <b>à quoi, avec quoi, de quoi</b>. Прийменник стоїть на початку.</p>
+|Avec qui| tu parles ?|з ким|З ким ти розмовляєш?|À quoi;De quoi;Avec quoi|Людина: avec qui.
+|À quoi| tu penses ?|про що|Про що ти думаєш?|À qui;Avec qui;De qui|Penser à + річ: à quoi.
+|À qui| est ce sac ?|чий|Чия це сумка?|De quoi;Avec qui;Pour quoi|Належність: à qui.
+|De quoi| as-tu besoin ?|чого|Що тобі потрібно?|De qui;À quoi;Avec quoi|Avoir besoin de + річ: de quoi.
+|Pour qui| est ce cadeau ?|для кого|Для кого цей подарунок?|À quoi;De quoi;Pour quoi|Людина: pour qui.
+|De quoi| vous parlez ?|про що|Про що ви говорите?|De qui;À quoi;Avec qui|Parler de + річ: de quoi.
+|Avec quoi| écris-tu ?|чим|Чим ти пишеш?|Avec qui;De quoi;À qui|Інструмент: avec quoi.
+|De qui| as-tu peur ?|кого|Кого ти боїшся?|À qui;Avec qui;Pour qui|Avoir peur de + людина: de qui.
+|Avec qui| travailles-tu ?|з ким|З ким ти працюєш?|Avec quoi;À quoi;De quoi|Людина: avec qui.
+|À quoi| sert cette machine ?|для чого|Для чого ця машина?|À qui;De qui;Avec qui|Servir à + річ: à quoi.
+@ a2cestca | C'est чи ça (ceci, cela) | C'est чи ça
+recap: <p><b>c'est</b> + іменник/прикметник (це …) · <b>ça</b> = це (займенник-підмет або додаток): <i>ça va, j'aime ça, ça coûte 5 €</i> · <b>cela</b> = формальне ça</p>
+|Ça| coûte combien ?|це|Скільки це коштує?|C'est;Ce;Ceci est|Ça coûte combien ? (займенник).
+J'aime |ça| !|це|Мені це подобається!|c'est;ce;ces|Додаток після дієслова: ça.
+|C'est| un bon restaurant.|це|Це гарний ресторан.|Ça;Ça est;Cela|Перед артиклем: c'est.
+|Ça| va ?|це|Як справи?|C'est;Ce;Ceci|Ça va.
+|C'est| très joli !|це|Це дуже гарно!|Ça;Ça est;Cela|Оцінка: c'est + прикметник.
+Je ne comprends pas |ça| .|це|Я цього не розумію.|c'est;ce;ces|Додаток: ça.
+|Ça| me fait plaisir.|це|Мені це приємно.|C'est;Ce;Ceci est|Підмет-займенник: ça.
+|C'est| mon frère.|це|Це мій брат.|Ça;Cela;Ça est|Перед присвійним: c'est.
+|Ça| ne m'intéresse pas.|це|Мене це не цікавить.|C'est;Ce;Ces|Ça ne m'intéresse pas.
+Ne dis pas |ça| !|це|Не кажи цього!|c'est;ce;ces|Додаток: ça.
+@ a2amoi | Приналежність: c'est à moi | C'est à moi
+recap: <p class="formula">être à + тонічний займенник / ім'я</p><p><i>Ce livre est <b>à moi</b>. — C'est <b>à qui</b> ? — C'est à Paul.</i></p>
+Ce stylo est |à qui| ?|чий|Чия ця ручка?|de qui;à quoi;qui|Питання про належність: à qui.
+Cette voiture est |à moi| .|моя|Ця машина моя.|à je;de moi;mon|Être à moi.
+Ces clés sont |à toi| , Marie ?|твої|Це твої ключі, Марі?|à tu;à te;de toi|Être à toi.
+Le chien est |à lui| .|його|Пес його.|à il;de lui;à le|Être à lui.
+C'est |à elle|, ce sac ?|її|Це її сумка?|à elle-même;de elle;à la|Être à elle.
+Ces livres sont |à nous| .|наші|Ці книжки наші.|à notre;à nos;de nous|Être à nous.
+La maison est |à eux| .|їхня (ч.)|Будинок їхній.|à ils;à leur;de eux|Être à eux.
+Ce manteau est |à| Pierre.|П'єра|Це пальто П'єра.|de;au;pour|Être à + ім'я.
+Ces photos sont |à vous| ?|ваші|Ці фото ваші?|à votre;de vous;à vos|Être à vous.
+Les jouets sont |à elles| .|їхні (ж.)|Іграшки їхні.|à elle;à leurs;de elles|Être à elles.
+@ a2freq | Слова часу й частоти | Частота: toujours, souvent
+recap: <p><b>toujours</b> завжди · <b>souvent</b> часто · <b>parfois / quelquefois</b> іноді · <b>rarement</b> рідко · <b>ne … jamais</b> ніколи · <b>tous les jours</b> щодня · <b>une fois par semaine</b> раз на тиждень</p>
+Je bois |toujours| du café le matin, chaque jour.|завжди|Я завжди п'ю каву зранку, щодня.|jamais;rarement;parfois|Щодня: toujours.
+Il ne mange |jamais| de viande.|ніколи|Він ніколи не їсть м'яса.|toujours;souvent;parfois|Ne … jamais.
+Je vais à la piscine une fois |par| semaine.|на|Я ходжу в басейн раз на тиждень.|pour;à la;dans|Une fois par semaine.
+Nous allons |souvent| au cinéma, trois fois par mois.|часто|Ми часто ходимо в кіно, тричі на місяць.|jamais;rarement;ne jamais|Часто: souvent.
+|Parfois|, il oublie ses clés.|іноді|Іноді він забуває ключі.|Jamais;Toujours jamais;Ne parfois|Іноді: parfois.
+Elle voit |rarement| ses cousins, presque jamais.|рідко|Вона рідко бачиться з двоюрідними, майже ніколи.|souvent;toujours;tous les jours|Майже ніколи: rarement.
+Je fais du sport |tous les| jours.|щодня|Я займаюся спортом щодня.|toutes les;tout le;chaque les|Tous les jours.
+|Chaque| matin, je prends le bus.|щоранку|Щоранку я сідаю на автобус.|Tous;Toute;Chaques|Chaque + однина: chaque matin.
+Il est |toujours| en retard, c'est agaçant.|завжди|Він завжди запізнюється, це дратує.|jamais;rarement;une fois|Toujours.
+Tu ne m'appelles |jamais| !|ніколи|Ти ніколи мені не дзвониш!|toujours;souvent;parfois|Ne … jamais.
+@ a2ilest | Il est + прикметник + de, c'est + прикметник + à | Il est facile de…
+recap: <p><b>Il est</b> + прикм. + <b>de</b> + інф. (про дію загалом): <i>Il est difficile de parler chinois.</i> · <b>C'est</b> + прикм. + <b>à</b> + інф. (про згадану річ): <i>Le chinois ? C'est difficile à parler.</i></p>
+Il est difficile |de| trouver un appartement.|прийменник|Важко знайти квартиру.|à;pour;—|Il est + прикм. + de.
+Ce livre ? C'est facile |à| lire.|прийменник|Ця книжка? Її легко читати.|de;pour;—|C'est + прикм. + à про згадану річ.
+Il est important |de| dormir.|прийменник|Важливо спати.|à;pour;que|Il est important de.
+Ce plat ? C'est simple |à| préparer.|прийменник|Ця страва? Її просто приготувати.|de;pour;que|C'est simple à.
+Il est interdit |de| fumer ici.|прийменник|Тут заборонено курити.|à;pour;—|Il est interdit de.
+Cette question ? C'est difficile |à| répondre.|прийменник|Це питання? На нього важко відповісти.|de;pour;que|C'est difficile à.
+Il est possible |de| réserver en ligne.|прийменник|Можна забронювати онлайн.|à;pour;que|Il est possible de.
+Il est agréable |de| se promener ici.|прийменник|Приємно тут гуляти.|à;pour;—|Il est agréable de.
+Ce mot ? C'est dur |à| prononcer.|прийменник|Це слово? Його важко вимовити.|de;pour;que|C'est dur à.
+Il est nécessaire |de| réserver.|прийменник|Необхідно бронювати.|à;pour;—|Il est nécessaire de.
+@ a2dedes | De замість des перед прикметником | De замість des
+recap: <p>Якщо прикметник стоїть <b>перед</b> іменником у множині, <b>des → de</b>: <i>de belles maisons, de grands arbres</i>. Але: <i>des maisons blanches</i>.</p>
+Il y a |de| beaux jardins ici.|артикль|Тут є гарні сади.|des;les;du|Прикметник перед іменником: de.
+J'ai acheté |des| pommes rouges.|артикль|Я купив червоні яблука.|de;les;du|Прикметник після іменника: des.
+Elle a |de| grands yeux bleus.|артикль|У неї великі блакитні очі.|des;les;du|Grands перед іменником: de.
+Nous avons vu |de| jolies maisons.|артикль|Ми бачили гарні будинки.|des;les;de la|Jolies перед іменником: de.
+Ce sont |des| amis italiens.|артикль|Це друзі-італійці.|de;d';les|Прикметник після іменника: des.
+Il raconte |de| bonnes histoires.|артикль|Він розповідає гарні історії.|des;les;du|Bonnes перед іменником: de.
+On vend |de| petits gâteaux ici.|артикль|Тут продають маленькі тістечка.|des;les;du|Petits перед іменником: de.
+J'ai |des| livres intéressants.|артикль|У мене є цікаві книжки.|de;d';les|Прикметник після: des.
+Ils habitent dans |de| vieilles maisons.|артикль|Вони живуть у старих будинках.|des;les;du|Vieilles перед іменником: de.
+Elle porte |des| chaussures noires.|артикль|Вона носить чорні туфлі.|de;d';les|Прикметник після: des.
+@ a2cafait | Ça fait … que | Ça fait … que
+recap: <p class="formula">ça fait / il y a + тривалість + que + présent</p><p><i>Ça fait deux ans que j'habite ici.</i> = Я живу тут уже два роки. Синонім: <i>J'habite ici depuis deux ans.</i></p>
+|Ça fait| deux ans que j'apprends le français.|уже|Я вчу французьку вже два роки.|Ça est;Il fait;Ça a|Ça fait … que.
+Ça fait une heure |que| je t'attends !|що|Я чекаю на тебе вже годину!|qui;depuis;quand|Ça fait … que.
+Ça fait longtemps que tu |habites| ici ?|habiter|Ти давно тут живеш?|as habité;habitais;habiteras|Дія триває: présent.
+|Il y a| trois jours qu'il pleut.|уже|Уже три дні йде дощ.|Il fait;Ça est;C'est fait|Il y a … que або ça fait.
+Ça fait dix ans |que| nous sommes mariés.|що|Ми одружені вже десять років.|depuis;qui;où|Ça fait … que.
+J'habite ici |depuis| cinq ans.|відтоді|Я живу тут уже п'ять років.|il y a;pendant que;ça fait|Синонім: depuis.
+Ça fait combien de temps que vous |jouez| le piano ?|jouer|Скільки часу ви граєте на піаніно?|avez joué;jouiez;jouerez|Présent.
+Ça fait un mois |que| je ne l'ai pas vu.|що|Я не бачив його вже місяць.|depuis;qui;quand|Ça fait … que.
+Il y a |des années| que je le connais.|тривалість|Я знаю його вже багато років.|des ans;beaucoup d'ans;longtemps de|Багато років: il y a des années que.
+Ça fait deux semaines qu'elle |est| malade.|être|Вона хворіє вже два тижні.|a été;était;sera|Présent.
+@ a2pcrefl | Passé composé займенникових дієслів | PC займенникових дієслів
+recap: <p class="formula">займенник + être + participe passé</p><p><i>je me suis levé(e), elle s'est levée, nous nous sommes levé(e)s</i></p>
+Je |me suis levé| à 7 h.|se lever|Я встав о 7:00.|me ai levé;suis levé;m'ai levé|Je me suis levé.
+Elle |s'est réveillée| tôt.|se réveiller|Вона прокинулася рано.|s'a réveillée;est réveillée;s'est réveillé|Elle s'est réveillée (узгодження).
+Nous |nous sommes promenés| au parc.|se promener|Ми погуляли в парку.|nous avons promenés;sommes promenés;nous sommes promené|Nous nous sommes promenés.
+Ils |se sont disputés| hier soir.|se disputer|Вони посварилися вчора ввечері.|se ont disputés;sont disputés;se sont disputé|Ils se sont disputés.
+Tu |t'es rasé| ce matin ?|se raser|Ти голився сьогодні вранці?|t'as rasé;es rasé;te as rasé|Tu t'es rasé.
+Elles |se sont mariées| en 2020.|se marier|Вони одружилися у 2020 році.|se sont marié;se ont mariées;sont mariées se|Elles se sont mariées.
+Je ne |me suis| pas lavé les mains.|se laver|Я не помив руки.|m'ai;suis;me ai|Je ne me suis pas lavé les mains.
+Vous |vous êtes perdus| ?|se perdre|Ви заблукали?|vous avez perdus;êtes perdus;vous êtes perdu pas|Vous vous êtes perdus.
+Il |s'est endormi| sur le canapé.|s'endormir|Він заснув на дивані.|s'a endormi;est endormi;s'est endormie|Il s'est endormi.
+Elle |s'est excusée| de son erreur.|s'excuser|Вона вибачилася за свою помилку.|s'a excusée;est excusée;s'est excusé|Elle s'est excusée.

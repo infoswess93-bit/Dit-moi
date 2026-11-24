@@ -432,6 +432,56 @@ T("B1", "Займенники", "Lequel, laquelle, lesquels, lesquelles", `
   <p><b>3. Відносний займенник після прийменника (про речі).</b> <i>La table sur laquelle j'ai posé le livre. Le stylo avec lequel j'écris. Les raisons pour lesquelles il est parti. Le projet auquel je pense.</i></p>
   <p><b>4. Про людей</b> після прийменника частіше <i>qui</i>: <i>l'ami avec qui je voyage</i>. Lequel теж можливий, особливо при неоднозначності: <i>le médecin auquel j'ai écrit / à qui j'ai écrit</i>.</p>
   <p><b>5. Не плутати.</b> <i>Quel</i> стоїть перед іменником (<i>Quel livre veux-tu ?</i>), <i>lequel</i> замінює його (<i>Lequel veux-tu ?</i>). Для de + що/хто частіше <i>dont</i>, але після складених прийменників (<i>près de, à côté de, au bout de</i>) беруть <i>duquel, de laquelle …</i>: <i>le quartier près duquel j'habite</i>.</p>`);
+T("A1", "Займенники", "Займенник on", `
+  <p><b>On</b> означає «ми» в розмовній мові або «люди, хтось» узагалі. Дієслово завжди в 3-й особі однини, як після il.</p>
+  ${E("On va au cinéma ce soir ?", "Ми йдемо в кіно сьогодні ввечері?")}
+  ${E("En France, on mange tard.", "У Франції їдять пізно.")}
+  ${E("On m'a volé mon vélo.", "У мене вкрали велосипед.")}
+  <p>Коли on = «ми», прикметник може бути в множині: <i>On est contents.</i></p>`);
+T("A1", "Іменник і артикль", "Приналежність з de: le livre de Paul", `
+  <p>Чиє щось, показує <b>de</b>: <i>la voiture <b>de</b> Marie</i>, <i>le chien <b>de</b> mon frère</i>. Українською це родовий відмінок.</p>
+  <p>Злиття: <b>de + le = du</b>, <b>de + les = des</b>: <i>le bureau <b>du</b> directeur, la maison <b>des</b> voisins</i>. <i>De la</i> і <i>de l'</i> не змінюються.</p>
+  ${E("C'est le téléphone de Paul.", "Це телефон Поля.")}
+  ${E("La porte du garage est ouverte.", "Двері гаража відчинені.")}`);
+T("A1", "Іменник і артикль", "Національності та професії: жіночий рід", `
+  <p>Зазвичай додаємо <b>-e</b>: <i>français → française, avocat → avocate</i>. Якщо слово вже закінчується на -e, воно не змінюється: <i>belge, suisse, journaliste</i>.</p>
+  ${M(["-ien → -ienne", "-on → -onne", "-er → -ère", "-eur → -euse", "-teur → -trice"])}
+  ${E("Il est italien, elle est italienne.", "Він італієць, вона італійка.")}
+  ${E("Il est serveur, elle est serveuse.", "Він офіціант, вона офіціантка.")}
+  <p>Після <i>être</i> професію й національність пишемо <b>без артикля</b>: <i>Elle est médecin.</i> Але <i>C'est un médecin.</i></p>`);
+T("A2", "Минулий час", "Passé composé займенникових дієслів", `
+  <p>Займенникові дієслова в passé composé завжди з <b>être</b>. Займенник стоїть перед допоміжним: <i>je <b>me suis</b> levé</i>.</p>
+  ${M(["je me suis levé(e)", "tu t'es levé(e)", "il s'est levé / elle s'est levée", "nous nous sommes levé(e)s", "vous vous êtes levé(e)(s)", "ils se sont levés / elles se sont levées"])}
+  ${E("Elle s'est réveillée à 7 h.", "Вона прокинулася о 7:00.")}
+  <p>Заперечення обгортає займенник і допоміжне: <i>Je <b>ne</b> me suis <b>pas</b> lavé.</i></p>`);
+T("B1", "Складні форми", "Висловлення думки: indicatif чи subjonctif", `
+  <p>Після ствердних <i>je pense que, je crois que, je trouve que, il me semble que</i> вживаємо <b>indicatif</b>: <i>Je pense qu'il <b>a</b> raison.</i></p>
+  <p>Після заперечення чи питання з інверсією, коли є сумнів, вживаємо <b>subjonctif</b>: <i>Je ne pense pas qu'il <b>ait</b> raison. Crois-tu qu'elle <b>vienne</b> ?</i></p>
+  <p>Після <i>je doute que, je ne suis pas sûr que, il est possible que</i> завжди subjonctif, а після <i>il est sûr que, il est probable que</i> indicatif.</p>
+  ${E("Je crois qu'il viendra. / Je ne crois pas qu'il vienne.", "Я думаю, що він прийде. / Не думаю, що він прийде.")}`);
+T("B1", "Складні форми", "Обмеження ne … que", `
+  <p><b>Ne … que</b> означає «лише, тільки». Це не заперечення: <i>Je <b>n'</b>ai <b>que</b> dix euros.</i> = У мене лише десять євро.</p>
+  <p><b>Que</b> стоїть безпосередньо перед тим, що обмежуємо: <i>Il ne travaille que le matin. Elle n'a parlé qu'à son frère.</i></p>
+  <p>Після <i>ne … que</i> артикль <b>не змінюється на de</b>: <i>Je ne bois que <b>du</b> thé.</i> Синонім: <i>seulement</i>.</p>`);
+T("B2", "Займенники", "Нейтральні займенники le, en, y", `
+  <p><b>Le</b> замінює цілу думку або прикметник: <i>Il est malade ? Oui, je <b>le</b> sais.</i> <i>Fatiguée ? Je <b>le</b> suis.</i></p>
+  <p><b>En</b> замінює думку після дієслів з <b>de</b>: <i>Tu as parlé de ton projet ? Oui, j'<b>en</b> ai parlé.</i> <i>Je m'<b>en</b> souviens.</i></p>
+  <p><b>Y</b> замінює думку після дієслів з <b>à</b>: <i>Tu penses à ton examen ? J'<b>y</b> pense.</i> <i>Je n'<b>y</b> crois pas.</i></p>`);
+T("B2", "Стиль", "Регістри мовлення: soutenu, courant, familier", `
+  <p>Одну думку можна сказати по-різному залежно від ситуації.</p>
+  ${M(["familier: T'as vu ? Je sais pas.", "courant: Tu as vu ? Je ne sais pas.", "soutenu: Avez-vous vu ? Je ne sais point."])}
+  <p>Розмовна мова губить <i>ne</i>, скорочує <i>tu as → t'as</i>, вживає <i>on</i> замість <i>nous</i> і слова <i>bouquin, boulot, bagnole</i>. У листах і на роботі вживаємо courant або soutenu: <i>livre, travail, voiture</i>.</p>
+  <p>Ознаки soutenu: інверсія в питаннях, <i>ne</i> без <i>pas</i> з <i>pouvoir, savoir, oser</i>, passé simple у тексті.</p>`);
+T("B2", "Логіка тексту", "Час і протиставлення: alors que, tandis que, à peine … que", `
+  <p><b>Alors que / tandis que</b> означають «тоді як» (протиставлення) або «у той час як» (одночасність): <i>Il travaille <b>alors que</b> sa sœur dort.</i></p>
+  <p><b>À peine … que</b> = «щойно … як». На початку речення потребує інверсії: <i><b>À peine</b> était-il arrivé <b>qu'</b>il a dû repartir.</i></p>
+  <p><b>Au moment où</b> = у той момент, коли; <b>dès que / aussitôt que</b> = щойно; <b>tant que</b> = доки.</p>`);
+T("B2", "Складні форми", "Складні заперечення: ne … ni … ni, ne … aucun, ne … guère", `
+  ${M(["ne … ni … ni", "ne … aucun(e)", "ne … nulle part", "ne … guère", "ne … pas encore", "ne … plus jamais"])}
+  ${E("Je ne bois ni thé ni café.", "Я не п'ю ні чаю, ні кави.")}
+  ${E("Il n'a aucune idée.", "Він не має жодного уявлення.")}
+  ${E("Je ne l'ai vu nulle part.", "Я ніде його не бачив.")}
+  <p>Після <i>ni … ni</i> неозначений і частковий артиклі зникають: <i>Il n'a ni frère ni sœur.</i> Означений залишається: <i>Je n'aime ni le thé ni le café.</i></p>`);
 var GP1 = ["Тонічні займенники", "Наказовий спосіб (impératif)", "Займенникові дієслова", "Прислівники", "Прийменники часу: depuis, pendant, il y a, dans, en", "Participe présent і gérondif", "Непряма мова", "Conditionnel passé", "Conditionnel présent", "Devoir, pouvoir, vouloir та il faut", "Futur simple", "Il y a, c'est та il est", "Imparfait", "Lequel, laquelle, lesquels, lesquelles", "Passé composé", "Passé composé чи imparfait", "Plus-que-parfait", "Subjonctif passé та вибір між subjonctif і indicatif", "Subjonctif présent", "Y та en", "Être та avoir (présent)", "Артиклі: означені, неозначені, частковий", "Відносні займенники dont та інші", "Дієслова з прийменниками", "Дієслова на -er (présent)", "Дієслова на -ir і часті нерегулярні", "Заперечення ne … pas", "Кількість: beaucoup de, un peu de та інші", "Непрямий додаток (COI)", "Особові займенники", "Питання", "Подвійні займенники та їх порядок", "Порівняння та найвищий ступінь", "Прикметники: узгодження та місце", "Причина, наслідок, мета", "Протиставлення та поступка", "Прямий додаток (COD)", "Речення з si", "Розширені заперечення", "Рід і число іменників", "Складні відносні займенники", "Узгодження participe passé"];
 var GP3 = ["De замість des перед прикметником", "Il est + прикметник + de, c'est + прикметник + à", "Ne explétif та інверсія", "Passé simple", "Ça fait … que", "Інтенсивність і міра: très, trop, assez, beaucoup", "Апостроф та елізія", "Безособові та номінальні конструкції", "Великі літери та пунктуація", "Взаємні та ідіоматичні займенникові дієслова", "Дні, місяці, пори року, дата", "Дія через faire, laisser, voir + інфінітив", "Заперечення інфінітива", "Погода та безособові конструкції", "Подобається: aimer, préférer, adorer, détester", "Порядкові числівники", "Порядок слів у реченні", "Приналежність: c'est à moi", "Пропозиції: On va …, Si on allait …", "Транспорт і спосіб пересування"];
 var GORD = ["Особові займенники", "Être та avoir (présent)", "Дієслова на -er (présent)", "Артиклі: означені, неозначені, частковий", "Заперечення ne … pas", "Питання", "Рід і число іменників", "Прикметники: узгодження та місце", "Дієслова на -ir і часті нерегулярні", "Il y a, c'est та il est", "Passé composé", "Imparfait", "Passé composé чи imparfait", "Futur simple", "Прямий додаток (COD)", "Непрямий додаток (COI)", "Y та en", "Порівняння та найвищий ступінь", "Кількість: beaucoup de, un peu de та інші", "Розширені заперечення", "Devoir, pouvoir, vouloir та il faut", "Conditionnel présent", "Речення з si", "Subjonctif présent", "Plus-que-parfait", "Відносні займенники dont та інші", "Lequel, laquelle, lesquels, lesquelles", "Подвійні займенники та їх порядок", "Узгодження participe passé", "Дієслова з прийменниками", "Subjonctif passé та вибір між subjonctif і indicatif", "Conditionnel passé", "Складні відносні займенники", "Причина, наслідок, мета", "Протиставлення та поступка", "Присвійні та вказівні прикметники", "Прийменники місця й напрямку", "Числівники, дата і час", "Займенникові дієслова", "Futur proche та passé récent", "Наказовий спосіб (impératif)", "Дієслова на -re (vendre, attendre, répondre)", "Quel, quelle, quels, quelles", "Привітання, знайомство й ввічливість", "Вирази з avoir та faire", "Ще часті нерегулярні дієслова (présent)", "Вимова й правопис", "Подобається: aimer, préférer, adorer, détester", "Погода та безособові конструкції", "Порядок слів у реченні", "Інтенсивність і міра: très, trop, assez, beaucoup", "Дні, місяці, пори року, дата", "Транспорт і спосіб пересування", "Порядкові числівники", "Апостроф та елізія", "Великі літери та пунктуація", "Приналежність: c'est à moi", "De замість des перед прикметником", "Ça fait … que", "Il est + прикметник + de, c'est + прикметник + à", "Заперечення інфінітива", "Пропозиції: On va …, Si on allait …", "Взаємні та ідіоматичні займенникові дієслова", "Passé simple", "Ne explétif та інверсія", "Безособові та номінальні конструкції", "Дія через faire, laisser, voir + інфінітив"];

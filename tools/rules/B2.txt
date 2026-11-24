@@ -1,0 +1,193 @@
+# Рівень B2. Короткий формат: початок|кінець|підказка|переклад|ВІДПОВІДЬ;неправильний;неправильний;неправильний|пояснення
+@ b2condp | Conditionnel passé | Conditionnel passé
+recap: <p class="formula">avoir / être у conditionnel + participe passé</p><p>Нереальне минуле: <i>Si j'avais su, je <b>serais venu</b>.</i> Жаль: <i>J'aurais dû partir.</i></p>
+Si j'avais su, je | te voir plus tôt.|venir|Якби я знав, я прийшов би до тебе раніше.|serais venu;viendrais;aurais venu;serai venu|Si + plus-que-parfait → conditionnel passé.
+Tu | me prévenir !|devoir|Ти мав би мене попередити!|aurais dû;devrais;as dû;aurais devoir|Докір про минуле: aurais dû.
+Si nous étions partis à l'heure, nous | le train.|ne pas rater|Якби ми вирушили вчасно, ми б не спізнилися на потяг.|n'aurions pas raté;ne raterions pas;n'avions pas raté;ne serions pas ratés|Conditionnel passé.
+Elle | t'aider, mais elle était malade.|vouloir|Вона хотіла б тобі допомогти, але хворіла.|aurait voulu;voudrait;avait voulu;serait voulue|Жаль: aurait voulu.
+Sans ton aide, je | jamais.|réussir|Без твоєї допомоги я б ніколи не впорався.|n'aurais réussi;ne réussirais;n'avais réussi;ne serais réussi|Нереальне минуле.
+S'il avait plu, ils | à la maison.|rester|Якби пішов дощ, вони залишилися б удома.|seraient restés;resteraient;auraient resté;étaient restés|Rester з être.
+D'après la presse, le ministre | hier.|démissionner|За даними преси, міністр нібито подав у відставку вчора.|aurait démissionné;démissionnerait;a démissionné;serait démissionné|Непідтверджена інформація: conditionnel passé.
+J' | aimer voir ça !|aimer|Я хотів би це побачити!|aurais;aurai;avais;serais|J'aurais aimé.
+Si tu m'avais appelé, je | .|répondre|Якби ти мені подзвонив, я б відповів.|t'aurais répondu;te répondrais;t'avais répondu;te serais répondu|T'aurais répondu.
+Vous | le voir, c'était magnifique !|devoir|Вам треба було це бачити, це було чудово!|auriez dû;devriez;avez dû;seriez dû|Auriez dû.
+@ b2subjp | Subjonctif passé та вибір між subjonctif і indicatif | Subjonctif passé
+recap: <p class="formula">avoir / être у subjonctif + participe passé</p><p>Дія, що вже відбулася: <i>Je suis content que tu <b>sois venu</b>.</i></p>
+Je suis content que tu | .|venir|Я радий, що ти прийшов.|sois venu;viennes;es venu;aies venu|Минула дія + emotion: subjonctif passé.
+Bien qu'il |, il est venu au travail.|être malade|Хоча він захворів, він прийшов на роботу.|ait été malade;a été malade;soit malade été;est malade|Bien que + subjonctif.
+Je doute qu'elle | le message.|recevoir|Сумніваюся, що вона отримала повідомлення.|ait reçu;a reçu;reçoit;aura reçu|Douter que + subjonctif passé.
+Il faut que vous | avant midi.|finir|Вам треба закінчити до обіду.|ayez fini;avez fini;finirez;aviez fini|Дія має бути завершена: subjonctif passé.
+Je regrette qu'ils | si tôt.|partir|Шкода, що вони пішли так рано.|soient partis;sont partis;aient parti;partent pas|Partir з être.
+C'est le meilleur film que j' | .|voir|Це найкращий фільм, який я бачив.|aie vu;ai vu;verrai;avais vu|Після найвищого ступеня часто subjonctif.
+Je sais qu'il | .|réussir|Я знаю, що він склав.|a réussi;ait réussi;réussisse;réussirait|Savoir que + indicatif.
+Il est possible qu'elle | le train.|rater|Можливо, вона спізнилася на потяг.|ait raté;a raté;rate pas;aura raté|Il est possible que + subjonctif.
+Je suis sûr qu'ils | la vérité.|dire|Я впевнений, що вони сказали правду.|ont dit;aient dit;disent pas;auraient dit|Être sûr que + indicatif.
+Avant que vous ne |, fermez la porte.|sortir|Перш ніж вийдете, зачиніть двері.|sortiez;sortez;sortirez;sortiriez|Avant que + subjonctif présent (дія в майбутньому).
+@ b2hypo | Вирази умови й гіпотези | Умова: au cas où, à condition que
+recap: <p><b>au cas où</b> + conditionnel · <b>à condition que / pourvu que</b> + subjonctif · <b>à condition de</b> + інфінітив · <b>en cas de</b> + іменник · <b>même si</b> + indicatif</p>
+Prends un parapluie au cas où il | .|pleuvoir|Візьми парасольку на випадок, якщо піде дощ.|pleuvrait;pleut;pleuve;a plu|Au cas où + conditionnel.
+Je viendrai à condition que tu | là.|être|Я прийду за умови, що ти будеш там.|sois;es;seras;serais|À condition que + subjonctif.
+| d'incendie, utilisez l'escalier.|у разі|У разі пожежі користуйтеся сходами.|En cas;Au cas où;Si;À condition|En cas de + іменник.
+Je sortirai même s'il | .|pleuvoir|Я вийду, навіть якщо піде дощ.|pleut;pleuve;pleuvrait;pleuvra|Même si + indicatif.
+Tu réussiras à condition de | .|travailler|Ти досягнеш успіху за умови, що працюватимеш.|travailler;travailles;travaillé;travaillerais|À condition de + інфінітив.
+Pourvu qu'il | beau pour le mariage !|faire|Аби тільки на весілля була гарна погода!|fasse;fait;fera;ferait|Pourvu que + subjonctif.
+Au cas où vous | des questions, appelez-moi.|avoir|Якщо раптом матимете запитання, телефонуйте.|auriez;avez;ayez;aurez|Au cas où + conditionnel.
+| tu viennes ou non, je pars.|чи … чи|Прийдеш ти чи ні, я їду.|Que;Si;Même si;Au cas où|Que … ou non + subjonctif.
+Supposons qu'il | raison.|avoir|Припустімо, що він має рацію.|ait;a;aura;aurait|Supposons que + subjonctif.
+Sans ton aide, je | perdu.|être|Без твоєї допомоги я б розгубився.|serais;suis;sois;serai|Sans + іменник замість si: conditionnel.
+@ b2psimple | Passé simple | Passé simple
+recap: <p>Книжний минулий час. -er: <b>-a</b> (il parla), -ir/-re: <b>-it</b> (il finit, il prit), інші: <b>-ut</b> (il fut, il eut, il put). 3 ос. мн.: -èrent, -irent, -urent.</p>
+Il | la porte et sortit.|ouvrir|Він відчинив двері й вийшов.|ouvrit;ouvra;ouvrut;a ouvert pas|Ouvrir: il ouvrit.
+Le roi | en 1715.|mourir|Король помер 1715 року.|mourut;mourit;moura;mourra|Mourir: il mourut.
+Elle | une longue lettre à son fiancé.|écrire|Вона написала довгий лист своєму нареченому.|écrivit;écrit pas;écriva;écrivut|Écrire: elle écrivit.
+Ils | ensemble pendant des heures.|parler|Вони розмовляли разом годинами.|parlèrent;parlirent;parlurent;parlaient pas|-er у 3 ос. мн.: -èrent.
+Il | peur et s'enfuit.|avoir|Він злякався й утік.|eut;avait pas;ut;eût pas|Avoir: il eut.
+La guerre | longue et terrible.|être|Війна була довгою і страшною.|fut;fit;eut;était pas|Être: elle fut.
+Ils | à Paris le lendemain.|arriver|Наступного дня вони прибули до Парижа.|arrivèrent;arrivirent;arrivurent;arriva|Arriver: ils arrivèrent.
+Elle | le train de nuit.|prendre|Вона сіла на нічний потяг.|prit;prenda;prenut;prenait pas|Prendre: elle prit.
+Le chevalier | son épée.|lever|Лицар підняв меч.|leva;levit;levut;lèva|Lever: il leva.
+Nous | la nouvelle avec joie.|recevoir|Ми з радістю отримали новину.|reçûmes;recevâmes;reçumes;recevimes|Recevoir: nous reçûmes.
+@ b2infp | Інфінітив passé та participe passé composé | Інфінітив passé
+recap: <p><b>avoir / être + PP</b> після après, sans, pour, de: <i>après <b>avoir mangé</b>, sans <b>avoir lu</b>.</i> Participe composé: <i><b>Ayant fini</b>, il est parti.</i></p>
+Après | le film, nous sommes sortis.|voir|Подивившись фільм, ми вийшли.|avoir vu;voir;vu;être vu|Après + інфінітив passé.
+Il est parti sans | au revoir.|dire|Він пішов, не попрощавшись.|avoir dit;dire pas;dit;être dit|Sans avoir + PP про попередню дію.
+Je te remercie de m' | .|aider|Дякую, що допоміг мені.|avoir aidé;aider;aidé;être aidé|Remercier de + інфінітив passé.
+| fini son travail, elle est rentrée.|participe|Закінчивши роботу, вона повернулася додому.|Ayant;Avoir;Étant;Eu|Participe composé: ayant + PP.
+Après | arrivés, ils ont dîné.|допоміжне|Приїхавши, вони повечеряли.|être;avoir;étant;été|Arriver з être: après être arrivés.
+| partie tôt, elle a évité les bouchons.|participe|Вирушивши рано, вона уникла заторів.|Étant;Ayant;Être;Été|Partir з être: étant partie.
+Il regrette de ne pas | plus tôt.|venir|Він шкодує, що не прийшов раніше.|être venu;avoir venu;venir;venu|Venir з être.
+Merci de | ce dossier si vite.|traiter|Дякуємо, що так швидко опрацювали цю справу.|avoir traité;traiter pas;traité;être traité|Інфінітив passé.
+| compris le problème, il a pu le résoudre.|participe|Зрозумівши проблему, він зміг її розв'язати.|Ayant;Étant;Avoir;Eu|Ayant compris.
+Elle est fière d' | son diplôme.|obtenir|Вона пишається тим, що отримала диплом.|avoir obtenu;obtenir;obtenu;être obtenu|Avoir obtenu.
+@ b2relcomp | Складні відносні займенники | Auquel, duquel, ce dont
+recap: <p><b>auquel / à laquelle / auxquels</b> (à + lequel) · <b>duquel / de laquelle</b> (de + lequel з прийменниковими зворотами) · <b>ce qui / ce que / ce dont</b> = те, що</p>
+Le projet | je pense est ambitieux.|à + lequel|Проєкт, про який я думаю, амбітний.|auquel;duquel;dont;lequel|Penser à: auquel.
+La rivière près de | nous habitons est polluée.|de + laquelle|Річка, біля якої ми живемо, забруднена.|laquelle;duquel;dont;quelle|Près de laquelle.
+| me plaît, c'est sa gentillesse.|те, що|Що мені подобається, так це його доброта.|Ce qui;Ce que;Ce dont;Qui|Підмет: ce qui.
+Dis-moi | tu as besoin.|те, чого|Скажи мені, що тобі потрібно.|ce dont;ce que;ce qui;dont|Avoir besoin de: ce dont.
+Les questions | il a répondu étaient difficiles.|à + lesquelles|Запитання, на які він відповів, були складні.|auxquelles;auxquels;desquelles;lesquelles|Répondre à + ж. р. мн.: auxquelles.
+| je ne comprends pas, c'est son silence.|те, що|Чого я не розумію, так це його мовчання.|Ce que;Ce qui;Ce dont;Que|Додаток: ce que.
+Le parc au milieu | se trouve le lac est beau.|de + lequel|Парк, посеред якого озеро, гарний.|duquel;dont;auquel;lequel|Au milieu de: duquel.
+La conférence | j'ai assisté était passionnante.|à + laquelle|Конференція, на якій я був, була захоплива.|à laquelle;auquel;dont;laquelle|Assister à: à laquelle.
+C'est | je rêve depuis longtemps.|те, про що|Це те, про що я давно мрію.|ce dont;ce que;ce qui;dont ce|Rêver de: ce dont.
+Les amis avec | je voyage sont drôles.|lesquels|Друзі, з якими я подорожую, веселі.|lesquels;qui lesquels;laquelle;lequel|Avec lesquels (або avec qui).
+@ b2relief | Виділення (mise en relief) | C'est … qui / que
+recap: <p><b>C'est … qui</b> (виділяємо підмет) · <b>C'est … que</b> (виділяємо додаток, час, місце) · <b>Ce qui / ce que …, c'est …</b></p>
+C'est Marie | a gagné.|qui / que|Саме Марі виграла.|qui;que;dont;où|Виділений підмет: qui.
+C'est ce livre | je cherchais.|qui / que|Саме цю книжку я шукав.|que;qui;dont;où|Виділений додаток: que.
+C'est à Paris | je l'ai rencontré.|qui / que|Саме в Парижі я з ним познайомився.|que;qui;où;dont|Виділене місце з à: que.
+C'est moi | ai raison.|qui / que|Це я маю рацію.|qui;que;qu';dont|Після c'est moi qui дієслово в 1-й особі: ai.
+Ce qui m'énerve, | le bruit.|c'est|Що мене дратує, так це шум.|c'est;ce;il est;ça|Ce qui …, c'est …
+C'est toi | dois partir.|qui / que|Саме ти маєш піти.|qui;que;qu';dont|C'est toi qui + 2-га особа.
+C'est demain | elle arrive.|qui / que|Саме завтра вона приїжджає.|qu';qui;où;dont|Виділений час: que (qu').
+| je veux, c'est du calme.|те, що|Чого я хочу, так це спокою.|Ce que;Ce qui;Ce dont;Qu'|Ce que je veux, c'est …
+Ce sont mes parents | m'ont aidé.|qui / que|Саме мої батьки мені допомогли.|qui;que;dont;où|Підмет: qui.
+C'est de toi | je parle.|qui / que|Саме про тебе я говорю.|que;dont;qui;où|Після c'est de … : que.
+@ b2faire | Дія через faire, laisser, voir + інфінітив | Faire faire, laisser faire
+recap: <p><b>faire + інфінітив</b> = змусити, доручити: <i>Je fais réparer ma voiture.</i> · <b>laisser + інф.</b> = дозволити · <b>voir / entendre + інф.</b> = бачити / чути, як</p>
+Je | réparer ma voiture.|доручити|Я віддаю машину на ремонт.|fais;laisse;ai;vais faire de|Faire + інфінітив.
+Elle a | couper ses cheveux.|доручити|Вона підстригла волосся (в перукаря).|fait;fais;faire;faite|Faire couper; PP fait не узгоджується.
+Laisse-moi | !|дозволити|Дай мені пояснити!|expliquer;explique;expliqué;d'expliquer|Laisser + інфінітив.
+J'ai vu les enfants | dans le parc.|бачити, як|Я бачив, як діти бігали в парку.|courir;courent;couru;de courir|Voir + інфінітив.
+Il nous fait | tous les jours.|змушувати|Він змушує нас сміятися щодня.|rire;rions;ri;de rire|Faire rire.
+Je les ai entendus | .|чути, як|Я чув, як вони співали.|chanter;chantent;chanté;de chanter|Entendre + інфінітив.
+Ne me fais pas | !|змушувати|Не змушуй мене чекати!|attendre;attends;attendu;d'attendre|Faire attendre.
+Elle a laissé son fils | seul.|дозволити|Вона дозволила синові піти самому.|partir;part;parti;de partir|Laisser partir.
+Nous allons faire | une maison.|доручити|Ми збираємося будувати будинок (найняти будівельників).|construire;construisons;construit;de construire|Faire construire.
+Tu as fait | le médecin ?|викликати|Ти викликав лікаря?|venir;viens;venu;de venir|Faire venir = викликати.
+@ b2opp | Протиставлення та поступка | Bien que, malgré, pourtant
+recap: <p><b>bien que / quoique</b> + subjonctif · <b>malgré</b> + іменник · <b>même si</b> + indicatif · <b>pourtant, cependant, toutefois</b> = проте · <b>avoir beau</b> + інф. = хоч як</p>
+| la pluie, nous sommes sortis.|попри|Попри дощ, ми вийшли.|Malgré;Bien que;Même si;Pourtant|Malgré + іменник.
+Bien qu'il | fatigué, il continue à courir.|être|Хоча він утомлений, він продовжує бігти.|soit;est;sera;serait|Bien que + subjonctif.
+Il a beau |, il ne comprend pas.|chercher|Хоч як він шукає, він не розуміє.|chercher;cherche;cherché;de chercher|Avoir beau + інфінітив.
+Elle est riche, | elle vit simplement.|проте|Вона багата, проте живе просто.|pourtant;malgré;bien que;même si|Pourtant = проте.
+| il soit jeune, il est très sage.|хоча|Хоча він молодий, він дуже мудрий.|Quoiqu';Malgré;Pourtant;Même s'|Quoique + subjonctif.
+Même si tu |, je ne changerai pas d'avis.|insister|Навіть якщо ти наполягатимеш, я не передумаю.|insistes;insistais pas;insiste;insisterais|Même si + indicatif.
+Il a réussi | ses difficultés.|попри|Він досяг успіху попри труднощі.|malgré;bien que;pourtant;même si|Malgré + іменник.
+Le film était long ; |, je ne me suis pas ennuyé.|однак|Фільм був довгий; однак мені не було нудно.|cependant;malgré;bien que;quoique|Cependant = однак.
+Bien que nous | partis tôt, nous étions en retard.|être|Хоча ми вирушили рано, ми запізнилися.|soyons;sommes;étions;serions|Bien que + subjonctif passé: soyons partis.
+J'ai eu beau |, il n'a pas répondu.|appeler|Хоч скільки я дзвонив, він не відповів.|l'appeler;l'appelé;l'appelais;de l'appeler|Avoir beau + інфінітив.
+@ b2concord | Узгодження часів (concordance) | Узгодження часів
+recap: <p>Якщо головне дієслово в минулому: présent → <b>imparfait</b>, passé composé → <b>plus-que-parfait</b>, futur → <b>conditionnel</b>.</p>
+Il a dit qu'il | fatigué.|être (зараз)|Він сказав, що втомлений.|était;est;sera;soit|Présent → imparfait.
+Elle m'a dit qu'elle | le lendemain.|venir (майбутнє)|Вона сказала мені, що прийде наступного дня.|viendrait;viendra;vient;venait pas|Futur → conditionnel.
+Je savais qu'il | .|partir (раніше)|Я знав, що він пішов.|était parti;est parti;partira;partait pas|Passé composé → plus-que-parfait.
+Ils ont annoncé que le train | en retard.|être (зараз)|Вони оголосили, що потяг запізнюється.|était;est;sera;soit|Présent → imparfait.
+Tu m'as promis que tu m' | .|appeler (майбутнє)|Ти пообіцяв, що мені подзвониш.|appellerais;appelleras;appelles;appelais pas|Futur → conditionnel.
+Il pensait que nous | déjà.|manger (раніше)|Він думав, що ми вже поїли.|avions mangé;avons mangé;mangerons;mangions pas|PC → plus-que-parfait.
+Elle a expliqué qu'elle | malade.|être (зараз)|Вона пояснила, що хворіє.|était;est;sera;serait pas|Présent → imparfait.
+Il m'a demandé si je | avec lui.|venir (майбутнє)|Він спитав, чи піду я з ним.|viendrais;viendrai;viens;venais pas|Futur → conditionnel.
+J'ai cru qu'ils | le match.|gagner (раніше)|Я подумав, що вони виграли матч.|avaient gagné;ont gagné;gagneront;gagnaient pas|PC → plus-que-parfait.
+On m'a dit que tu | à Lyon.|habiter (зараз)|Мені сказали, що ти живеш у Ліоні.|habitais;habites;habiteras;habiterais|Présent → imparfait.
+@ b2nexpl | Ne explétif та інверсія | Ne explétif та інверсія
+recap: <p><b>Ne explétif</b> без заперечного значення після avant que, à moins que, de peur que, craindre que: <i>avant qu'il <b>ne</b> parte</i>. <b>Інверсія</b> після peut-être, aussi, à peine на початку речення.</p>
+Partons avant qu'il | pleuve.|ne explétif|Ходімо, поки не пішов дощ.|ne;n';pas;—|Avant que … ne + subjonctif.
+J'ai peur qu'il | soit trop tard.|ne explétif|Боюся, що вже надто пізно.|ne;pas;n';—|Avoir peur que … ne.
+| -être viendra-t-il demain.|інверсія|Можливо, він прийде завтра.|Peut;Peux;Peut-;Puis|Peut-être на початку → інверсія.
+À peine | -il arrivé qu'il est reparti.|être|Щойно він приїхав, як знову поїхав.|était;est;a;avait|À peine + інверсія: était-il.
+À moins que tu | sois d'accord, je partirai.|ne explétif|Хіба що ти не згоден, я поїду.|ne;pas;n';—|À moins que … ne.
+Il est plus intelligent qu'on | le croit.|ne explétif|Він розумніший, ніж думають.|ne;pas;n';—|Після порівняння: qu'on ne le croit.
+Sans doute | -il raison.|avoir|Напевно, він має рацію.|a;ait;aura;avait|Sans doute + інверсія: a-t-il.
+« Je viendrai », | -il.|dire|«Я прийду», — сказав він.|dit;a dit;disait pas;dira|Після прямої мови інверсія: dit-il.
+Ainsi | -elle compris son erreur.|avoir|Так вона зрозуміла свою помилку.|a;avait;ait;aura|Ainsi + інверсія.
+Je crains qu'elle | se trompe.|ne explétif|Боюся, що вона помиляється.|ne;n';pas;—|Craindre que … ne.
+@ b2nomin | Безособові та номінальні конструкції | Номіналізація
+recap: <p>Дієслово → іменник: <i>arriver → l'arrivée, décider → la décision, augmenter → l'augmentation</i>. Безособові: <i>il s'agit de, il reste, il manque, il convient de</i>.</p>
+| du train est prévue à 9 h.|arriver|Прибуття потяга заплановане на 9:00.|L'arrivée;L'arrivage;L'arriver;Le arrivé|Arriver → l'arrivée.
+La | des prix inquiète les gens.|augmenter|Зростання цін турбує людей.|augmentation;augmentement;augmentage;augmentée|Augmenter → l'augmentation.
+Il | de prendre une décision rapide.|s'agir|Ідеться про те, щоб швидко ухвалити рішення.|s'agit;agit;est agi;s'agissent|Безособове: il s'agit de.
+Il | encore trois places.|rester|Залишилося ще три місця.|reste;restent;sont restées;restons|Безособове: il reste (однина).
+La | du musée est prévue en mai.|ouvrir|Відкриття музею заплановане на травень.|réouverture pas;ouvrement;ouvrage;ouverture|Ouvrir → l'ouverture.
+Il | deux chaises.|manquer|Бракує двох стільців.|manque;manquent;sont manquées;manquons|Безособове: il manque (однина).
+Le | du directeur a surpris tout le monde.|partir|Від'їзд директора всіх здивував.|départ;partage;partement;parti|Partir → le départ.
+Il | de répondre poliment.|convenir|Слід відповідати ввічливо.|convient;conviennent;convenez;est convenu de|Il convient de.
+La | de la loi a pris un an.|préparer|Підготовка закону тривала рік.|préparation;préparage;préparement;préparée|Préparer → la préparation.
+Le | de la réunion est fixé.|choisir (дата)|Вибір дати наради визначено.|choix;choisissement;choisie;choisir|Choisir → le choix.
+@ b2neutre | Нейтральні займенники le, en, y | Нейтральні le, en, y
+recap: <p><b>le</b> = це (думка, прикметник) · <b>en</b> = про це (після дієслів з de) · <b>y</b> = про це (після дієслів з à)</p>
+Il est malade ? — Oui, je | sais.|займенник|Він хворий? — Так, я це знаю.|le;en;y;la|Savoir + думка: le.
+Tu te souviens de ce voyage ? — Oui, je m' | souviens.|займенник|Ти пам'ятаєш ту подорож? — Так, пам'ятаю.|en;y;le;lui|Se souvenir de: en.
+Tu penses à ton examen ? — Oui, j' | pense.|займенник|Ти думаєш про іспит? — Так, думаю.|y;en;le;lui|Penser à + річ: y.
+Fatiguée ? Je ne | suis pas.|займенник|Утомлена? Я — ні.|le;la;en;y|Замінює прикметник: le (незмінне).
+Il a parlé de son projet ? — Oui, il | a parlé.|займенник|Він говорив про свій проєкт? — Так, говорив.|en;y;l';lui|Parler de: en.
+Tu crois à cette histoire ? — Non, je n' | crois pas.|займенник|Ти віриш у цю історію? — Ні, не вірю.|y;en;le;lui|Croire à: y.
+Elle viendra ? — Je | espère.|займенник|Вона прийде? — Сподіваюся.|l';en;y;la|Espérer + думка: le (l').
+Tu es content de ton travail ? — Oui, j' | suis content.|займенник|Ти задоволений роботою? — Так, задоволений.|en;y;le;lui|Être content de: en.
+Tu as réfléchi à ma proposition ? — J' | réfléchis.|займенник|Ти подумав над моєю пропозицією? — Думаю.|y;en;la;lui|Réfléchir à: y.
+Il faut partir ? — Oui, il | faut.|займенник|Треба йти? — Так, треба.|le;en;y;lui|Il le faut.
+@ b2reg | Регістри мовлення: soutenu, courant, familier | Регістри мовлення
+recap: <p>familier: <i>t'as, je sais pas, boulot, bouquin, bagnole, mec</i> · courant: <i>tu as, je ne sais pas, travail, livre, voiture, homme</i> · soutenu: <i>Avez-vous …, je ne saurais, ouvrage</i></p>
+« J'ai trop de boulot » — у courant: J'ai trop de | .|нейтрально|У мене забагато роботи.|travail;bouquin;taf;boulots|Boulot (familier) = travail.
+« T'as vu ? » — у courant: | vu ?|нейтрально|Ти бачив?|Tu as;T'as;Tas;Tu a|T'as = tu as.
+« Je sais pas » — у courant: Je | sais pas.|нейтрально|Я не знаю.|ne;n';pas;—|У нормі ne обов'язкове.
+« Il a une belle bagnole » — у courant: Il a une belle | .|нейтрально|У нього гарна машина.|voiture;caisse;bagnole;auto-moto|Bagnole = voiture.
+У листі до директора: « | -vous m'indiquer la date ? »|soutenu|Чи не могли б ви вказати дату?|Pourriez;Tu peux;Peux;Pouvez pas|Ввічливий регістр: pourriez-vous.
+« J'ai lu un super bouquin » — у courant: un super | .|нейтрально|Я прочитав чудову книжку.|livre;bouquin;roman-photo;libre|Bouquin = livre.
+« C'est un mec sympa » — у courant: C'est un | sympa.|нейтрально|Це симпатичний чоловік.|homme;mec;type;gars|Mec = homme.
+У soutenu: « Je ne | vous le dire. »|soutenu|Не можу вам цього сказати.|saurais;sais pas;saurai;savais|Soutenu: je ne saurais (без pas).
+« On y va ? » — у soutenu: | -nous ?|soutenu|Ходімо?|Partons;On part;Allons pas;Partir|Soutenu уникає on.
+« Il bosse beaucoup » — у courant: Il | beaucoup.|нейтрально|Він багато працює.|travaille;bosse;taffe;boss|Bosser = travailler.
+@ b2alors | Час і протиставлення: alors que, tandis que, à peine … que | Alors que, tandis que
+recap: <p><b>alors que / tandis que</b> = тоді як · <b>au moment où</b> = у ту мить, коли · <b>à peine … que</b> = щойно … як · <b>tant que</b> = доки</p>
+Il travaille | sa sœur dort.|тоді як|Він працює, тоді як сестра спить.|alors que;bien que;pour que;avant que|Протиставлення: alors que.
+| il est arrivé, le téléphone a sonné.|у мить, коли|У ту мить, коли він прийшов, задзвонив телефон.|Au moment où;Alors que;Tandis;À peine|Au moment où.
+À peine était-il sorti | il s'est mis à pleuvoir.|що|Щойно він вийшов, як почався дощ.|qu';que de;quand;alors|À peine … que.
+Je reste | tu es malade.|доки|Я залишуся, доки ти хворієш.|tant que;alors que;tandis;à peine|Tant que = доки.
+Moi, j'adore le froid, | lui préfère la chaleur.|тоді як|Я обожнюю холод, тоді як він віддає перевагу теплу.|tandis que;pendant;malgré;afin que|Tandis que = тоді як.
+| la porte s'ouvrait, il a crié.|у мить, коли|Саме тоді, коли двері відчинялися, він закричав.|Au moment où;Tant que;À peine;Bien que|Au moment où.
+Elle est partie | il commençait à parler.|якраз тоді, як|Вона пішла якраз тоді, як він почав говорити.|alors qu';malgré;pour qu';tant qu'|Alors que перед il → alors qu'.
+À peine | -nous arrivés qu'il a fallu repartir.|être|Щойно ми приїхали, як довелося знову їхати.|étions;sommes;avions;serions|À peine + інверсія: étions-nous.
+| il y aura de la neige, on pourra skier.|доки|Доки буде сніг, можна буде кататися на лижах.|Tant qu';Alors qu';Tandis qu';Bien qu'|Tant qu'il y aura.
+Tu joues | moi je travaille !|тоді як|Ти граєшся, тоді як я працюю!|pendant que;depuis que;dès que;pour que|Pendant que = поки, тоді як.
+@ b2negcomp | Складні заперечення: ne … ni … ni, ne … aucun, ne … guère | Ne … ni … ni, ne … aucun
+recap: <p><b>ne … ni … ni</b> ні … ні · <b>ne … aucun(e)</b> жодного · <b>ne … nulle part</b> ніде · <b>ne … guère</b> майже не · <b>ne … plus jamais</b> більше ніколи</p>
+Je ne bois | thé ni café.|ні|Я не п'ю ні чаю, ні кави.|ni;pas;ou;et|Ne … ni … ni.
+Il n'a | idée.|жодного|Він не має жодного уявлення.|aucune;aucun;pas;nulle|Idée ж. р.: aucune.
+Je ne l'ai trouvé | .|ніде|Я його ніде не знайшов.|nulle part;aucune part;pas part;rien part|Ne … nulle part.
+Il ne mange | : il a perdu l'appétit.|майже не|Він майже нічого не їсть: у нього немає апетиту.|guère;pas guère;aucun;ni|Ne … guère = майже не.
+Je ne le ferai | !|більше ніколи|Я більше ніколи цього не зроблю!|plus jamais;jamais plus pas;pas jamais;aucun|Ne … plus jamais.
+Elle n'a ni frère | sœur.|ні|У неї немає ні брата, ні сестри.|ni;et;ou;pas de|Ni … ni без артикля.
+| étudiant n'est venu.|жоден|Жоден студент не прийшов.|Aucun;Aucune;Pas un de;Nul part|Étudiant ч. р.: aucun … ne.
+Il ne parle à | .|нікому|Він ні з ким не розмовляє.|personne;rien;aucun;nulle part|Ne … personne.
+Nous n'avons | vu.|нічого|Ми нічого не бачили.|rien;personne;aucun;ni|Ne … rien.
+Je n'aime ni le thé ni | café.|артикль|Я не люблю ні чаю, ні кави.|le;de;du;—|Означений артикль після ni зберігається.

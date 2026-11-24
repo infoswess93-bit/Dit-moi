@@ -28,6 +28,12 @@
       <button type="button" class="segbtn" data-grp="tenses" aria-pressed="true">Часи</button>
       <button type="button" class="segbtn" data-grp="topics" aria-pressed="false">Практика</button>
     </div>
+    <div class="seg wide" id="levelseg" role="group" aria-label="Рівень" hidden>
+      <button type="button" class="segbtn" data-lv="A1">A1</button>
+      <button type="button" class="segbtn" data-lv="A2">A2</button>
+      <button type="button" class="segbtn" data-lv="B1">B1</button>
+      <button type="button" class="segbtn" data-lv="B2">B2</button>
+    </div>
     <div class="subtabs" id="subtabs" role="tablist" aria-label="Тема"></div>
     <div class="lessons" id="lessons" role="tablist" aria-label="Урок"></div>
     <details class="recap" id="recapbox">
@@ -62,6 +68,7 @@
 <script src="data/gloss.js"></script>
 <script src="data/vocab-presets.js"></script>
 <script src="data/grammar.js"></script>
+<script src="data/rules.js"></script>
 <script src="js/app.js"></script>
 <script>if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(function () {});</script>
 </body>

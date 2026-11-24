@@ -475,3 +475,8 @@ h1, .htitle, .score, .tq { font-weight: 600; }
 .fixintro .htitle { font-size: 1.4rem; }
 .mistakes .bad-ans, .bad-ans { color: var(--bad); text-decoration: line-through; text-decoration-thickness: 1.5px; }
 .fixdone { margin: 0; font-weight: 700; color: var(--good); }
+
+.rintro .ckind { color: var(--accent); }
+.rintro .recap-body { padding: 12px 14px; border-radius: 14px; background: var(--bg); }
+.gpractice { margin-top: 4px; }
+#levelseg .segbtn small { font-weight: 600; opacity: 0.75; }

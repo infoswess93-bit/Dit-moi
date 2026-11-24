@@ -427,7 +427,7 @@
     var typed = amode === "typed";
     var html = "";
     html += '<section class="card" aria-labelledby="sentence">';
-    html += '<div class="meta"><span class="chip">' + esc(SETS[q.set].label + (inErrors ? " · урок " + (q.lesson + 1) : "")) + '</span>' + (hist[q.id] ? '<span class="chip warn">помилок раніше: ' + hist[q.id] + '</span>' : '') + '<span class="verb">(' + wrapWords(q.verb) + ')</span></div>';
+    html += '<div class="meta"><span class="chip">' + esc(SETS[q.set].label + (inErrors ? " · урок " + (q.lesson + 1) : "")) + '</span>' + (hist[q.id] ? '<span class="chip warn">помилок раніше: ' + hist[q.id] + '</span>' : '') + (q.verb ? '<span class="verb">(' + wrapWords(q.verb) + ')</span>' : '') + '</div>';
     html += '<p class="sentence" id="sentence">' + wrapWords(q.pre) + '<span class="blank" id="blank">&nbsp;&nbsp;&nbsp;&nbsp;</span>' + wrapWords(q.post) + '</p>';
     html += '<p class="tr">' + esc(q.tr) + '</p>';
     html += '<div class="seg amode" role="group" aria-label="Спосіб відповіді"><button type="button" class="segbtn" data-am="choice" aria-pressed="' + !typed + '">Варіанти</button><button type="button" class="segbtn" data-am="typed" aria-pressed="' + typed + '">Вписати <small>+50%</small></button></div>';
@@ -630,7 +630,18 @@
     try { localStorage.setItem("fr-daily", JSON.stringify(daily)); } catch (e) {}
   }
   function dailyToday() { return daily.d === dayStr(new Date()) ? daily : null; }
-  function buildDaily() {
+  /* Rule of the day: rotates through the rules of the learner's current level (first level not finished). */
+  function ruleOfDay() {
+    var lvl = null, i, j;
+    for (i = 0; i < LEVELS.length && !lvl; i++) {
+      var l = setsOfLevel(LEVELS[i]);
+      for (j = 0; j < l.length; j++) { if (tenseStatus(l[j]) !== "done") { lvl = LEVELS[i]; break; } }
+    }
+    var list = setsOfLevel(lvl || "A1");
+    var day = Math.floor((Date.now() - new Date().getTimezoneOffset() * 60000) / 86400000);
+    return list.length ? list[day % list.length] : null;
+  }
+  function buildDaily(rule) {
     var ids = [], have = {}, k, i;
     var bk = []; for (var id in bank) { if (ALL[id]) bk.push(id); }
     bk = shuffle(bk).slice(0, 5);
@@ -639,17 +650,23 @@
     var pools = {};
     for (i = 0; i < keys.length; i++) { var pl = []; for (var l = 0; l < SETS[keys[i]].lessons.length; l++) pl = pl.concat(SETS[keys[i]].lessons[l]); pools[keys[i]] = shuffle(pl); }
     var r = 0; keys = shuffle(keys);
-    while (ids.length < 20 && r < 200) {
+    while (ids.length < (rule ? 15 : 20) && r < 200) {
       var pk = pools[keys[r % keys.length]];
       while (pk.length && have[pk[pk.length - 1].id]) pk.pop();
       if (pk.length) { var q = pk.pop(); ids.push(q.id); have[q.id] = 1; }
       r++;
     }
-    return shuffle(ids);
+    ids = shuffle(ids);
+    if (rule) {
+      var rp = []; for (var rl = 0; rl < SETS[rule].lessons.length; rl++) rp = rp.concat(SETS[rule].lessons[rl]);
+      rp = shuffle(rp).filter(function (q) { return !have[q.id]; }).slice(0, 5);
+      ids = rp.map(function (q) { return q.id; }).concat(ids);
+    }
+    return ids;
   }
   function openDaily(again) {
     var t = dailyToday();
-    if (!t || again) { daily = { d: dayStr(new Date()), ids: buildDaily(), n: 0, s: 0, w: [], p: 0, done: false, awarded: t ? !!t.awarded : false }; }
+    if (!t || again) { var rk = ruleOfDay(); daily = { d: dayStr(new Date()), rule: rk, ids: buildDaily(rk), n: 0, s: 0, w: [], p: 0, done: false, awarded: t ? !!t.awarded : false }; }
     inDaily = true; inHome = false; inSettings = false; inErrors = false; inVocab = false; inGram = false;
     navOpen = false;
     setMode(); refreshStatus();
@@ -660,7 +677,19 @@
       res = { n: daily.n, s: daily.s || 0, w: wr, p: daily.p || 0 };
     }
     saveDaily();
+    if (!res && daily.rule && SETS[daily.rule]) { renderDailyIntro(list); return; }
     start(list, "daily", res);
+  }
+  function renderDailyIntro(list) {
+    var r = SETS[daily.rule];
+    countEl.textContent = "0 / " + list.length; barFill.style.width = "0%";
+    var h = '<section class="card summary rintro"><p class="ckind">Правило дня · ' + esc(r.level) + '</p><p class="htitle">' + esc(r.label) + '</p>' +
+      '<div class="recap-body">' + r.recap + '</div>' +
+      '<p style="margin:0;color:var(--muted)">Спершу 5 завдань на це правило, потім 15 на часи.</p>' +
+      '<div class="actions"><button type="button" class="btn big" id="dstart">Почати</button>' + (r.gramRef ? '<button type="button" class="btn ghost" id="dgram">Повне правило</button>' : '') + '</div></section>';
+    stage.innerHTML = h;
+    document.getElementById("dstart").addEventListener("click", function () { start(list, "daily", null); keepInView(); });
+    var dg = document.getElementById("dgram"); if (dg) dg.addEventListener("click", function () { inDaily = false; openGram(r.gramRef); window.scrollTo(0, 0); });
   }
 
   /* Final test: mixed formats built from the exercises of one set; unlocked when every lesson is finished. */
@@ -831,6 +860,14 @@
     return !any ? "new" : (todo ? "todo" : (allDone ? "done" : "new"));
   }
   var lastSet = { tenses: "pc", topics: "cod" };
+  var LEVELS = ["A1", "A2", "B1", "B2"];
+  var GIDX = null;
+  function setsOfLevel(lv) {
+    if (!GIDX) { GIDX = {}; for (var gx = 0; gx < GRAM_ORDER.length; gx++) GIDX[GRAM_ORDER[gx].t] = gx; }
+    var out = [];
+    for (var k in SETS) { if (SETS[k].group === "topics" && SETS[k].level === lv) out.push(k); }
+    return out.sort(function (a, b) { return ((GIDX[SETS[a].gramRef] || 999) - (GIDX[SETS[b].gramRef] || 999)); });
+  }
   function syncTabs() {
     var g = curGroup();
     var tg = (g === "tenses" || g === "topics") ? "lessons" : (g === "daily" ? "home" : g);
@@ -842,10 +879,21 @@
     vb.textContent = String(vd); vb.hidden = vd === 0;
     var gb = document.querySelectorAll("#groupseg .segbtn");
     for (var gi2 = 0; gi2 < gb.length; gi2++) gb[gi2].setAttribute("aria-pressed", String(gb[gi2].getAttribute("data-grp") === g));
-    var sub = document.getElementById("subtabs");
+    var sub = document.getElementById("subtabs"), lsg = document.getElementById("levelseg");
+    lsg.hidden = g !== "topics";
+    if (g === "topics") {
+      var lb = lsg.querySelectorAll(".segbtn"), clv = SETS[currentKey].level;
+      for (var li2 = 0; li2 < lb.length; li2++) {
+        var lvk = lb[li2].getAttribute("data-lv"), all = setsOfLevel(lvk), dn = 0;
+        for (var a2 = 0; a2 < all.length; a2++) if (tenseStatus(all[a2]) === "done") dn++;
+        lb[li2].setAttribute("aria-pressed", String(lvk === clv));
+        lb[li2].innerHTML = lvk + ' <small>' + dn + '/' + all.length + '</small>';
+      }
+    }
     if (g === "tenses" || g === "topics") {
-      var h = "";
-      for (var k in SETS) {
+      var h = "", keys = g === "topics" ? setsOfLevel(SETS[currentKey].level) : Object.keys(SETS);
+      for (var ki = 0; ki < keys.length; ki++) {
+        var k = keys[ki];
         if (SETS[k].group !== g) continue;
         var ks = tenseStatus(k);
         h += '<button type="button" class="subtab' + (ks !== "new" ? " " + ks : "") + '" role="tab" data-set="' + k + '" aria-selected="' + (k === currentKey ? "true" : "false") + '">' + esc(SETS[k].label) + '</button>';
@@ -1086,8 +1134,14 @@
   var gopen = {};
   var gq = "";
 
+  function practiceFor(title) {
+    var best = null;
+    for (var k in SETS) { if (SETS[k].gramRef === title) { if (!best || (SETS[k].group === "topics" && SETS[best].group !== "topics")) best = k; } }
+    return best;
+  }
   function gramItemHtml(g, num, f) {
-    return '<details class="gtopic" data-i="' + g.i + '"' + (gopen[g.i] || f ? " open" : "") + '><summary><span>' + (num ? '<span class="gnum">' + num + '.</span> ' : "") + esc(g.t) + (f ? '<span class="gtag">' + g.lv + '</span>' : '') + '</span><span class="gpri p' + g.p + '" title="' + PNAME[g.p] + '"></span></summary><div class="gbody">' + g.h + '</div></details>';
+    var pk = practiceFor(g.t);
+    return '<details class="gtopic" data-i="' + g.i + '"' + (gopen[g.i] || f ? " open" : "") + '><summary><span>' + (num ? '<span class="gnum">' + num + '.</span> ' : "") + esc(g.t) + (f ? '<span class="gtag">' + g.lv + '</span>' : '') + '</span><span class="gpri p' + g.p + '" title="' + PNAME[g.p] + '"></span></summary><div class="gbody">' + g.h + (pk ? '<p><button type="button" class="btn gpractice" data-practice="' + pk + '">Вправи на це правило →</button></p>' : '') + '</div></details>';
   }
   function gramListHtml(filter) {
     var f = strip(norm(filter || "")), h = "", n = 0, i, g, lv;
@@ -1146,6 +1200,8 @@
     s.value = gq;
     s.addEventListener("input", function () { gq = s.value; document.getElementById("glist").innerHTML = gramListHtml(s.value); });
     stage.querySelector(".gram").addEventListener("click", function (e) {
+      var pb = e.target.closest ? e.target.closest("button[data-practice]") : null;
+      if (pb) { var pk = pb.getAttribute("data-practice"); navOpen = false; openSet(pk, pickLesson(pk)); window.scrollTo(0, 0); return; }
       var b = e.target.closest ? e.target.closest("button[data-gl], button[data-gv]") : null;
       if (!b) return;
       if (b.getAttribute("data-gv")) {
@@ -1278,6 +1334,16 @@
     var key = lastSet[g];
     if (!key) { var nt = nextIn(g); key = nt ? nt.k : null; }
     if (!key) for (var k in SETS) { if (SETS[k].group === g) { key = k; break; } }
+    openSet(key, pickLesson(key));
+  });
+  document.getElementById("levelseg").addEventListener("click", function (e) {
+    var b = e.target.closest("[data-lv]");
+    if (!b) return;
+    var lv = b.getAttribute("data-lv"), list = setsOfLevel(lv);
+    if (!list.length || lv === SETS[currentKey].level) return;
+    var key = list[0];
+    for (var i = 0; i < list.length; i++) { if (tenseStatus(list[i]) !== "done") { key = list[i]; break; } }
+    navOpen = true;
     openSet(key, pickLesson(key));
   });
   document.getElementById("subtabs").addEventListener("click", function (e) {
@@ -1460,8 +1526,8 @@
       '<div class="wtools">' + sayBtn(wd.w + (wd.ex ? ". " + wd.ex : ""), "") + (wd.mine || vocabHas(wd.w) ? '' : '<button type="button" class="btn ghost" id="wadd">+ У словник</button>') + '<button type="button" class="qskip" id="wnext" aria-label="Інше слово">↻</button></div></section>';
 
     var t = dailyToday(), dn = t && !t.done ? Math.min(t.n || 0, 20) : 0;
-    h += '<section class="card daily"><div class="dtext"><p class="ckind">Сьогоднішній урок</p><p class="htitle">' + (t && t.done ? "Пройдено ✓" : "20 завдань з усіх часів") + '</p>' +
-      '<p class="clesson">' + (t && t.done ? "Результат: " + t.score + " з " + t.total + ". Завтра буде новий урок." : (dn ? "Виконано " + dn + " з 20" : "Présent, passé composé, imparfait, futur і не лише")) + '</p>' +
+    h += '<section class="card daily"><div class="dtext"><p class="ckind">Сьогоднішній урок</p><p class="htitle">' + (t && t.done ? "Пройдено ✓" : "20 завдань") + '</p>' +
+      '<p class="clesson">' + (t && t.done ? "Результат: " + t.score + " з " + t.total + ". Завтра буде новий урок." : (dn ? "Виконано " + dn + " з 20" : "Правило дня: " + esc((SETS[(t && t.rule) || ruleOfDay()] || {}).label || "часи") + " + 15 завдань на часи")) + '</p>' +
       (dn ? '<div class="hbar" aria-hidden="true"><i style="width:' + (dn * 5) + '%"></i></div>' : '') + '</div>' +
       '<button type="button" class="btn big" id="dgo">' + (t && t.done ? "Пройти ще раз" : (dn ? "Продовжити" : "Пройти")) + '</button></section>';
 
