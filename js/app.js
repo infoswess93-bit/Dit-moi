@@ -2798,7 +2798,7 @@
     h += '<div class="srow"><button type="button" class="btn" id="s-copy">Скопіювати прогрес</button>' + (window.self === window.top ? '<button type="button" class="btn ghost" id="s-save">Зберегти файл</button>' : '') + '</div>';
     h += '<textarea class="ta" id="s-out" readonly hidden aria-label="Експорт прогресу"></textarea>';
     h += '<hr class="sep">';
-    h += '<label class="hint" for="s-in">Вставте скопійований прогрес або виберіть файл:</label>';
+    h += '<label class="hint" for="s-in">Вставте скопійований прогрес або слова зі «Словника з фото», чи виберіть файл:</label>';
     h += '<textarea class="ta" id="s-in" placeholder="{&quot;app&quot;:&quot;dis-moi&quot;, …}" spellcheck="false">' + esc(importText) + '</textarea>';
     h += '<div class="srow"><button type="button" class="btn ghost" id="s-check">Завантажити прогрес</button><span class="btn ghost filebtn">Вибрати файл<input type="file" id="s-file" accept=".json,application/json,text/plain" aria-label="Вибрати файл прогресу"></span></div>';
     if (importMsg) h += '<p class="smsg ' + importMsg[0] + '">' + importMsg[1] + '</p>';
@@ -2842,6 +2842,23 @@
     inp.addEventListener("input", function () { importText = inp.value; });
     function check(text) {
       importText = text;
+      var wo = null; try { wo = JSON.parse(String(text).trim()); } catch (e) {}
+      if (wo && wo.app === "dis-moi-words" && Array.isArray(wo.words)) {
+        var wAdd = 0, wSkip = 0, wNow = Date.now();
+        for (var wi = wo.words.length - 1; wi >= 0; wi--) {
+          var e0 = wo.words[wi];
+          if (!e0 || typeof e0.w !== "string" || !e0.w.trim()) continue;
+          var w0 = e0.w.trim().slice(0, 80);
+          if (vocabHas(w0)) { wSkip++; continue; }
+          vocab.unshift({ w: w0, ua: String(e0.ua || "").trim().slice(0, 120) || "—", ex: String(e0.ex || "").trim().slice(0, 200), exua: String(e0.exua || "").trim().slice(0, 240), t: wNow, box: 0, due: 0, reps: 0, lapses: 0, src: "photo" });
+          wAdd++;
+        }
+        saveVocab(); refreshStatus();
+        importText = ""; importReady = null;
+        importMsg = [wAdd ? "good" : "warn", "Додано до словника: " + wAdd + (wSkip ? ". Вже були: " + wSkip : "") + ". Бали й прогрес не змінено."];
+        renderSettings();
+        return;
+      }
       var r = parseImport(text);
       if (r.err) { importMsg = ["bad", r.err]; importReady = null; }
       else {
