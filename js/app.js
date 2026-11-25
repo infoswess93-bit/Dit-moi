@@ -818,14 +818,37 @@
   function saveTests() { try { localStorage.setItem("fr-tests", JSON.stringify(tests)); } catch (e) {} }
   var tq = [], tpos = 0, tscore = 0, twrong = [], tkey = "", tans = false;
   var TYPE_LABEL = { choice: "Оберіть варіант", type: "Впишіть самі", judge: "Вірно чи є помилка?", tr: "Яке речення відповідає перекладу?" };
-  function openTest() {
+  var tresults = [];
+  function tlabel() { return tkey === "general" ? "Загальний тест" : SETS[tkey].label; }
+  function generalPool() {
+    var keys = [], k, l, pool = [];
+    for (k in SETS) { for (l = 0; l < SETS[k].lessons.length; l++) if (finished[k + ":" + l] || prog[k + ":" + l]) { keys.push(k); break; } }
+    if (keys.length < 6) { ["prs", "pc", "imp", "fp", "fs"].forEach(function (x) { if (keys.indexOf(x) < 0) keys.push(x); }); setsOfLevel("A1").slice(0, 4).forEach(function (x) { if (keys.indexOf(x) < 0) keys.push(x); }); }
+    keys = shuffle(keys).slice(0, 10);
+    var per = Math.max(2, Math.ceil(20 / keys.length));
+    keys.forEach(function (key) {
+      var met = [], all = [];
+      SETS[key].lessons.forEach(function (ls, li) { all = all.concat(ls); if (finished[key + ":" + li] || prog[key + ":" + li]) met = met.concat(ls); });
+      pool = pool.concat(shuffle(met.length >= per ? met : all).slice(0, per));
+    });
+    return shuffle(pool).slice(0, 20);
+  }
+  function openGeneralTest() {
+    inPage = ""; inHome = false; inSettings = false; inDaily = false; inVocab = false; inGram = false; inErrors = false;
+    setMode(); genActive = true; refreshStatus();
+    document.getElementById("progress").hidden = false;
+    openTest(true);
+  }
+  function openTest(general) {
     var set = SETS[currentKey], pool = [];
-    for (var l = 0; l < set.lessons.length; l++) pool = pool.concat(set.lessons[l]);
-    pool = shuffle(pool).slice(0, 12);
-    var types = shuffle(["choice", "choice", "choice", "type", "type", "type", "judge", "judge", "judge", "tr", "tr", "tr"]);
+    if (general === true) pool = generalPool();
+    else { for (var l = 0; l < set.lessons.length; l++) pool = pool.concat(set.lessons[l]); pool = shuffle(pool).slice(0, 12); }
+    var base = ["choice", "type", "judge", "tr"], types = [];
+    for (var ti = 0; ti < pool.length; ti++) types.push(base[ti % 4]);
+    types = shuffle(types);
     tq = [];
     for (var i = 0; i < pool.length; i++) {
-      var q = pool[i], it = { q: q, t: types[i % 12] };
+      var q = pool[i], it = { q: q, t: types[i] };
       if (it.t === "judge") {
         var bad = [];
         for (var k = 0; k < q.o.length; k++) { if (q.a.indexOf(q.o[k]) < 0) bad.push(q.o[k]); }
@@ -834,7 +857,7 @@
       }
       tq.push(it);
     }
-    tpos = 0; tscore = 0; twrong = []; tkey = currentKey;
+    tpos = 0; tscore = 0; twrong = []; tresults = []; tkey = general === true ? "general" : currentKey;
     renderTest();
     keepInView();
   }
@@ -846,7 +869,7 @@
     countEl.textContent = (tpos + 1) + " / " + tq.length;
     barFill.style.width = (tpos / tq.length * 100) + "%";
     bar.setAttribute("aria-valuemax", String(tq.length)); bar.setAttribute("aria-valuenow", String(tpos));
-    var h = '<section class="card"><div class="meta"><span class="tbadge">Тест · ' + esc(SETS[tkey].label) + '</span></div>';
+    var h = '<section class="card"><div class="meta"><span class="tbadge">' + (tkey === "general" ? "Загальний тест" : "Тест · " + esc(SETS[tkey].label)) + '</span>' + (tkey === "general" ? '<span class="chip">' + esc(SETS[q.set].label) + '</span>' : '') + '</div>';
     h += '<p class="label" style="margin:0">' + TYPE_LABEL[it.t] + '</p>';
     if (it.t === "choice" || it.t === "type") {
       h += '<p class="sentence" id="sentence">' + wrapWords(q.pre) + '<span class="blank" id="blank">&nbsp;&nbsp;&nbsp;&nbsp;</span>' + wrapWords(q.post) + '</p><p class="tr">' + esc(q.tr) + '</p>';
@@ -896,6 +919,7 @@
       shownAns = it.t === "tr" ? fullSentence(q, q.a[0]) : q.a[0];
     }
     tans = true;
+    tresults.push({ q: q, t: it.t, ok: ok, near: near, given: it.t === "judge" ? (val === "1" ? "Вірно" : "Є помилка") : val });
     answerFx(ok, fullSentence(q, q.a[0]));
     if (ok) tscore++;
     else {
@@ -921,29 +945,31 @@
     barFill.style.width = ((tpos + 1) / tq.length * 100) + "%";
   }
   function testSummary() {
-    var n = tq.length, tb = tests[tkey], award = 0;
+    var n = tq.length, tb = tests[tkey], award = 0, general = tkey === "general";
     if (!tb) award = 20 + tscore * 5; else if (tscore > tb.best) award = (tscore - tb.best) * 5;
-    tests[tkey] = { best: Math.max(tscore, tb ? tb.best : 0), of: n, runs: (tb ? tb.runs : 0) + 1 };
+    tests[tkey] = { best: Math.max(tscore, tb ? tb.best : 0), of: n, runs: (tb ? tb.runs : 0) + 1, last: { d: todayS(), s: tscore, n: n } };
     saveTests();
-    if (award) gain(award, Math.round(award / 5));
-    if (tscore / n >= 0.8 && eco.stamps[tkey] !== "rare") { eco.stamps[tkey] = "rare"; ecoSave(); toast("✉ Рідкісна марка: " + SETS[tkey].label); achCheck(); }
+    var rw = award ? gain(award, Math.round(award / 5)) : { x: 0, c: 0 };
+    if (!general && tscore / n >= 0.8 && eco.stamps[tkey] !== "rare") { eco.stamps[tkey] = "rare"; ecoSave(); toast("✉ Рідкісна марка: " + SETS[tkey].label); achCheck(); }
     touchStreak(); saveGame(); refreshStatus();
     barFill.style.width = "100%";
     countEl.textContent = n + " / " + n;
-    var pct = tscore / n, title = pct >= 0.9 ? "🏆 Майстер!" : (pct >= 0.7 ? "👏 Дуже добре" : (pct >= 0.5 ? "👍 Непогано" : "💪 Є що повторити"));
-    var h = '<section class="card summary"><p class="label" style="margin:0">Підсумковий тест · ' + esc(SETS[tkey].label) + '</p><div class="score">' + tscore + '<small> / ' + n + '</small></div>';
-    h += '<div class="reward"><span class="bigstars">' + title + '</span><span>' + (award ? 'Бали за тест: <b>+' + award + '</b>' : 'Бали нараховуються лише за покращення найкращого результату (' + tests[tkey].best + ' з ' + n + ').') + '</span></div>';
-    if (twrong.length) {
-      h += '<p style="margin:0">Помилки (збережено в «Роботі над помилками»):</p><ul class="mistakes">';
-      for (var i = 0; i < twrong.length; i++) { var w = twrong[i]; h += '<li>' + esc(w.q.pre) + '<b>' + esc(w.q.a[0]) + '</b>' + esc(w.q.post) + '<br><span style="color:var(--muted)">Ваша відповідь: ' + esc(w.given) + '</span></li>'; }
-      h += '</ul>';
-    }
+    var h = '<section class="card summary result"><p class="label" style="margin:0">' + (general ? "Загальний тест · розгорнута оцінка" : "Підсумковий тест · " + esc(SETS[tkey].label)) + '</p>';
+    h += '<div class="score">' + tscore + '<small> / ' + n + '</small></div>';
+    h += '<ul class="rows"><li><span>' + (award ? "Нагорода за тест" : "Найкращий результат") + '</span><b>' + (award ? rewardText(rw) : tests[tkey].best + " з " + n) + '</b></li></ul>';
+    h += testReport(tresults, general);
     h += '<div class="actions"><button type="button" class="btn" id="tagain">Ще раз (нові питання)</button>';
-    h += '<button type="button" class="btn ghost" id="tback">До уроків</button></div></section>';
+    if (twrong.length) h += '<button type="button" class="btn ghost" data-goto="errors">Mes erreurs</button>';
+    h += '<button type="button" class="btn ghost" id="tback">' + (general ? "На головну" : "До уроків") + '</button></div></section>';
     stage.innerHTML = h;
-    document.getElementById("tagain").addEventListener("click", function () { currentKey = tkey; openTest(); });
-    var te = document.getElementById("terr"); if (te) te.addEventListener("click", function () { openErrors(); keepInView(); });
-    document.getElementById("tback").addEventListener("click", function () { openSet(tkey, currentLesson); keepInView(); });
+    document.getElementById("tagain").addEventListener("click", function () { if (general) openGeneralTest(); else { currentKey = tkey; openTest(); } });
+    document.getElementById("tback").addEventListener("click", function () { if (general) openHome(); else openSet(tkey, currentLesson); keepInView(); window.scrollTo(0, 0); });
+    stage.querySelector(".report").addEventListener("click", function (e) {
+      var r = e.target.closest("[data-rep]");
+      if (r) { var k = r.getAttribute("data-rep"), l = +r.getAttribute("data-l"); openSet(k, l >= 0 ? l : pickLesson(k), true); window.scrollTo(0, 0); return; }
+      var g = e.target.closest("[data-rule]");
+      if (g) { openGram(g.getAttribute("data-rule")); window.scrollTo(0, 0); }
+    });
   }
 
   function renderLessonChips() {
@@ -1028,7 +1054,7 @@
   }
   var navOpen = false;
   function syncNav() {
-    var g = curGroup(), lesson = g === "tenses" || g === "topics";
+    var g = curGroup(), lesson = (g === "tenses" || g === "topics") && !genActive;
     var nb = document.getElementById("navbar"), np = document.getElementById("navpanel");
     nb.hidden = !lesson;
     np.hidden = !(lesson && navOpen);
@@ -1045,7 +1071,9 @@
     refreshGame();
   }
 
+  var genActive = false;
   function setMode() {
+    genActive = false;
     var other = inErrors || inVocab || inGram || inHome || inSettings || inDaily || !!inPage;
     document.getElementById("setbtn").setAttribute("aria-pressed", String(inSettings));
     document.getElementById("lessons").hidden = other;
@@ -1680,6 +1708,8 @@
       (dn ? '<div class="hbar" aria-hidden="true"><i style="width:' + (dn * 5) + '%"></i></div>' : '') + '</div>' +
       '<button type="button" class="btn big" id="dgo">' + (t && t.done ? "Пройти ще раз" : (dn ? "Продовжити" : "Пройти")) + '</button></section>';
 
+    var gt = tests.general && tests.general.last;
+    h += '<section class="card gtest"><div><p class="ckind">Загальний тест</p><p class="clesson">' + (gt ? "Останній: " + gt.s + " з " + gt.n + " · " + gt.d : "20 питань з усього вивченого + розгорнута оцінка") + '</p></div><button type="button" class="btn ghost" id="gtgo">Пройти тест</button></section>';
     var wd = wordOfDay();
     h += '<section class="wodh" aria-label="Слово дня"><p class="wlabel">Слово дня</p>' +
       '<h2 class="wtitle"><span class="ww">' + esc(wd.w) + '</span> <span class="wdash">—</span> <span class="wua">' + esc(wd.ua) + '</span></h2>' +
@@ -1702,6 +1732,7 @@
     if (hh) hh.addEventListener("click", function () { try { localStorage.setItem("fr-hint-chrome", "1"); } catch (e1) {} renderHome(); });
     document.getElementById("dgo").addEventListener("click", function () { openDaily(!!(t && t.done)); window.scrollTo(0, 0); });
     document.getElementById("hgo").addEventListener("click", function () { openSet(c.k, c.l); window.scrollTo(0, 0); });
+    document.getElementById("gtgo").addEventListener("click", function () { openGeneralTest(); window.scrollTo(0, 0); });
     document.getElementById("ringbox").addEventListener("click", function () { openSettings(); window.scrollTo(0, 0); });
     var qc = document.getElementById("qchest"); if (qc) qc.addEventListener("click", function () { q.chest = true; ecoSave(); openChest("silver", renderHome); });
     var gg = document.getElementById("goldgo"); if (gg) gg.addEventListener("click", function () { eco.goldAt = streak.n; ecoSave(); openChest("gold", renderHome); });
@@ -2532,6 +2563,176 @@
   var PAGES = { errors: renderErrorsPage, defi: renderDefi, shop: renderShop, season: renderSeason, league: renderLeague, map: renderMap, profile: renderProfile, story: renderStory, scenario: renderScenario };
 
 
+  /* ===================== Cloud save: progress kept in the viewer's own private subtree ===================== */
+  var cloud = { db: null, col: null, status: "off", last: {}, busy: false };
+  var SYNC_SKIP = { "fr-hint-chrome": 1, "fr-sync-meta": 1 };
+  /* While reloading after a pull, block every progress write so stale in-memory state cannot overwrite it. */
+  try {
+    var _origSet = Storage.prototype.setItem;
+    Storage.prototype.setItem = function (k, v) { if (window.__frFreeze && String(k).indexOf("fr-") === 0) return; return _origSet.call(this, k, v); };
+  } catch (e) {}
+  function frKeys() {
+    var o = {};
+    try { for (var i = 0; i < localStorage.length; i++) { var k = localStorage.key(i); if (k && k.indexOf("fr-") === 0 && !SYNC_SKIP[k]) o[k] = localStorage.getItem(k); } } catch (e) {}
+    return o;
+  }
+  function syncMeta() { try { return JSON.parse(localStorage.getItem("fr-sync-meta") || "{}") || {}; } catch (e) { return {}; } }
+  function setSyncMeta(m) { try { localStorage.setItem("fr-sync-meta", JSON.stringify(m)); } catch (e) {} }
+  function xpOf(gameStr) { try { return (JSON.parse(gameStr || "{}").xp) || 0; } catch (e) { return 0; } }
+  function cloudStart() {
+    if (!window.claude || typeof window.claude.use !== "function") return;
+    Promise.all([window.claude.use("db"), window.claude.use("user")]).then(function (r) {
+      var db = r[0], user = r[1];
+      if (!db || !user) return null;
+      return user.id().then(function (uid) {
+        if (!uid) return null;
+        cloud.db = db;
+        cloud.col = db.doc("data/users/" + uid + "/kv").collection("keys");
+        return cloud.col.get();
+      });
+    }).then(function (snap) {
+      if (!snap) return;
+      var remote = {}, meta = syncMeta(), local = frKeys(), firstHere = !Object.keys(meta).length, pulled = 0, k;
+      snap.docs.forEach(function (d) { var v = d.data(); if (v && typeof v.t === "number") remote[d.id] = v; });
+      /* First sync on this device with progress on both sides: keep the side with more XP. */
+      var preferLocal = firstHere && Object.keys(remote).length && xpOf(local["fr-game"]) > xpOf(remote["fr-game"] && remote["fr-game"].v);
+      for (k in remote) {
+        var rv = remote[k], lt = meta[k] || 0;
+        if (SYNC_SKIP[k]) continue;
+        if (!preferLocal && rv.t > lt && rv.v !== (local[k] === undefined ? null : local[k])) {
+          try { if (rv.v === null) localStorage.removeItem(k); else localStorage.setItem(k, rv.v); } catch (e) {}
+          pulled++;
+        }
+        if (!preferLocal && rv.t > lt) meta[k] = rv.t;
+        cloud.last[k] = preferLocal ? null : rv.v; /* what the cloud holds */
+      }
+      setSyncMeta(meta);
+      cloud.status = "on";
+      var guard = 0; try { guard = +sessionStorage.getItem("fr-pulled") || 0; } catch (e) {}
+      if (pulled && Date.now() - guard > 15000) {
+        try { sessionStorage.setItem("fr-pulled", String(Date.now())); } catch (e) {}
+        window.__frFreeze = true;
+        toast("☁ Завантажую прогрес з акаунта…");
+        location.reload();
+        return;
+      }
+      cloudPush();
+      setInterval(cloudPush, 5000);
+      document.addEventListener("visibilitychange", function () { if (document.visibilityState === "hidden") cloudPush(); });
+      window.addEventListener("pagehide", cloudPush);
+    }).catch(function () { cloud.status = "error"; });
+  }
+  function cloudPush() {
+    if (!cloud.col || cloud.busy) return;
+    var cur = frKeys(), todo = [], k;
+    for (k in cur) if (cur[k] !== cloud.last[k]) todo.push(k);
+    for (k in cloud.last) if (cloud.last[k] !== null && cur[k] === undefined) todo.push(k);
+    if (!todo.length) return;
+    cloud.busy = true;
+    var meta = syncMeta();
+    (function next(i) {
+      if (i >= todo.length) { setSyncMeta(meta); cloud.busy = false; cloud.status = "on"; return; }
+      var key = todo[i], val = cur[key] === undefined ? null : cur[key], t = Date.now();
+      cloud.col.doc(key).set({ v: val, t: t }).then(function () {
+        cloud.last[key] = val; meta[key] = t; next(i + 1);
+      }, function (e) { cloud.busy = false; cloud.status = e && e.code === "quota_exceeded" ? "full" : "error"; setSyncMeta(meta); });
+    })(0);
+  }
+  function cloudLine() {
+    if (cloud.status === "on") return '<p class="smsg good">☁ Прогрес автоматично зберігається у вашому акаунті Claude: оновлення застосунку його не стирають, і він спільний для Chrome та застосунку Claude.</p>';
+    if (cloud.status === "full") return '<p class="smsg bad">Сховище акаунта переповнене. Прогрес поки зберігається лише на цьому пристрої.</p>';
+    if (cloud.status === "error") return '<p class="smsg warn">Не вдалося зв\'язатися зі сховищем акаунта. Прогрес зберігається на пристрої; спробую знову пізніше.</p>';
+    return '<p class="smsg warn">Хмарне збереження працює, коли застосунок відкрито в Claude. Тут прогрес зберігається лише на цьому пристрої.</p>';
+  }
+
+  /* ===================== Detailed, friendly test report ===================== */
+  var TYPE_NAME = { choice: "Вибір із варіантів", type: "Вписати самостійно", judge: "Знайти помилку", tr: "Розуміння змісту" };
+  var TYPE_TIP = {
+    choice: "Схожі форми ще плутаються. Перед уроком відкрий «Коротке нагадування» — там показано, як їх розрізнити.",
+    type: "Правильну форму ти впізнаєш, а писати її самому поки складніше. Спробуй у уроках режим «Вписати»: так форми запам'ятовуються міцніше.",
+    judge: "Помилки в готовому реченні ще проскакують. Читай речення до кінця й дивись на закінчення — так тренується «око».",
+    tr: "Варто спершу прочитати переклад і зрозуміти зміст, а вже потім шукати форму."
+  };
+  var PAT = {
+    accent: ["Наголоси та діакритика", "Форма правильна, бракує лише знаків (é, è, ç…). Кнопки з французькими літерами під полем допоможуть."],
+    aux: ["Допоміжне дієслово avoir / être", "Згадай «дім» дієслів руху й стану: aller, venir, partir, arriver… живуть з être, решта — з avoir."],
+    agree: ["Узгодження закінчень (-e, -s)", "З être participe passé «підлаштовується» під підмет: elle est allée, ils sont partis."],
+    ending: ["Закінчення за особою", "Основа правильна, а закінчення від іншої особи. Корисно проговорити відмінювання вголос: je…, tu…, il…"],
+    tense: ["Вибір часу чи форми", "Обрано форму іншого часу. Шукай у реченні підказки часу: hier, demain, souvent, si…"],
+    meaning: ["Зміст речення", "Помилка не у формі, а в значенні. Повільне читання перекладу тут найкраща підказка."]
+  };
+  var AVOIR_F = ["ai", "as", "a", "avons", "avez", "ont", "avais", "avait", "avions", "aviez", "avaient"];
+  var ETRE_F = ["suis", "es", "est", "sommes", "êtes", "sont", "étais", "était", "étions", "étiez", "étaient"];
+  function errPattern(r) {
+    if (r.t === "judge") return "meaning";
+    if (r.t === "tr") return r.near ? "accent" : "tense";
+    var g = norm(r.given), a = norm(r.q.a[0]);
+    if (strip(g) === strip(a)) return "accent";
+    var gw = g.split(" "), aw = a.split(" ");
+    if (gw.length > 1 && aw.length > 1) {
+      var ga = AVOIR_F.indexOf(gw[0]) >= 0 ? "a" : (ETRE_F.indexOf(gw[0]) >= 0 ? "e" : ""), aa = AVOIR_F.indexOf(aw[0]) >= 0 ? "a" : (ETRE_F.indexOf(aw[0]) >= 0 ? "e" : "");
+      if (ga && aa && ga !== aa) return "aux";
+      var gl = gw[gw.length - 1].replace(/[es]+$/, ""), al = aw[aw.length - 1].replace(/[es]+$/, "");
+      if (ga === aa && gl === al && gw[gw.length - 1] !== aw[aw.length - 1]) return "agree";
+    }
+    var n = 0; while (n < g.length && n < a.length && g[n] === a[n]) n++;
+    if (n >= 4 && Math.abs(g.length - a.length) <= 4) return "ending";
+    return r.q.o.indexOf(r.given) >= 0 || r.q.o.some(function (o) { return norm(o) === g; }) ? "tense" : "ending";
+  }
+  function testReport(results, general) {
+    var n = results.length, ok = results.filter(function (r) { return r.ok; }).length, p = Math.round(ok / Math.max(1, n) * 100);
+    var intro = p >= 90 ? "Чудова робота! Ти впевнено тримаєш цей матеріал — можна сміливо йти далі."
+      : p >= 70 ? "Дуже добре! Основа в тебе вже є, лишилося трохи відшліфувати кілька моментів."
+      : p >= 50 ? "Непоганий результат — ти на правильному шляху. Кілька тем варто ще раз спокійно переглянути, і все складеться."
+      : "Не засмучуйся: тест якраз і потрібен, щоб побачити, куди докласти зусиль. Крок за кроком — і результат прийде.";
+    var h = '<div class="report"><div class="rhead">' + minouSvg(64, p >= 70 ? "wow" : "") + '<p>' + intro + '</p></div>';
+    /* by question type */
+    var byT = {};
+    results.forEach(function (r) { var b = byT[r.t] || (byT[r.t] = { ok: 0, n: 0 }); b.n++; if (r.ok) b.ok++; });
+    h += '<h3 class="rh">За типом завдань</h3><ul class="rlist">';
+    var weakTypes = [];
+    ["choice", "type", "judge", "tr"].forEach(function (t) {
+      var b = byT[t]; if (!b) return;
+      var pp = Math.round(b.ok / b.n * 100);
+      if (pp < 70) weakTypes.push(t);
+      h += '<li><span>' + TYPE_NAME[t] + '</span><div class="hbar ' + (pp >= 70 ? "ok" : "lo") + '"><i style="width:' + pp + '%"></i></div><b>' + b.ok + '/' + b.n + '</b></li>';
+    });
+    h += '</ul>';
+    /* by topic (general) or lesson (topic test) */
+    var byK = {}, order = [];
+    results.forEach(function (r) {
+      var key = general ? r.q.set : r.q.set + ":" + r.q.lesson;
+      if (!byK[key]) { byK[key] = { ok: 0, n: 0, set: r.q.set, lesson: r.q.lesson }; order.push(key); }
+      byK[key].n++; if (r.ok) byK[key].ok++;
+    });
+    var strong = [], weak = [];
+    order.forEach(function (key) { var b = byK[key]; (b.ok === b.n ? strong : (b.ok / b.n < 0.7 ? weak : strong)).push(b); });
+    weak.sort(function (a, b) { return a.ok / a.n - b.ok / b.n; });
+    function bname(b) { return general ? SETS[b.set].label : "Урок " + (b.lesson + 1); }
+    h += '<h3 class="rh">' + (general ? "За темами" : "За уроками") + '</h3><ul class="rlist">';
+    order.forEach(function (key) { var b = byK[key], pp = Math.round(b.ok / b.n * 100); h += '<li><span>' + esc(bname(b)) + '</span><div class="hbar ' + (pp >= 70 ? "ok" : "lo") + '"><i style="width:' + pp + '%"></i></div><b>' + b.ok + '/' + b.n + '</b></li>'; });
+    h += '</ul>';
+    var full = strong.filter(function (b) { return b.ok === b.n && b.n >= 1; });
+    if (full.length) h += '<div class="rbox good"><b>Що вже виходить</b><p>' + full.slice(0, 5).map(function (b) { return esc(bname(b)); }).join(", ") + ' — без жодної помилки. Так тримати!</p></div>';
+    /* patterns */
+    var pc = {};
+    results.filter(function (r) { return !r.ok; }).forEach(function (r) { var k = errPattern(r); pc[k] = (pc[k] || 0) + 1; });
+    var pats = Object.keys(pc).sort(function (a, b) { return pc[b] - pc[a]; }).slice(0, 3);
+    if (weak.length || pats.length || weakTypes.length) {
+      h += '<div class="rbox soft"><b>Що варто підтягнути</b><ul>';
+      weak.slice(0, 3).forEach(function (b) {
+        var s = SETS[b.set];
+        h += '<li><p><b>' + esc(bname(b)) + '</b> — ' + b.ok + ' з ' + b.n + '. ' + (b.ok ? "Ти вже на півдорозі, " : "Почни з ") + 'короткого повторення: спершу нагадування, потім кілька вправ.</p>' +
+          '<div class="srow"><button type="button" class="btn" data-rep="' + b.set + '" data-l="' + (general ? -1 : b.lesson) + '">Повторити</button>' + (s.gramRef ? '<button type="button" class="btn ghost" data-rule="' + esc(s.gramRef) + '">Правило</button>' : '') + '</div></li>';
+      });
+      pats.forEach(function (k) { h += '<li><p><b>' + PAT[k][0] + '</b> (' + pc[k] + '×). ' + PAT[k][1] + '</p></li>'; });
+      weakTypes.slice(0, 2).forEach(function (t) { h += '<li><p><b>' + TYPE_NAME[t] + '.</b> ' + TYPE_TIP[t] + '</p></li>'; });
+      h += '</ul></div>';
+    }
+    h += '<p class="rend">' + (p >= 70 ? "Помилки з тесту вже чекають у Mes erreurs — виправ їх, і вони перетворяться на Écus." : "Усі помилки з тесту збережено в Mes erreurs. Повертайся до них потроху щодня — це найшвидший шлях до впевненості. Minou в тебе вірить!") + '</p></div>';
+    return h;
+  }
+
   /* Settings screen. */
   var importText = "", importMsg = null, importReady = null;
   function exportData() {
@@ -2539,7 +2740,7 @@
     try {
       for (var i = 0; i < localStorage.length; i++) {
         var k = localStorage.key(i);
-        if (k && k.indexOf("fr-") === 0) data[k] = localStorage.getItem(k);
+        if (k && k.indexOf("fr-") === 0 && !SYNC_SKIP[k]) data[k] = localStorage.getItem(k);
       }
     } catch (e) {}
     return JSON.stringify({ app: "dis-moi", v: 1, date: new Date().toISOString(), data: data });
@@ -2592,7 +2793,8 @@
     h += '</section>';
 
     h += '<section class="card sets"><h2>Перенести прогрес</h2>';
-    h += '<p class="hint">Бали, зірки, помилки, словник і налаштування зберігаються лише на цьому пристрої. Щоб перенести їх на інший телефон чи в іншу версію застосунку, скопіюйте прогрес тут і вставте там.</p>';
+    h += cloudLine();
+    h += '<p class="hint">Бали, зірки, помилки, словник і налаштування зберігаються на пристрої. Щоб перенести їх на інший телефон чи в іншу версію застосунку, скопіюйте прогрес тут і вставте там.</p>';
     h += '<div class="srow"><button type="button" class="btn" id="s-copy">Скопіювати прогрес</button>' + (window.self === window.top ? '<button type="button" class="btn ghost" id="s-save">Зберегти файл</button>' : '') + '</div>';
     h += '<textarea class="ta" id="s-out" readonly hidden aria-label="Експорт прогресу"></textarea>';
     h += '<hr class="sep">';
@@ -2663,7 +2865,9 @@
         var del = [];
         for (var i = 0; i < localStorage.length; i++) { var k = localStorage.key(i); if (k && k.indexOf("fr-") === 0) del.push(k); }
         for (var j = 0; j < del.length; j++) localStorage.removeItem(del[j]);
-        for (var key in importReady) { if (key.indexOf("fr-") === 0 && typeof importReady[key] === "string") localStorage.setItem(key, importReady[key]); }
+        var nm = {}, now = Date.now();
+        for (var key in importReady) { if (key.indexOf("fr-") === 0 && !SYNC_SKIP[key] && typeof importReady[key] === "string") { localStorage.setItem(key, importReady[key]); nm[key] = now; } }
+        setSyncMeta(nm);
         importReady = null; importText = "";
         importMsg = ["good", "Прогрес завантажено. Перезапускаю…"];
         renderSettings();
@@ -2686,4 +2890,5 @@
   })();
   openHome();
   setTimeout(greetReturn, 300);
+  cloudStart();
 })();
